@@ -17,13 +17,24 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
-// ------------------------------------------------------------
-// 🔵 CONNEXION GOOGLE
-// ------------------------------------------------------------
+// ============================================================
+// 🔵 GOOGLE
+// ============================================================
 
-const googleProvider = new GoogleAuthProvider();
+const googleProvider =
+    new GoogleAuthProvider();
 
-window.connexionGoogle = async function () {
+const googleLoginButton =
+    document.getElementById(
+        "googleLoginButton"
+    );
+
+
+// ============================================================
+// 🔐 CONNEXION / DÉCONNEXION
+// ============================================================
+
+async function gererConnexion() {
 
     try {
 
@@ -64,14 +75,14 @@ window.connexionGoogle = async function () {
 
     }
 
-};
+}
 
 
-// ------------------------------------------------------------
+// ============================================================
 // 🚪 DÉCONNEXION
-// ------------------------------------------------------------
+// ============================================================
 
-window.deconnexion = async function () {
+async function deconnexion() {
 
     try {
 
@@ -90,12 +101,12 @@ window.deconnexion = async function () {
 
     }
 
-};
+}
 
 
-// ------------------------------------------------------------
-// 👤 SURVEILLER L'ÉTAT DE CONNEXION
-// ------------------------------------------------------------
+// ============================================================
+// 👤 SURVEILLER L'ÉTAT DU COMPTE
+// ============================================================
 
 onAuthStateChanged(
     auth,
@@ -113,11 +124,49 @@ onAuthStateChanged(
                 user.email
             );
 
+
+            // --------------------------------------------
+            // Bouton compte
+            // --------------------------------------------
+
+            if (googleLoginButton) {
+
+                googleLoginButton.textContent =
+                    "👤 " +
+                    (
+                        user.displayName ||
+                        "Mon compte"
+                    ) +
+                    " · Déconnexion";
+
+
+                googleLoginButton.onclick =
+                    deconnexion;
+
+            }
+
+
         } else {
 
             console.log(
                 "🚪 Aucun utilisateur connecté"
             );
+
+
+            // --------------------------------------------
+            // Bouton connexion
+            // --------------------------------------------
+
+            if (googleLoginButton) {
+
+                googleLoginButton.textContent =
+                    "🔵 Se connecter avec Google";
+
+
+                googleLoginButton.onclick =
+                    gererConnexion;
+
+            }
 
         }
 
@@ -130,9 +179,9 @@ onAuthStateChanged(
 // ============================================================
 
 
-// ------------------------------------------------------------
-// ÉLÉMENTS HTML
-// ------------------------------------------------------------
+// ============================================================
+// 🎛️ ÉLÉMENTS HTML
+// ============================================================
 
 const audio =
     document.getElementById(
@@ -800,6 +849,7 @@ audio.addEventListener(
 loadSong(0);
 
 updatePlayer();
+
 
 console.log(
     "📻 GaloulouRadio est démarré !"
