@@ -6,6 +6,9 @@
 // ÉLÉMENTS HTML
 // ------------------------------------------------------------
 
+import { auth } from "./firebase.js";
+
+console.log("🔥 Firebase Authentication est connecté !");
 const audio = document.getElementById("radioAudio");
 
 const playButton = document.getElementById("playButton");
