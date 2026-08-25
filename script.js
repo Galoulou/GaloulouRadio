@@ -36,9 +36,9 @@ const playlists = {
 
     hits: [
         {
-            title: "Musique 1",
-            artist: "GaloulouRadio",
-            file: "music/musique1.mp3"
+            title: "chill",
+            artist: "Kulakovka",
+            file: "music/kulakovka-chill-reel-570198.mp3"
         },
         {
             title: "Musique 2",
