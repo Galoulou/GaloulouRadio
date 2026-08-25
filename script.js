@@ -1282,4 +1282,4 @@ console.log(
 
 console.log(
     "☁️ Firebase Realtime Database est chargé !"
-)
+);
