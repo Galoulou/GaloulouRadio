@@ -102,10 +102,16 @@
 
     </button>
 
+    <button
+    id="settingsButton"
+    class="account-button"
+    type="button">
+
+    ⚙️ Paramètres
+
+</button>
 
 </header>
-
-
 
 <!-- =========================================================
      ACCUEIL
@@ -694,7 +700,202 @@
 
 </main>
 
+<!-- =========================================================
+     ⚙️ PARAMÈTRES
+========================================================= -->
 
+<section
+    id="settingsPanel"
+    class="settings-panel"
+    hidden>
+
+    <div class="settings-box">
+
+        <div class="settings-header">
+
+            <div>
+
+                <span>
+                    ⚙️ PARAMÈTRES
+                </span>
+
+                <h2>
+                    Personnalise GaloulouRadio
+                </h2>
+
+            </div>
+
+            <button
+                id="closeSettingsButton"
+                type="button"
+                aria-label="Fermer les paramètres">
+
+                ✕
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             🌙 THÈME
+        ================================================== -->
+
+        <div class="setting-item">
+
+            <div>
+
+                <strong>
+                    🌙 Thème
+                </strong>
+
+                <p>
+                    Choisis l'apparence de GaloulouRadio.
+                </p>
+
+            </div>
+
+            <select id="themeSetting">
+
+                <option value="system">
+                    Système
+                </option>
+
+                <option value="light">
+                    Clair
+                </option>
+
+                <option value="dark">
+                    Sombre
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- =================================================
+             🎨 COULEUR
+        ================================================== -->
+
+        <div class="setting-item">
+
+            <div>
+
+                <strong>
+                    🎨 Couleur d'accent
+                </strong>
+
+                <p>
+                    Choisis la couleur principale du site.
+                </p>
+
+            </div>
+
+            <input
+                id="accentColorSetting"
+                type="color"
+                value="#2563eb">
+
+        </div>
+
+
+        <!-- =================================================
+             🖼️ FOND
+        ================================================== -->
+
+        <div class="setting-item">
+
+            <div>
+
+                <strong>
+                    🖼️ Couleur du fond
+                </strong>
+
+                <p>
+                    Personnalise le fond de ton site.
+                </p>
+
+            </div>
+
+            <input
+                id="backgroundSetting"
+                type="color"
+                value="#ffffff">
+
+        </div>
+
+
+        <!-- =================================================
+             🔊 VOLUME
+        ================================================== -->
+
+        <div class="setting-item">
+
+            <div>
+
+                <strong>
+                    🔊 Volume
+                </strong>
+
+                <p>
+                    Volume par défaut de la radio.
+                </p>
+
+            </div>
+
+            <input
+                id="settingsVolume"
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value="1">
+
+        </div>
+
+
+        <!-- =================================================
+             ▶️ AUTOPLAY
+        ================================================== -->
+
+        <div class="setting-item">
+
+            <div>
+
+                <strong>
+                    ▶️ Lecture automatique
+                </strong>
+
+                <p>
+                    Lancer automatiquement la radio.
+                </p>
+
+            </div>
+
+            <input
+                id="autoplaySetting"
+                type="checkbox"
+                checked>
+
+        </div>
+
+        <!-- =================================================
+             💾 INFO
+        ================================================== -->
+
+        <div
+            id="settingsLoginMessage"
+            class="settings-login-message">
+
+            🔐 Connecte-toi avec Google pour
+            sauvegarder tes paramètres.
+
+        </div>
+
+    </div>
+
+</section>
 
 <!-- =========================================================
      FOOTER
