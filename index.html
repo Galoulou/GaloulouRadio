@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>📻 GaloulouRadio</title>
+
+    <meta name="description"
+          content="GaloulouRadio — ta radio, ton univers.">
+
+    <meta name="theme-color"
+          content="#2563eb">
+
+    <link rel="manifest" href="manifest.json">
+
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📻</text></svg>">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="style.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+
+        <span class="logo-icon">📻</span>
+
+        <div>
+
+            <strong>GaloulouRadio</strong>
+
+            <small>by Galoulou</small>
+
+        </div>
+
+    </div>
+
+    <nav>
+
+        <a href="#accueil">Accueil</a>
+        <a href="#programmes">Programmes</a>
+        <a href="#apropos">À propos</a>
+
+    </nav>
+
+</header>
+
+
+<main id="accueil">
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <span class="live-badge">
+                🔴 RADIO EN LIGNE
+            </span>
+
+            <h1>
+
+                Galoulou<span>Radio</span>
+
+            </h1>
+
+            <p>
+
+                Ta radio. Ton univers. 🎧
+
+                <br>
+
+                Retrouvez bientôt vos émissions,
+                musiques et contenus préférés.
+
+            </p>
+
+            <button
+                id="playButton"
+                class="play-button">
+
+                ▶ Écouter GaloulouRadio
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <section class="player-section">
+
+        <div class="player">
+
+            <div class="radio-icon">
+
+                📻
+
+            </div>
+
+            <div class="player-info">
+
+                <span class="player-label">
+                    MAINTENANT
+                </span>
+
+                <h2 id="currentTitle">
+                    GaloulouRadio
+                </h2>
+
+                <p id="currentArtist">
+                    En attente du direct...
+                </p>
+
+            </div>
+
+            <div class="player-controls">
+
+                <button id="mainPlay"
+                        aria-label="Lecture">
+
+                    ▶
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <audio id="radioAudio"></audio>
+
+    </section>
+
+
+    <section id="programmes"
+             class="programs-section">
+
+        <div class="section-title">
+
+            <span>📅 PROGRAMMES</span>
+
+            <h2>
+                La programmation
+            </h2>
+
+            <p>
+                Les émissions de GaloulouRadio.
+            </p>
+
+        </div>
+
+
+        <div class="programs-grid">
+
+            <article class="program-card">
+
+                <div class="program-icon">
+                    🌅
+                </div>
+
+                <div>
+
+                    <span class="program-time">
+                        MATIN
+                    </span>
+
+                    <h3>
+                        Le Réveil de Galoulou
+                    </h3>
+
+                    <p>
+                        Actualités, gaming et bonne humeur
+                        pour commencer la journée.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <article class="program-card">
+
+                <div class="program-icon">
+                    🎮
+                </div>
+
+                <div>
+
+                    <span class="program-time">
+                        GAMING
+                    </span>
+
+                    <h3>
+                        Gaming Time
+                    </h3>
+
+                    <p>
+                        Roblox, jeux vidéo et nouveautés
+                        du monde gaming.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <article class="program-card">
+
+                <div class="program-icon">
+                    🌙
+                </div>
+
+                <div>
+
+                    <span class="program-time">
+                        SOIR
+                    </span>
+
+                    <h3>
+                        La Soirée Cookie
+                    </h3>
+
+                    <p>
+                        Une émission détente aux couleurs
+                        de La Team Cookie.
+                    </p>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <section id="apropos"
+             class="about-section">
+
+        <div class="about-box">
+
+            <div class="about-icon">
+                📻
+            </div>
+
+            <div>
+
+                <span>
+                    À PROPOS
+                </span>
+
+                <h2>
+                    Bienvenue sur GaloulouRadio
+                </h2>
+
+                <p>
+
+                    GaloulouRadio est un projet personnel
+                    créé par Galoulou.
+
+                    <br><br>
+
+                    L'objectif est de créer progressivement
+                    une petite radio avec ses propres émissions,
+                    contenus et événements.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <div class="footer-content">
+
+        <div>
+
+            <strong>
+                📻 GaloulouRadio
+            </strong>
+
+            <p>
+                Ta radio, ton univers.
+            </p>
+
+        </div>
+
+        <div>
+
+            <a href="https://galoulou.github.io/la-team-cookie/"
+               target="_blank">
+
+                🍪 La Team Cookie
+
+            </a>
+
+            <a href="https://galoulou.github.io/roblox-games/"
+               target="_blank">
+
+                🎮 Cookie Studios
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        © 2026 GaloulouRadio · Projet personnel
+
+    </div>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
