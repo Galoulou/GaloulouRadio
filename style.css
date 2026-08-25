@@ -534,5 +534,109 @@ footer {
     .footer-content {
         flex-direction: column;
     }
+    /* MESSAGE DE NOËL */
+
+.christmas-message {
+
+    position: fixed;
+
+    top: 95px;
+
+    left: 50%;
+
+    transform: translate(-50%, -30px);
+
+    width: min(90%, 500px);
+
+    padding: 16px 22px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    text-align: center;
+
+    background: rgba(15, 23, 42, .94);
+
+    border: 1px solid rgba(96, 165, 250, .5);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, .35),
+        0 0 25px rgba(37, 99, 235, .2);
+
+    backdrop-filter: blur(15px);
+
+    z-index: 9999;
+
+    animation: christmasMessageIn .45s ease forwards;
+
+}
+
+.christmas-message strong {
+
+    color: #60a5fa;
+
+    font-size: 15px;
+
+}
+
+.christmas-message span {
+
+    color: #cbd5e1;
+
+    font-size: 13px;
+
+}
+
+
+.christmas-message.hide {
+
+    animation: christmasMessageOut .45s ease forwards;
+
+}
+
+
+@keyframes christmasMessageIn {
+
+    from {
+
+        opacity: 0;
+
+        transform: translate(-50%, -30px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translate(-50%, 0);
+
+    }
+
+}
+
+
+@keyframes christmasMessageOut {
+
+    from {
+
+        opacity: 1;
+
+        transform: translate(-50%, 0);
+
+    }
+
+    to {
+
+        opacity: 0;
+
+        transform: translate(-50%, -30px);
+
+    }
 
 }
