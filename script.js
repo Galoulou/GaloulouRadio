@@ -1,10 +1,11 @@
 // ============================================================
-// 📻 GALOULOURADIO - LECTEUR + FIREBASE + PARAMÈTRES
+// 📻 GALOULOURADIO
+// 🎵 LECTEUR + FIREBASE AUTHENTICATION + DATABASE
 // ============================================================
 
 
 // ============================================================
-// 🔥 FIREBASE AUTHENTICATION + DATABASE
+// 🔥 FIREBASE
 // ============================================================
 
 import {
@@ -12,12 +13,14 @@ import {
     db
 } from "./firebase.js";
 
+
 import {
     GoogleAuthProvider,
     signInWithPopup,
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
 
 import {
     ref,
@@ -34,6 +37,7 @@ import {
 const googleProvider =
     new GoogleAuthProvider();
 
+
 const googleLoginButton =
     document.getElementById(
         "googleLoginButton"
@@ -41,435 +45,7 @@ const googleLoginButton =
 
 
 // ============================================================
-// 👤 PARAMÈTRES PAR DÉFAUT
-// ============================================================
-
-const parametresParDefaut = {
-
-    theme: "system",
-
-    accentColor: "#ff9800",
-
-    background: "#ffffff",
-
-    volume: 1,
-
-    autoplay: true,
-
-    favorites: []
-
-};
-
-
-// ============================================================
-// 🔐 CONNEXION GOOGLE
-// ============================================================
-
-async function gererConnexion() {
-
-    try {
-
-        const result =
-            await signInWithPopup(
-                auth,
-                googleProvider
-            );
-
-        const user =
-            result.user;
-
-        console.log(
-            "✅ Connexion Google réussie !"
-        );
-
-        console.log(
-            "👤 Nom :",
-            user.displayName
-        );
-
-        console.log(
-            "📧 Email :",
-            user.email
-        );
-
-        console.log(
-            "🆔 UID :",
-            user.uid
-        );
-
-    } catch (error) {
-
-        console.error(
-            "❌ Erreur de connexion Google :",
-            error
-        );
-
-    }
-
-}
-
-
-// ============================================================
-// 🚪 DÉCONNEXION
-// ============================================================
-
-async function deconnexion() {
-
-    try {
-
-        await signOut(auth);
-
-        console.log(
-            "🚪 Déconnexion réussie !"
-        );
-
-    } catch (error) {
-
-        console.error(
-            "❌ Erreur de déconnexion :",
-            error
-        );
-
-    }
-
-}
-
-
-// ============================================================
-// 📥 CHARGER LES PARAMÈTRES UTILISATEUR
-// ============================================================
-
-async function chargerParametres(user) {
-
-    if (!user) {
-        return;
-    }
-
-    try {
-
-        const userRef =
-            ref(
-                db,
-                "users/" + user.uid
-            );
-
-        const snapshot =
-            await get(userRef);
-
-
-        // ----------------------------------------------------
-        // 🆕 PREMIÈRE CONNEXION
-        // ----------------------------------------------------
-
-        if (!snapshot.exists()) {
-
-            console.log(
-                "🆕 Aucun profil trouvé."
-            );
-
-            console.log(
-                "☁️ Création du profil..."
-            );
-
-
-            await set(
-                userRef,
-                parametresParDefaut
-            );
-
-
-            console.log(
-                "✅ Profil utilisateur créé !"
-            );
-
-
-            appliquerParametres(
-                parametresParDefaut
-            );
-
-            return;
-        }
-
-
-        // ----------------------------------------------------
-        // ☁️ PROFIL EXISTANT
-        // ----------------------------------------------------
-
-        const parametres =
-            snapshot.val();
-
-
-        console.log(
-            "☁️ Paramètres récupérés :",
-            parametres
-        );
-
-
-        appliquerParametres(
-            parametres
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "❌ Erreur lors du chargement des paramètres :",
-            error
-        );
-
-    }
-
-}
-
-
-// ============================================================
-// 🎨 APPLIQUER LES PARAMÈTRES
-// ============================================================
-
-function appliquerParametres(parametres) {
-
-    if (!parametres) {
-        return;
-    }
-
-
-    // --------------------------------------------------------
-    // 🎨 FOND
-    // --------------------------------------------------------
-
-    if (
-        parametres.background
-    ) {
-
-        document.body.style.backgroundColor =
-            parametres.background;
-
-    }
-
-
-    // --------------------------------------------------------
-    // 🟠 COULEUR D'ACCENT
-    // --------------------------------------------------------
-
-    if (
-        parametres.accentColor
-    ) {
-
-        document.documentElement.style
-            .setProperty(
-                "--accent-color",
-                parametres.accentColor
-            );
-
-    }
-
-
-    // --------------------------------------------------------
-    // 🔊 VOLUME
-    // --------------------------------------------------------
-
-    if (
-        typeof parametres.volume ===
-        "number"
-    ) {
-
-        if (audio) {
-
-            audio.volume =
-                parametres.volume;
-
-        }
-
-        if (volumeBar) {
-
-            volumeBar.value =
-                parametres.volume;
-
-        }
-
-    }
-
-
-    // --------------------------------------------------------
-    // 🌙 THÈME
-    // --------------------------------------------------------
-
-    if (
-        parametres.theme
-    ) {
-
-        document.documentElement
-            .setAttribute(
-                "data-theme",
-                parametres.theme
-            );
-
-    }
-
-
-    console.log(
-        "🎨 Paramètres appliqués !"
-    );
-
-}
-
-
-// ============================================================
-// 💾 SAUVEGARDER UN PARAMÈTRE
-// ============================================================
-
-async function sauvegarderParametre(
-    nom,
-    valeur
-) {
-
-    const user =
-        auth.currentUser;
-
-
-    if (!user) {
-
-        console.log(
-            "⚠️ Impossible de sauvegarder : aucun utilisateur connecté."
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        const userRef =
-            ref(
-                db,
-                "users/" + user.uid
-            );
-
-
-        await update(
-            userRef,
-            {
-                [nom]: valeur
-            }
-        );
-
-
-        console.log(
-            "💾 Paramètre sauvegardé :",
-            nom,
-            valeur
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "❌ Erreur lors de la sauvegarde :",
-            error
-        );
-
-    }
-
-}
-
-
-// ============================================================
-// 👤 SURVEILLER L'ÉTAT DU COMPTE
-// ============================================================
-
-onAuthStateChanged(
-    auth,
-    async (user) => {
-
-        if (user) {
-
-            console.log(
-                "👤 Utilisateur connecté :",
-                user.displayName
-            );
-
-            console.log(
-                "📧 Email :",
-                user.email
-            );
-
-
-            console.log(
-                "🆔 UID :",
-                user.uid
-            );
-
-
-            // ------------------------------------------------
-            // ☁️ CHARGER LES PARAMÈTRES
-            // ------------------------------------------------
-
-            await chargerParametres(
-                user
-            );
-
-
-            // ------------------------------------------------
-            // 👤 BOUTON COMPTE
-            // ------------------------------------------------
-
-            if (
-                googleLoginButton
-            ) {
-
-                googleLoginButton.textContent =
-                    "👤 " +
-                    (
-                        user.displayName ||
-                        "Mon compte"
-                    ) +
-                    " · Déconnexion";
-
-
-                googleLoginButton.onclick =
-                    deconnexion;
-
-            }
-
-
-        } else {
-
-            console.log(
-                "🚪 Aucun utilisateur connecté"
-            );
-
-
-            // ------------------------------------------------
-            // 🔵 BOUTON CONNEXION
-            // ------------------------------------------------
-
-            if (
-                googleLoginButton
-            ) {
-
-                googleLoginButton.textContent =
-                    "🔵 Se connecter avec Google";
-
-
-                googleLoginButton.onclick =
-                    gererConnexion;
-
-            }
-
-        }
-
-    }
-);
-
-
-// ============================================================
-// 📻 LECTEUR GALOULOURADIO
-// ============================================================
-
-
-// ============================================================
-// 🎛️ ÉLÉMENTS HTML
+// 📻 ÉLÉMENTS DU LECTEUR
 // ============================================================
 
 const audio =
@@ -661,7 +237,7 @@ const playlists = {
 
 
 // ============================================================
-// ⚙️ VARIABLES
+// ⚙️ VARIABLES DU LECTEUR
 // ============================================================
 
 let currentPlaylist =
@@ -677,13 +253,494 @@ let isPlaying =
 
 
 // ============================================================
+// ☁️ PARAMÈTRES PAR DÉFAUT
+// ============================================================
+
+const parametresParDefaut = {
+
+    theme:
+        "system",
+
+    accentColor:
+        "#2563eb",
+
+    background:
+        "#ffffff",
+
+    volume:
+        1,
+
+    autoplay:
+        true,
+
+    favorites:
+        []
+
+};
+
+
+// ============================================================
+// 🎨 PARAMÈTRES ACTUELS
+// ============================================================
+
+let parametresUtilisateur = {
+    ...parametresParDefaut
+};
+
+
+// ============================================================
+// 📥 CHARGER LES PARAMÈTRES
+// ============================================================
+
+async function chargerParametres(user) {
+
+    if (!user) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const userRef =
+            ref(
+                db,
+                "users/" +
+                user.uid
+            );
+
+
+        const snapshot =
+            await get(
+                userRef
+            );
+
+
+        // ----------------------------------------------------
+        // 🆕 PREMIÈRE CONNEXION
+        // ----------------------------------------------------
+
+        if (!snapshot.exists()) {
+
+            console.log(
+                "🆕 Première connexion !"
+            );
+
+
+            console.log(
+                "☁️ Création du profil..."
+            );
+
+
+            await set(
+                userRef,
+                parametresParDefaut
+            );
+
+
+            parametresUtilisateur = {
+                ...parametresParDefaut
+            };
+
+
+            console.log(
+                "✅ Profil créé dans Firebase !"
+            );
+
+
+            appliquerParametres(
+                parametresUtilisateur
+            );
+
+
+            return;
+
+        }
+
+
+        // ----------------------------------------------------
+        // ☁️ PROFIL EXISTANT
+        // ----------------------------------------------------
+
+        const donnees =
+            snapshot.val();
+
+
+        parametresUtilisateur = {
+
+            ...parametresParDefaut,
+
+            ...donnees
+
+        };
+
+
+        console.log(
+            "☁️ Paramètres récupérés :",
+            parametresUtilisateur
+        );
+
+
+        appliquerParametres(
+            parametresUtilisateur
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Erreur de chargement des paramètres :",
+            error
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// 🎨 APPLIQUER LES PARAMÈTRES
+// ============================================================
+
+function appliquerParametres(parametres) {
+
+    if (!parametres) {
+
+        return;
+
+    }
+
+
+    // --------------------------------------------------------
+    // 🎨 FOND
+    // --------------------------------------------------------
+
+    if (
+        parametres.background
+    ) {
+
+        document.body.style.backgroundColor =
+            parametres.background;
+
+    }
+
+
+    // --------------------------------------------------------
+    // 🟦 COULEUR PRINCIPALE
+    // --------------------------------------------------------
+
+    if (
+        parametres.accentColor
+    ) {
+
+        document.documentElement.style
+            .setProperty(
+                "--accent-color",
+                parametres.accentColor
+            );
+
+    }
+
+
+    // --------------------------------------------------------
+    // 🌙 THÈME
+    // --------------------------------------------------------
+
+    if (
+        parametres.theme
+    ) {
+
+        document.documentElement
+            .setAttribute(
+                "data-theme",
+                parametres.theme
+            );
+
+    }
+
+
+    // --------------------------------------------------------
+    // 🔊 VOLUME
+    // --------------------------------------------------------
+
+    if (
+        typeof parametres.volume ===
+        "number"
+    ) {
+
+        audio.volume =
+            parametres.volume;
+
+
+        if (volumeBar) {
+
+            volumeBar.value =
+                parametres.volume;
+
+        }
+
+    }
+
+
+    console.log(
+        "🎨 Paramètres appliqués !"
+    );
+
+}
+
+
+// ============================================================
+// 💾 SAUVEGARDER UN PARAMÈTRE
+// ============================================================
+
+async function sauvegarderParametre(
+    nom,
+    valeur
+) {
+
+    const user =
+        auth.currentUser;
+
+
+    if (!user) {
+
+        console.log(
+            "⚠️ Pas de compte connecté."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const userRef =
+            ref(
+                db,
+                "users/" +
+                user.uid
+            );
+
+
+        await update(
+            userRef,
+            {
+                [nom]: valeur
+            }
+        );
+
+
+        parametresUtilisateur[
+            nom
+        ] =
+            valeur;
+
+
+        console.log(
+            "💾 Paramètre sauvegardé :",
+            nom,
+            valeur
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Erreur de sauvegarde :",
+            error
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// 🔐 CONNEXION GOOGLE
+// ============================================================
+
+async function gererConnexion() {
+
+    try {
+
+        const result =
+            await signInWithPopup(
+                auth,
+                googleProvider
+            );
+
+
+        const user =
+            result.user;
+
+
+        console.log(
+            "✅ Connexion Google réussie !"
+        );
+
+
+        console.log(
+            "👤 Nom :",
+            user.displayName
+        );
+
+
+        console.log(
+            "📧 Email :",
+            user.email
+        );
+
+
+        console.log(
+            "🆔 UID :",
+            user.uid
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Erreur de connexion Google :",
+            error
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// 🚪 DÉCONNEXION
+// ============================================================
+
+async function deconnexion() {
+
+    try {
+
+        await signOut(
+            auth
+        );
+
+
+        console.log(
+            "🚪 Déconnexion réussie !"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Erreur de déconnexion :",
+            error
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// 👤 SURVEILLER LE COMPTE
+// ============================================================
+
+onAuthStateChanged(
+    auth,
+    async (user) => {
+
+        if (user) {
+
+            console.log(
+                "👤 Utilisateur connecté :",
+                user.displayName
+            );
+
+
+            console.log(
+                "📧 Email :",
+                user.email
+            );
+
+
+            console.log(
+                "🆔 UID :",
+                user.uid
+            );
+
+
+            // ------------------------------------------------
+            // ☁️ CHARGER SES PARAMÈTRES
+            // ------------------------------------------------
+
+            await chargerParametres(
+                user
+            );
+
+
+            // ------------------------------------------------
+            // 👤 BOUTON COMPTE
+            // ------------------------------------------------
+
+            if (
+                googleLoginButton
+            ) {
+
+                googleLoginButton.textContent =
+                    "👤 " +
+                    (
+                        user.displayName ||
+                        "Mon compte"
+                    ) +
+                    " · Déconnexion";
+
+
+                googleLoginButton.onclick =
+                    deconnexion;
+
+            }
+
+
+        } else {
+
+            console.log(
+                "🚪 Aucun utilisateur connecté"
+            );
+
+
+            // ------------------------------------------------
+            // 🔵 BOUTON CONNEXION
+            // ------------------------------------------------
+
+            if (
+                googleLoginButton
+            ) {
+
+                googleLoginButton.textContent =
+                    "🔵 Se connecter avec Google";
+
+
+                googleLoginButton.onclick =
+                    gererConnexion;
+
+            }
+
+        }
+
+    }
+);
+
+
+// ============================================================
 // 🕐 FORMAT DU TEMPS
 // ============================================================
 
 function formatTime(seconds) {
 
     if (
-        !Number.isFinite(seconds)
+        !Number.isFinite(
+            seconds
+        )
     ) {
 
         return "0:00";
@@ -705,7 +762,10 @@ function formatTime(seconds) {
 
     return `${minutes}:${remainingSeconds
         .toString()
-        .padStart(2, "0")}`;
+        .padStart(
+            2,
+            "0"
+        )}`;
 
 }
 
@@ -895,9 +955,7 @@ function nextSong() {
 // 🎵 BOUTON PRINCIPAL
 // ============================================================
 
-if (
-    playButton
-) {
+if (playButton) {
 
     playButton.addEventListener(
         "click",
@@ -923,9 +981,7 @@ if (
 // 🎵 BOUTON DU LECTEUR
 // ============================================================
 
-if (
-    mainPlay
-) {
+if (mainPlay) {
 
     mainPlay.addEventListener(
         "click",
@@ -951,9 +1007,7 @@ if (
 // ⏭️ BOUTON SUIVANT
 // ============================================================
 
-if (
-    nextButton
-) {
+if (nextButton) {
 
     nextButton.addEventListener(
         "click",
@@ -1026,9 +1080,7 @@ playlistButtons.forEach(
 // 🔊 VOLUME
 // ============================================================
 
-if (
-    volumeBar
-) {
+if (volumeBar) {
 
     audio.volume =
         Number(
@@ -1051,7 +1103,7 @@ if (
 
 
             // ----------------------------------------------
-            // ☁️ SAUVEGARDER SI CONNECTÉ
+            // ☁️ SAUVEGARDER
             // ----------------------------------------------
 
             sauvegarderParametre(
@@ -1131,9 +1183,7 @@ audio.addEventListener(
 // 🎚️ DÉPLACER LA BARRE
 // ============================================================
 
-if (
-    progressBar
-) {
+if (progressBar) {
 
     progressBar.addEventListener(
         "input",
@@ -1232,4 +1282,4 @@ console.log(
 
 console.log(
     "☁️ Firebase Realtime Database est chargé !"
-);
+)
