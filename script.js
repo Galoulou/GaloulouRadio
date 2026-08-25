@@ -37,7 +37,7 @@ const playlists = {
 
         {
             title: "Le Site sera prêt en Noel 2026 !",
-            artist: "Kulakovka",
+            artist: "GaloulouStudio",
             file: "music/music2.mp3"
         },
 
@@ -62,9 +62,9 @@ const playlists = {
         },
 
         {
-            title: "Music 1",
-            artist: "GaloulouRadio",
-            file: "music/music1.mp3"
+            title: "Reveille Doux",
+            artist: "Kulakovka",
+            file: "music/kulakovka-lofi-relax-570489.mp3"
         }
 
     ],
