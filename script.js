@@ -3,6 +3,7 @@
 // 🎵 LECTEUR
 // 🔐 FIREBASE AUTHENTICATION
 // ☁️ FIREBASE REALTIME DATABASE
+// ⚙️ SETTINGS
 // ============================================================
 
 
@@ -47,6 +48,60 @@ const googleProvider =
 const googleLoginButton =
     document.getElementById(
         "googleLoginButton"
+    );
+
+
+const settingsButton =
+    document.getElementById(
+        "settingsButton"
+    );
+
+
+const settingsPanel =
+    document.getElementById(
+        "settingsPanel"
+    );
+
+
+const closeSettingsButton =
+    document.getElementById(
+        "closeSettingsButton"
+    );
+
+
+const settingsLoginMessage =
+    document.getElementById(
+        "settingsLoginMessage"
+    );
+
+
+const themeSetting =
+    document.getElementById(
+        "themeSetting"
+    );
+
+
+const accentColorSetting =
+    document.getElementById(
+        "accentColorSetting"
+    );
+
+
+const backgroundSetting =
+    document.getElementById(
+        "backgroundSetting"
+    );
+
+
+const settingsVolume =
+    document.getElementById(
+        "settingsVolume"
+    );
+
+
+const autoplaySetting =
+    document.getElementById(
+        "autoplaySetting"
     );
 
 
@@ -287,10 +342,32 @@ let parametresUtilisateur = {
 
 
 // ============================================================
+// 🛡️ OUTILS
+// ============================================================
+
+function utilisateurConnecte() {
+
+    return Boolean(
+        auth.currentUser
+    );
+
+}
+
+
+// ============================================================
 // 🔐 CONNEXION GOOGLE
 // ============================================================
 
 async function connecterAvecGoogle() {
+
+    if (
+        auth.currentUser
+    ) {
+
+        return;
+
+    }
+
 
     try {
 
@@ -310,18 +387,7 @@ async function connecterAvecGoogle() {
         );
 
 
-        // IMPORTANT :
-        // On ne récupère pas et on n'affiche pas
-        // l'e-mail, le mot de passe, le token
-        // ou d'autres informations privées.
-
-
     } catch (error) {
-
-        console.error(
-            "❌ Connexion Google impossible."
-        );
-
 
         if (
             error.code ===
@@ -333,6 +399,7 @@ async function connecterAvecGoogle() {
             );
 
             return;
+
         }
 
 
@@ -342,10 +409,11 @@ async function connecterAvecGoogle() {
         ) {
 
             console.log(
-                "ℹ️ Connexion déjà en cours."
+                "ℹ️ Une connexion Google est déjà en cours."
             );
 
             return;
+
         }
 
 
@@ -355,16 +423,16 @@ async function connecterAvecGoogle() {
         ) {
 
             console.error(
-                "❌ Ce domaine n'est pas autorisé dans Firebase."
+                "❌ Le domaine du site n'est pas autorisé dans Firebase."
             );
 
             return;
+
         }
 
 
         console.error(
-            "Code Firebase :",
-            error.code
+            "❌ Connexion Google impossible."
         );
 
     }
@@ -396,28 +464,65 @@ async function deconnecter() {
             "❌ Déconnexion impossible."
         );
 
-        console.error(
-            "Code Firebase :",
-            error.code
-        );
-
     }
 
 }
 
 
 // ============================================================
-// 🔵 BOUTON COMPTE
+// 🔵 METTRE À JOUR LE BOUTON COMPTE
 // ============================================================
 
-if (
-    googleLoginButton
+function mettreAJourBoutonCompte(
+    user
 ) {
 
-    googleLoginButton.addEventListener(
+    if (
+        !googleLoginButton
+    ) {
+
+        return;
+
+    }
+
+
+    googleLoginButton.removeEventListener(
         "click",
         connecterAvecGoogle
     );
+
+
+    googleLoginButton.removeEventListener(
+        "click",
+        deconnecter
+    );
+
+
+    if (user) {
+
+        googleLoginButton.textContent =
+            "👤 Mon compte · Déconnexion";
+
+
+        googleLoginButton.addEventListener(
+            "click",
+            deconnecter
+        );
+
+    }
+
+    else {
+
+        googleLoginButton.textContent =
+            "🔵 Se connecter avec Google";
+
+
+        googleLoginButton.addEventListener(
+            "click",
+            connecterAvecGoogle
+        );
+
+    }
 
 }
 
@@ -431,6 +536,14 @@ async function chargerParametres(
 ) {
 
     if (!user) {
+
+        parametresUtilisateur = {
+            ...parametresParDefaut
+        };
+
+
+        appliquerParametres();
+
 
         return;
 
@@ -453,10 +566,6 @@ async function chargerParametres(
             );
 
 
-        // ----------------------------------------------------
-        // 🆕 PREMIÈRE CONNEXION
-        // ----------------------------------------------------
-
         if (
             !snapshot.exists()
         ) {
@@ -477,11 +586,6 @@ async function chargerParametres(
             );
 
         }
-
-
-        // ----------------------------------------------------
-        // ☁️ PROFIL EXISTANT
-        // ----------------------------------------------------
 
         else {
 
@@ -514,11 +618,6 @@ async function chargerParametres(
             "❌ Impossible de charger les paramètres."
         );
 
-        console.error(
-            "Code Firebase :",
-            error.code
-        );
-
     }
 
 }
@@ -530,32 +629,58 @@ async function chargerParametres(
 
 function appliquerParametres() {
 
+    const parametres =
+        parametresUtilisateur;
+
+
     // --------------------------------------------------------
-    // 🎨 FOND
+    // 🖼️ FOND
     // --------------------------------------------------------
 
     if (
-        parametresUtilisateur.background
+        backgroundSetting &&
+        parametres.background
+    ) {
+
+        backgroundSetting.value =
+            parametres.background;
+
+    }
+
+
+    if (
+        parametres.background
     ) {
 
         document.body.style.backgroundColor =
-            parametresUtilisateur.background;
+            parametres.background;
 
     }
 
 
     // --------------------------------------------------------
-    // 🟦 ACCENT
+    // 🎨 ACCENT
     // --------------------------------------------------------
 
     if (
-        parametresUtilisateur.accentColor
+        accentColorSetting &&
+        parametres.accentColor
+    ) {
+
+        accentColorSetting.value =
+            parametres.accentColor;
+
+    }
+
+
+    if (
+        parametres.accentColor
     ) {
 
         document.documentElement.style
             .setProperty(
                 "--accent-color",
-                parametresUtilisateur.accentColor
+                parametres.accentColor
             );
 
     }
@@ -566,13 +691,36 @@ function appliquerParametres() {
     // --------------------------------------------------------
 
     if (
-        parametresUtilisateur.theme
+        themeSetting &&
+        parametres.theme
+    ) {
+
+        themeSetting.value =
+            parametres.theme;
+
+    }
+
+
+    if (
+        parametres.theme ===
+        "system"
+    ) {
+
+        document.documentElement
+            .removeAttribute(
+                "data-theme"
+            );
+
+    }
+
+    else if (
+        parametres.theme
     ) {
 
         document.documentElement
             .setAttribute(
                 "data-theme",
-                parametresUtilisateur.theme
+                parametres.theme
             );
 
     }
@@ -583,22 +731,63 @@ function appliquerParametres() {
     // --------------------------------------------------------
 
     if (
-        typeof parametresUtilisateur.volume ===
+        typeof parametres.volume ===
         "number"
     ) {
 
-        audio.volume =
-            parametresUtilisateur.volume;
+        const volume =
+            Math.max(
+                0,
+                Math.min(
+                    1,
+                    parametres.volume
+                )
+            );
+
+
+        if (audio) {
+
+            audio.volume =
+                volume;
+
+        }
 
 
         if (volumeBar) {
 
             volumeBar.value =
-                parametresUtilisateur.volume;
+                volume;
+
+        }
+
+
+        if (settingsVolume) {
+
+            settingsVolume.value =
+                volume;
 
         }
 
     }
+
+
+    // --------------------------------------------------------
+    // ▶️ AUTOPLAY
+    // --------------------------------------------------------
+
+    if (
+        autoplaySetting
+    ) {
+
+        autoplaySetting.checked =
+            parametres.autoplay === true;
+
+    }
+
+
+    console.log(
+        "🎨 Paramètres appliqués."
+    );
 
 }
 
@@ -616,7 +805,16 @@ async function sauvegarderParametre(
         auth.currentUser;
 
 
+    // --------------------------------------------------------
+    // 👤 PAS CONNECTÉ
+    // --------------------------------------------------------
+
     if (!user) {
+
+        console.log(
+            "🔐 Connecte-toi pour sauvegarder tes paramètres."
+        );
+
 
         return;
 
@@ -647,15 +845,16 @@ async function sauvegarderParametre(
             valeur;
 
 
+        console.log(
+            "💾 Paramètre sauvegardé :",
+            nom
+        );
+
+
     } catch (error) {
 
         console.error(
             "❌ Impossible de sauvegarder le paramètre."
-        );
-
-        console.error(
-            "Code Firebase :",
-            error.code
         );
 
     }
@@ -664,16 +863,17 @@ async function sauvegarderParametre(
 
 
 // ============================================================
-// 👤 ÉTAT DE CONNEXION
+// 👤 ÉTAT DE CONNEXION FIREBASE
 // ============================================================
 
 onAuthStateChanged(
     auth,
     async (user) => {
 
-        // ====================================================
-        // 👤 CONNECTÉ
-        // ====================================================
+        mettreAJourBoutonCompte(
+            user
+        );
+
 
         if (user) {
 
@@ -682,44 +882,21 @@ onAuthStateChanged(
             );
 
 
+            if (
+                settingsLoginMessage
+            ) {
+
+                settingsLoginMessage.textContent =
+                    "☁️ Tes paramètres sont sauvegardés sur ton compte.";
+
+            }
+
+
             await chargerParametres(
                 user
             );
 
-
-            if (
-                googleLoginButton
-            ) {
-
-                googleLoginButton.textContent =
-                    "👤 Mon compte · Déconnexion";
-
-
-                googleLoginButton.removeEventListener(
-                    "click",
-                    connecterAvecGoogle
-                );
-
-
-                googleLoginButton.removeEventListener(
-                    "click",
-                    deconnecter
-                );
-
-
-                googleLoginButton.addEventListener(
-                    "click",
-                    deconnecter
-                );
-
-            }
-
         }
-
-
-        // ====================================================
-        // 🚪 DÉCONNECTÉ
-        // ====================================================
 
         else {
 
@@ -729,36 +906,357 @@ onAuthStateChanged(
 
 
             if (
-                googleLoginButton
+                settingsLoginMessage
             ) {
 
-                googleLoginButton.textContent =
-                    "🔵 Se connecter avec Google";
-
-
-                googleLoginButton.removeEventListener(
-                    "click",
-                    deconnecter
-                );
-
-
-                googleLoginButton.removeEventListener(
-                    "click",
-                    connecterAvecGoogle
-                );
-
-
-                googleLoginButton.addEventListener(
-                    "click",
-                    connecterAvecGoogle
-                );
+                settingsLoginMessage.textContent =
+                    "🔐 Connecte-toi avec Google pour sauvegarder tes paramètres.";
 
             }
+
+
+            chargerParametres(
+                null
+            );
 
         }
 
     }
 );
+
+
+// ============================================================
+// ⚙️ OUVRIR LES SETTINGS
+// ============================================================
+
+function ouvrirSettings() {
+
+    if (
+        !settingsPanel
+    ) {
+
+        console.error(
+            "❌ settingsPanel introuvable."
+        );
+
+        return;
+
+    }
+
+
+    settingsPanel.hidden =
+        false;
+
+
+    settingsPanel.style.display =
+        "block";
+
+
+    console.log(
+        "⚙️ Paramètres ouverts."
+    );
+
+}
+
+
+// ============================================================
+// ❌ FERMER LES SETTINGS
+// ============================================================
+
+function fermerSettings() {
+
+    if (
+        !settingsPanel
+    ) {
+
+        return;
+
+    }
+
+
+    settingsPanel.hidden =
+        true;
+
+
+    settingsPanel.style.display =
+        "none";
+
+
+    console.log(
+        "⚙️ Paramètres fermés."
+    );
+
+}
+
+
+// ============================================================
+// ⚙️ BOUTON SETTINGS
+// ============================================================
+
+if (
+    settingsButton
+) {
+
+    settingsButton.addEventListener(
+        "click",
+        ouvrirSettings
+    );
+
+}
+
+else {
+
+    console.error(
+        "❌ Bouton Settings introuvable."
+    );
+
+}
+
+
+// ============================================================
+// ❌ BOUTON FERMER
+// ============================================================
+
+if (
+    closeSettingsButton
+) {
+
+    closeSettingsButton.addEventListener(
+        "click",
+        fermerSettings
+    );
+
+}
+
+
+// ============================================================
+// 🖱️ CLIC EN DEHORS
+// ============================================================
+
+if (
+    settingsPanel
+) {
+
+    settingsPanel.addEventListener(
+        "click",
+        (event) => {
+
+            if (
+                event.target ===
+                settingsPanel
+            ) {
+
+                fermerSettings();
+
+            }
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// 🌙 THÈME
+// ============================================================
+
+if (
+    themeSetting
+) {
+
+    themeSetting.addEventListener(
+        "change",
+        () => {
+
+            const theme =
+                themeSetting.value;
+
+
+            if (
+                theme ===
+                "system"
+            ) {
+
+                document.documentElement
+                    .removeAttribute(
+                        "data-theme"
+                    );
+
+            }
+
+            else {
+
+                document.documentElement
+                    .setAttribute(
+                        "data-theme",
+                        theme
+                    );
+
+            }
+
+
+            sauvegarderParametre(
+                "theme",
+                theme
+            );
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// 🎨 COULEUR D'ACCENT
+// ============================================================
+
+if (
+    accentColorSetting
+) {
+
+    accentColorSetting.addEventListener(
+        "input",
+        () => {
+
+            const color =
+                accentColorSetting.value;
+
+
+            document.documentElement.style
+                .setProperty(
+                    "--accent-color",
+                    color
+                );
+
+        }
+    );
+
+
+    accentColorSetting.addEventListener(
+        "change",
+        () => {
+
+            sauvegarderParametre(
+                "accentColor",
+                accentColorSetting.value
+            );
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// 🖼️ COULEUR DU FOND
+// ============================================================
+
+if (
+    backgroundSetting
+) {
+
+    backgroundSetting.addEventListener(
+        "input",
+        () => {
+
+            document.body.style
+                .backgroundColor =
+                backgroundSetting.value;
+
+        }
+    );
+
+
+    backgroundSetting.addEventListener(
+        "change",
+        () => {
+
+            sauvegarderParametre(
+                "background",
+                backgroundSetting.value
+            );
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// 🔊 VOLUME SETTINGS
+// ============================================================
+
+if (
+    settingsVolume
+) {
+
+    settingsVolume.addEventListener(
+        "input",
+        () => {
+
+            const volume =
+                Number(
+                    settingsVolume.value
+                );
+
+
+            if (audio) {
+
+                audio.volume =
+                    volume;
+
+            }
+
+
+            if (volumeBar) {
+
+                volumeBar.value =
+                    volume;
+
+            }
+
+        }
+    );
+
+
+    settingsVolume.addEventListener(
+        "change",
+        () => {
+
+            sauvegarderParametre(
+                "volume",
+                Number(
+                    settingsVolume.value
+                )
+            );
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// ▶️ AUTOPLAY
+// ============================================================
+
+if (
+    autoplaySetting
+) {
+
+    autoplaySetting.addEventListener(
+        "change",
+        () => {
+
+            sauvegarderParametre(
+                "autoplay",
+                autoplaySetting.checked
+            );
+
+        }
+    );
+
+}
 
 
 // ============================================================
@@ -815,6 +1313,7 @@ function loadSong(
 ) {
 
     if (
+        !audio ||
         !currentPlaylist ||
         currentPlaylist.length === 0
     ) {
@@ -838,24 +1337,54 @@ function loadSong(
         song.file;
 
 
-    currentTitle.textContent =
-        song.title;
+    if (
+        currentTitle
+    ) {
+
+        currentTitle.textContent =
+            song.title;
+
+    }
 
 
-    currentArtist.textContent =
-        song.artist;
+    if (
+        currentArtist
+    ) {
+
+        currentArtist.textContent =
+            song.artist;
+
+    }
 
 
-    progressBar.value =
-        0;
+    if (
+        progressBar
+    ) {
+
+        progressBar.value =
+            0;
+
+    }
 
 
-    currentTime.textContent =
-        "0:00";
+    if (
+        currentTime
+    ) {
+
+        currentTime.textContent =
+            "0:00";
+
+    }
 
 
-    duration.textContent =
-        "0:00";
+    if (
+        duration
+    ) {
+
+        duration.textContent =
+            "0:00";
+
+    }
 
 }
 
@@ -865,6 +1394,15 @@ function loadSong(
 // ============================================================
 
 async function playRadio() {
+
+    if (
+        !audio
+    ) {
+
+        return;
+
+    }
+
 
     try {
 
@@ -878,7 +1416,23 @@ async function playRadio() {
         updatePlayer();
 
 
+        if (
+            radioStatus
+        ) {
+
+            radioStatus.textContent =
+                "🤖 PROGRAMME AUTOMATIQUE";
+
+        }
+
     } catch (error) {
+
+        isPlaying =
+            false;
+
+
+        updatePlayer();
+
 
         console.error(
             "❌ Lecture audio impossible."
@@ -894,6 +1448,15 @@ async function playRadio() {
 // ============================================================
 
 function pauseRadio() {
+
+    if (
+        !audio
+    ) {
+
+        return;
+
+    }
+
 
     audio.pause();
 
@@ -912,6 +1475,16 @@ function pauseRadio() {
 // ============================================================
 
 function updatePlayer() {
+
+    if (
+        !playButton ||
+        !mainPlay
+    ) {
+
+        return;
+
+    }
+
 
     if (
         isPlaying
@@ -1081,6 +1654,10 @@ playlistButtons.forEach(
                     ]
                 ) {
 
+                    console.error(
+                        "❌ Playlist inconnue."
+                    );
+
                     return;
 
                 }
@@ -1111,7 +1688,7 @@ playlistButtons.forEach(
 
 
 // ============================================================
-// 🔊 VOLUME
+// 🔊 VOLUME DU LECTEUR
 // ============================================================
 
 if (
@@ -1128,13 +1705,38 @@ if (
                 );
 
 
-            audio.volume =
-                volume;
+            if (
+                audio
+            ) {
 
+                audio.volume =
+                    volume;
+
+            }
+
+
+            if (
+                settingsVolume
+            ) {
+
+                settingsVolume.value =
+                    volume;
+
+            }
+
+        }
+    );
+
+
+    volumeBar.addEventListener(
+        "change",
+        () => {
 
             sauvegarderParametre(
                 "volume",
-                volume
+                Number(
+                    volumeBar.value
+                )
             );
 
         }
@@ -1147,63 +1749,99 @@ if (
 // ⏱️ DURÉE
 // ============================================================
 
-audio.addEventListener(
-    "loadedmetadata",
-    () => {
+if (
+    audio
+) {
 
-        duration.textContent =
-            formatTime(
-                audio.duration
-            );
+    audio.addEventListener(
+        "loadedmetadata",
+        () => {
 
-    }
-);
+            if (
+                duration
+            ) {
+
+                duration.textContent =
+                    formatTime(
+                        audio.duration
+                    );
+
+            }
+
+        }
+    );
+
+}
 
 
 // ============================================================
 // 📈 PROGRESSION
 // ============================================================
 
-audio.addEventListener(
-    "timeupdate",
-    () => {
+if (
+    audio
+) {
 
-        if (
-            !Number.isFinite(
-                audio.duration
-            )
-        ) {
+    audio.addEventListener(
+        "timeupdate",
+        () => {
 
-            return;
+            if (
+                !Number.isFinite(
+                    audio.duration
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            const pourcentage =
+                (
+                    audio.currentTime /
+                    audio.duration
+                ) *
+                100;
+
+
+            if (
+                progressBar
+            ) {
+
+                progressBar.value =
+                    pourcentage;
+
+            }
+
+
+            if (
+                currentTime
+            ) {
+
+                currentTime.textContent =
+                    formatTime(
+                        audio.currentTime
+                    );
+
+            }
+
+
+            if (
+                duration
+            ) {
+
+                duration.textContent =
+                    formatTime(
+                        audio.duration
+                    );
+
+            }
 
         }
+    );
 
-
-        const pourcentage =
-            (
-                audio.currentTime /
-                audio.duration
-            ) *
-            100;
-
-
-        progressBar.value =
-            pourcentage;
-
-
-        currentTime.textContent =
-            formatTime(
-                audio.currentTime
-            );
-
-
-        duration.textContent =
-            formatTime(
-                audio.duration
-            );
-
-    }
-);
+}
 
 
 // ============================================================
@@ -1219,6 +1857,7 @@ if (
         () => {
 
             if (
+                !audio ||
                 !Number.isFinite(
                     audio.duration
                 )
@@ -1248,350 +1887,102 @@ if (
 // 🎵 MUSIQUE TERMINÉE
 // ============================================================
 
-audio.addEventListener(
-    "ended",
-    () => {
+if (
+    audio
+) {
 
-        nextSong();
+    audio.addEventListener(
+        "ended",
+        () => {
 
-    }
-);
+            nextSong();
+
+        }
+    );
+
+}
 
 
 // ============================================================
 // ❌ ERREUR AUDIO
 // ============================================================
 
-audio.addEventListener(
-    "error",
-    () => {
+if (
+    audio
+) {
 
-        isPlaying =
-            false;
+    audio.addEventListener(
+        "error",
+        () => {
 
-
-        updatePlayer();
-
-
-        currentTitle.textContent =
-            "Erreur audio ❌";
+            isPlaying =
+                false;
 
 
-        currentArtist.textContent =
-            "Impossible de charger ce morceau.";
+            updatePlayer();
 
-    }
-);
+
+            if (
+                currentTitle
+            ) {
+
+                currentTitle.textContent =
+                    "Erreur audio ❌";
+
+            }
+
+
+            if (
+                currentArtist
+            ) {
+
+                currentArtist.textContent =
+                    "Impossible de charger ce morceau.";
+
+            }
+
+        }
+    );
+
+}
 
 
 // ============================================================
 // 🚀 DÉMARRAGE
 // ============================================================
 
-loadSong(0);
+loadSong(
+    0
+);
+
 
 updatePlayer();
 
 
+if (
+    settingsPanel
+) {
+
+    settingsPanel.hidden =
+        true;
+
+
+    settingsPanel.style.display =
+        "none";
+
+}
+
+
 console.log(
     "📻 GaloulouRadio démarré."
- );
+);
 
 
-// ============================================================
-// ⚙️ SETTINGS
-// ============================================================
+console.log(
+    "🔥 Firebase Authentication chargé."
+);
 
-const settingsButton =
-    document.getElementById(
-        "settingsButton"
-    );
 
-
-const settingsPanel =
-    document.getElementById(
-        "settingsPanel"
-    );
-
-
-const closeSettingsButton =
-    document.getElementById(
-        "closeSettingsButton"
-    );
-
-
-const themeSetting =
-    document.getElementById(
-        "themeSetting"
-    );
-
-
-const accentColorSetting =
-    document.getElementById(
-        "accentColorSetting"
-    );
-
-
-const backgroundSetting =
-    document.getElementById(
-        "backgroundSetting"
-    );
-
-
-const settingsVolume =
-    document.getElementById(
-        "settingsVolume"
-    );
-
-
-const autoplaySetting =
-    document.getElementById(
-        "autoplaySetting"
-    );
-
-
-// ============================================================
-// ⚙️ OUVRIR LES SETTINGS
-// ============================================================
-
-if (settingsButton) {
-
-    settingsButton.addEventListener(
-        "click",
-        () => {
-
-            if (!settingsPanel) {
-                return;
-            }
-
-
-            settingsPanel.hidden =
-                false;
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// ❌ FERMER LES SETTINGS
-// ============================================================
-
-if (closeSettingsButton) {
-
-    closeSettingsButton.addEventListener(
-        "click",
-        () => {
-
-            if (!settingsPanel) {
-                return;
-            }
-
-
-            settingsPanel.hidden =
-                true;
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// 🖱️ CLIQUER EN DEHORS
-// ============================================================
-
-if (settingsPanel) {
-
-    settingsPanel.addEventListener(
-        "click",
-        (event) => {
-
-            if (
-                event.target ===
-                settingsPanel
-            ) {
-
-                settingsPanel.hidden =
-                    true;
-
-            }
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// 🌙 THÈME
-// ============================================================
-
-if (themeSetting) {
-
-    themeSetting.addEventListener(
-        "change",
-        () => {
-
-            const theme =
-                themeSetting.value;
-
-
-            document.documentElement
-                .setAttribute(
-                    "data-theme",
-                    theme
-                );
-
-
-            sauvegarderParametre(
-                "theme",
-                theme
-            );
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// 🎨 COULEUR D'ACCENT
-// ============================================================
-
-if (accentColorSetting) {
-
-    accentColorSetting.addEventListener(
-        "input",
-        () => {
-
-            const color =
-                accentColorSetting.value;
-
-
-            document.documentElement.style
-                .setProperty(
-                    "--accent-color",
-                    color
-                );
-
-        }
-    );
-
-
-    accentColorSetting.addEventListener(
-        "change",
-        () => {
-
-            sauvegarderParametre(
-                "accentColor",
-                accentColorSetting.value
-            );
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// 🖼️ FOND
-// ============================================================
-
-if (backgroundSetting) {
-
-    backgroundSetting.addEventListener(
-        "input",
-        () => {
-
-            document.body.style
-                .backgroundColor =
-                backgroundSetting.value;
-
-        }
-    );
-
-
-    backgroundSetting.addEventListener(
-        "change",
-        () => {
-
-            sauvegarderParametre(
-                "background",
-                backgroundSetting.value
-            );
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// 🔊 VOLUME
-// ============================================================
-
-if (settingsVolume) {
-
-    settingsVolume.addEventListener(
-        "input",
-        () => {
-
-            const volume =
-                Number(
-                    settingsVolume.value
-                );
-
-
-            audio.volume =
-                volume;
-
-
-            if (volumeBar) {
-
-                volumeBar.value =
-                    volume;
-
-            }
-
-        }
-    );
-
-
-    settingsVolume.addEventListener(
-        "change",
-        () => {
-
-            sauvegarderParametre(
-                "volume",
-                Number(
-                    settingsVolume.value
-                )
-            );
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// ▶️ AUTOPLAY
-// ============================================================
-
-if (autoplaySetting) {
-
-    autoplaySetting.addEventListener(
-        "change",
-        () => {
-
-            sauvegarderParametre(
-                "autoplay",
-                autoplaySetting.checked
-            );
-
-        }
-    );
-
-}
+console.log(
+    "☁️ Firebase Realtime Database chargé."
+);
