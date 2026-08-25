@@ -2,14 +2,17 @@
 // 📻 GALOULOURADIO
 // 🎵 LECTEUR
 // 🔐 FIREBASE AUTHENTICATION
-// ☁️ FIREBASE REALTIME DATABASE
-// ⚙️ SETTINGS
+// ============================================================
+
+
+// ============================================================
+// 🔥 FIREBASE
 // ============================================================
 
 import {
-    auth,
-    db
+    auth
 } from "./firebase.js";
+
 
 import {
     GoogleAuthProvider,
@@ -18,54 +21,95 @@ import {
     signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-import {
-    ref,
-    get,
-    set,
-    update
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
-
 
 // ============================================================
 // 🔵 GOOGLE
 // ============================================================
 
-const googleProvider = new GoogleAuthProvider();
+const googleProvider =
+    new GoogleAuthProvider();
 
 
 // ============================================================
 // 📌 ÉLÉMENTS HTML
 // ============================================================
 
-const googleLoginButton = document.getElementById("googleLoginButton");
-const settingsButton = document.getElementById("settingsButton");
-const settingsPanel = document.getElementById("settingsPanel");
-const closeSettingsButton = document.getElementById("closeSettingsButton");
-const settingsLoginMessage = document.getElementById("settingsLoginMessage");
+const googleLoginButton =
+    document.getElementById(
+        "googleLoginButton"
+    );
 
-const themeSetting = document.getElementById("themeSetting");
-const accentColorSetting = document.getElementById("accentColorSetting");
-const backgroundSetting = document.getElementById("backgroundSetting");
-const settingsVolume = document.getElementById("settingsVolume");
-const autoplaySetting = document.getElementById("autoplaySetting");
 
-const audio = document.getElementById("radioAudio");
-const playButton = document.getElementById("playButton");
-const mainPlay = document.getElementById("mainPlay");
-const nextButton = document.getElementById("nextButton");
+const audio =
+    document.getElementById(
+        "radioAudio"
+    );
 
-const currentTitle = document.getElementById("currentTitle");
-const currentArtist = document.getElementById("currentArtist");
 
-const progressBar = document.getElementById("progressBar");
-const currentTime = document.getElementById("currentTime");
-const duration = document.getElementById("duration");
+const playButton =
+    document.getElementById(
+        "playButton"
+    );
 
-const volumeBar = document.getElementById("volumeBar");
-const radioStatus = document.getElementById("radioStatus");
+
+const mainPlay =
+    document.getElementById(
+        "mainPlay"
+    );
+
+
+const nextButton =
+    document.getElementById(
+        "nextButton"
+    );
+
+
+const currentTitle =
+    document.getElementById(
+        "currentTitle"
+    );
+
+
+const currentArtist =
+    document.getElementById(
+        "currentArtist"
+    );
+
+
+const progressBar =
+    document.getElementById(
+        "progressBar"
+    );
+
+
+const currentTime =
+    document.getElementById(
+        "currentTime"
+    );
+
+
+const duration =
+    document.getElementById(
+        "duration"
+    );
+
+
+const volumeBar =
+    document.getElementById(
+        "volumeBar"
+    );
+
+
+const radioStatus =
+    document.getElementById(
+        "radioStatus"
+    );
+
 
 const playlistButtons =
-    document.querySelectorAll(".playlist-button");
+    document.querySelectorAll(
+        ".playlist-button"
+    );
 
 
 // ============================================================
@@ -75,60 +119,112 @@ const playlistButtons =
 const playlists = {
 
     hits: [
+
         {
-            title: "Le Site sera prêt en Noel 2026 !",
-            artist: "GaloulouStudio",
-            file: "music/music2.mp3"
+            title:
+                "Le Site sera prêt en Noel 2026 !",
+
+            artist:
+                "GaloulouStudio",
+
+            file:
+                "music/music2.mp3"
         },
 
         {
-            title: "Music 1",
-            artist: "GaloulouRadio",
-            file: "music/music1.mp3"
+            title:
+                "Music 1",
+
+            artist:
+                "GaloulouRadio",
+
+            file:
+                "music/music1.mp3"
         }
+
     ],
+
 
     morning: [
+
         {
-            title: "Chill",
-            artist: "Kulakovka",
-            file: "music/kulakovka-chill-reel-570198.mp3"
+            title:
+                "Chill",
+
+            artist:
+                "Kulakovka",
+
+            file:
+                "music/kulakovka-chill-reel-570198.mp3"
         },
 
         {
-            title: "Reveille Doux",
-            artist: "Kulakovka",
-            file: "music/kulakovka-lofi-relax-570489.mp3"
+            title:
+                "Reveille Doux",
+
+            artist:
+                "Kulakovka",
+
+            file:
+                "music/kulakovka-lofi-relax-570489.mp3"
         }
+
     ],
+
 
     night: [
+
         {
-            title: "Music 1",
-            artist: "GaloulouRadio",
-            file: "music/music1.mp3"
+            title:
+                "Music 1",
+
+            artist:
+                "GaloulouRadio",
+
+            file:
+                "music/music1.mp3"
         },
 
         {
-            title: "Chill",
-            artist: "Kulakovka",
-            file: "music/kulakovka-chill-reel-570198.mp3"
+            title:
+                "Chill",
+
+            artist:
+                "Kulakovka",
+
+            file:
+                "music/kulakovka-chill-reel-570198.mp3"
         }
+
     ],
 
+
     chill: [
+
         {
-            title: "Chill",
-            artist: "Kulakovka",
-            file: "music/kulakovka-chill-reel-570198.mp3"
+            title:
+                "Chill",
+
+            artist:
+                "Kulakovka",
+
+            file:
+                "music/kulakovka-chill-reel-570198.mp3"
         },
 
         {
-            title: "Music 1",
-            artist: "GaloulouRadio",
-            file: "music/music1.mp3"
+            title:
+                "Music 1",
+
+            artist:
+                "GaloulouRadio",
+
+            file:
+                "music/music1.mp3"
         }
+
     ]
+
 };
 
 
@@ -136,36 +232,16 @@ const playlists = {
 // ⚙️ ÉTAT DU LECTEUR
 // ============================================================
 
-let currentPlaylist = playlists.hits;
-let currentIndex = 0;
-let isPlaying = false;
+let currentPlaylist =
+    playlists.hits;
 
 
-// ============================================================
-// ☁️ PARAMÈTRES PAR DÉFAUT
-// ============================================================
-
-const parametresParDefaut = {
-    theme: "system",
-    accentColor: "#2563eb",
-    background: "#050b18",
-    volume: 1,
-    autoplay: true,
-    favorites: []
-};
-
-let parametresUtilisateur = {
-    ...parametresParDefaut
-};
+let currentIndex =
+    0;
 
 
-// ============================================================
-// 🛡️ UTILISATEUR
-// ============================================================
-
-function utilisateurConnecte() {
-    return Boolean(auth.currentUser);
-}
+let isPlaying =
+    false;
 
 
 // ============================================================
@@ -174,20 +250,76 @@ function utilisateurConnecte() {
 
 async function connecterAvecGoogle() {
 
-    if (utilisateurConnecte()) {
+    if (
+        auth.currentUser
+    ) {
+
         return;
+
     }
 
+
     try {
+
+        console.log(
+            "🔵 Connexion Google..."
+        );
+
 
         await signInWithPopup(
             auth,
             googleProvider
         );
 
-        console.log("✅ Connexion Google réussie.");
+
+        console.log(
+            "✅ Connexion Google réussie."
+        );
+
 
     } catch (error) {
+
+        if (
+            error.code ===
+            "auth/popup-closed-by-user"
+        ) {
+
+            console.log(
+                "ℹ️ Fenêtre Google fermée."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            error.code ===
+            "auth/cancelled-popup-request"
+        ) {
+
+            console.log(
+                "ℹ️ Une connexion Google est déjà en cours."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            error.code ===
+            "auth/unauthorized-domain"
+        ) {
+
+            console.error(
+                "❌ Le domaine du site n'est pas autorisé dans Firebase."
+            );
+
+            return;
+
+        }
+
 
         console.error(
             "❌ Connexion Google impossible :",
@@ -195,6 +327,7 @@ async function connecterAvecGoogle() {
         );
 
     }
+
 }
 
 
@@ -206,9 +339,15 @@ async function deconnecter() {
 
     try {
 
-        await signOut(auth);
+        await signOut(
+            auth
+        );
 
-        console.log("🚪 Déconnexion réussie.");
+
+        console.log(
+            "🚪 Déconnexion réussie."
+        );
+
 
     } catch (error) {
 
@@ -218,6 +357,7 @@ async function deconnecter() {
         );
 
     }
+
 }
 
 
@@ -225,326 +365,90 @@ async function deconnecter() {
 // 🔵 BOUTON COMPTE
 // ============================================================
 
-function mettreAJourBoutonCompte(user) {
+function mettreAJourBoutonCompte(
+    user
+) {
 
-    if (!googleLoginButton) {
+    if (
+        !googleLoginButton
+    ) {
+
         return;
+
     }
 
-    googleLoginButton.onclick = null;
 
-    if (user) {
+    googleLoginButton.removeEventListener(
+        "click",
+        connecterAvecGoogle
+    );
+
+
+    googleLoginButton.removeEventListener(
+        "click",
+        deconnecter
+    );
+
+
+    if (
+        user
+    ) {
 
         googleLoginButton.textContent =
             "👤 Mon compte · Déconnexion";
 
-        googleLoginButton.onclick =
-            deconnecter;
 
-    } else {
+        googleLoginButton.addEventListener(
+            "click",
+            deconnecter
+        );
+
+    }
+
+    else {
 
         googleLoginButton.textContent =
             "🔵 Se connecter avec Google";
 
-        googleLoginButton.onclick =
-            connecterAvecGoogle;
 
-    }
-}
+        googleLoginButton.addEventListener(
+            "click",
+            connecterAvecGoogle
+        );
 
-
-// ============================================================
-// 🎨 APPLIQUER LE THÈME
-// ============================================================
-
-function appliquerTheme(theme) {
-
-    if (theme === "system") {
-
-        document.documentElement
-            .removeAttribute("data-theme");
-
-    } else {
-
-        document.documentElement
-            .setAttribute(
-                "data-theme",
-                theme
-            );
-
-    }
-}
-
-
-// ============================================================
-// 🎨 APPLIQUER LES PARAMÈTRES
-// ============================================================
-
-function appliquerParametres() {
-
-    const p = parametresUtilisateur;
-
-
-    // 🎨 COULEUR
-
-    if (p.accentColor) {
-
-        document.documentElement.style
-            .setProperty(
-                "--accent-color",
-                p.accentColor
-            );
-
-        document.documentElement.style
-            .setProperty(
-                "--blue",
-                p.accentColor
-            );
-
-    }
-
-
-    // 🖼️ FOND
-
-    if (p.background) {
-
-        document.body.style.background =
-            p.background;
-
-    }
-
-
-    // 🌙 THÈME
-
-    if (p.theme) {
-
-        appliquerTheme(p.theme);
-
-    }
-
-
-    // 🔊 VOLUME
-
-    if (typeof p.volume === "number") {
-
-        const volume =
-            Math.max(
-                0,
-                Math.min(
-                    1,
-                    p.volume
-                )
-            );
-
-        if (audio) {
-            audio.volume = volume;
-        }
-
-        if (volumeBar) {
-            volumeBar.value = volume;
-        }
-
-        if (settingsVolume) {
-            settingsVolume.value = volume;
-        }
-    }
-
-
-    // ▶️ AUTOPLAY
-
-    if (autoplaySetting) {
-
-        autoplaySetting.checked =
-            p.autoplay === true;
-
-    }
-
-
-    // 🔄 INPUTS
-
-    if (themeSetting) {
-        themeSetting.value =
-            p.theme || "system";
-    }
-
-    if (accentColorSetting) {
-        accentColorSetting.value =
-            p.accentColor || "#2563eb";
-    }
-
-    if (backgroundSetting) {
-        backgroundSetting.value =
-            p.background || "#050b18";
     }
 
 }
 
 
 // ============================================================
-// ☁️ CHARGER PARAMÈTRES
-// ============================================================
-
-async function chargerParametres(user) {
-
-    if (!user) {
-
-        parametresUtilisateur = {
-            ...parametresParDefaut
-        };
-
-        appliquerParametres();
-
-        return;
-    }
-
-    try {
-
-        const userRef =
-            ref(
-                db,
-                `users/${user.uid}`
-            );
-
-        const snapshot =
-            await get(userRef);
-
-
-        if (!snapshot.exists()) {
-
-            await set(
-                userRef,
-                parametresParDefaut
-            );
-
-            parametresUtilisateur = {
-                ...parametresParDefaut
-            };
-
-        } else {
-
-            parametresUtilisateur = {
-                ...parametresParDefaut,
-                ...snapshot.val()
-            };
-
-        }
-
-        appliquerParametres();
-
-        console.log(
-            "☁️ Paramètres chargés."
-        );
-
-    } catch (error) {
-
-        console.error(
-            "❌ Erreur chargement paramètres :",
-            error
-        );
-
-        appliquerParametres();
-
-    }
-}
-
-
-// ============================================================
-// 💾 SAUVEGARDER PARAMÈTRE
-// ============================================================
-
-async function sauvegarderParametre(
-    nom,
-    valeur
-) {
-
-    const user = auth.currentUser;
-
-    // On applique quand même localement
-    parametresUtilisateur[nom] =
-        valeur;
-
-
-    // Pas connecté → pas de sauvegarde Firebase
-    if (!user) {
-
-        console.log(
-            "🔐 Connecte-toi pour sauvegarder tes paramètres."
-        );
-
-        return;
-    }
-
-
-    try {
-
-        const userRef =
-            ref(
-                db,
-                `users/${user.uid}`
-            );
-
-        await update(
-            userRef,
-            {
-                [nom]: valeur
-            }
-        );
-
-        console.log(
-            `💾 ${nom} sauvegardé.`
-        );
-
-    } catch (error) {
-
-        console.error(
-            "❌ Erreur sauvegarde :",
-            error
-        );
-
-    }
-}
-
-
-// ============================================================
-// 👤 FIREBASE AUTH
+// 👤 ÉTAT FIREBASE
 // ============================================================
 
 onAuthStateChanged(
     auth,
-    async (user) => {
+    (user) => {
 
-        mettreAJourBoutonCompte(user);
+        mettreAJourBoutonCompte(
+            user
+        );
 
-        if (user) {
+
+        if (
+            user
+        ) {
 
             console.log(
-                "👤 Compte connecté :",
-                user.email
+                "👤 Compte connecté."
             );
 
-            if (settingsLoginMessage) {
+        }
 
-                settingsLoginMessage.textContent =
-                    "☁️ Tes paramètres sont sauvegardés sur ton compte.";
-
-            }
-
-            await chargerParametres(user);
-
-        } else {
+        else {
 
             console.log(
                 "🚪 Aucun compte connecté."
             );
-
-            if (settingsLoginMessage) {
-
-                settingsLoginMessage.textContent =
-                    "🔐 Connecte-toi avec Google pour sauvegarder tes paramètres.";
-
-            }
-
-            await chargerParametres(null);
 
         }
 
@@ -553,284 +457,57 @@ onAuthStateChanged(
 
 
 // ============================================================
-// ⚙️ SETTINGS — OUVRIR
+// 🕐 FORMAT DU TEMPS
 // ============================================================
 
-function ouvrirSettings() {
-
-    if (!settingsPanel) {
-        return;
-    }
-
-    settingsPanel.hidden = false;
-    settingsPanel.style.display = "block";
-
-}
-
-
-// ============================================================
-// ❌ SETTINGS — FERMER
-// ============================================================
-
-function fermerSettings() {
-
-    if (!settingsPanel) {
-        return;
-    }
-
-    settingsPanel.hidden = true;
-    settingsPanel.style.display = "none";
-
-}
-
-
-if (settingsButton) {
-
-    settingsButton.addEventListener(
-        "click",
-        ouvrirSettings
-    );
-
-}
-
-
-if (closeSettingsButton) {
-
-    closeSettingsButton.addEventListener(
-        "click",
-        fermerSettings
-    );
-
-}
-
-
-if (settingsPanel) {
-
-    settingsPanel.addEventListener(
-        "click",
-        (event) => {
-
-            if (
-                event.target ===
-                settingsPanel
-            ) {
-
-                fermerSettings();
-
-            }
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// 🌙 THÈME
-// ============================================================
-
-if (themeSetting) {
-
-    themeSetting.addEventListener(
-        "change",
-        () => {
-
-            const theme =
-                themeSetting.value;
-
-            appliquerTheme(theme);
-
-            sauvegarderParametre(
-                "theme",
-                theme
-            );
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// 🎨 COULEUR
-// ============================================================
-
-if (accentColorSetting) {
-
-    accentColorSetting.addEventListener(
-        "input",
-        () => {
-
-            const color =
-                accentColorSetting.value;
-
-            document.documentElement.style
-                .setProperty(
-                    "--accent-color",
-                    color
-                );
-
-            document.documentElement.style
-                .setProperty(
-                    "--blue",
-                    color
-                );
-
-        }
-    );
-
-
-    accentColorSetting.addEventListener(
-        "change",
-        () => {
-
-            sauvegarderParametre(
-                "accentColor",
-                accentColorSetting.value
-            );
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// 🖼️ FOND
-// ============================================================
-
-if (backgroundSetting) {
-
-    backgroundSetting.addEventListener(
-        "input",
-        () => {
-
-            document.body.style.background =
-                backgroundSetting.value;
-
-        }
-    );
-
-
-    backgroundSetting.addEventListener(
-        "change",
-        () => {
-
-            sauvegarderParametre(
-                "background",
-                backgroundSetting.value
-            );
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// 🔊 VOLUME SETTINGS
-// ============================================================
-
-if (settingsVolume) {
-
-    settingsVolume.addEventListener(
-        "input",
-        () => {
-
-            const volume =
-                Number(
-                    settingsVolume.value
-                );
-
-            if (audio) {
-                audio.volume = volume;
-            }
-
-            if (volumeBar) {
-                volumeBar.value = volume;
-            }
-
-        }
-    );
-
-
-    settingsVolume.addEventListener(
-        "change",
-        () => {
-
-            sauvegarderParametre(
-                "volume",
-                Number(settingsVolume.value)
-            );
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// ▶️ AUTOPLAY
-// ============================================================
-
-if (autoplaySetting) {
-
-    autoplaySetting.addEventListener(
-        "change",
-        () => {
-
-            sauvegarderParametre(
-                "autoplay",
-                autoplaySetting.checked
-            );
-
-        }
-    );
-
-}
-
-
-// ============================================================
-// 🕐 FORMAT TEMPS
-// ============================================================
-
-function formatTime(seconds) {
+function formatTime(
+    seconds
+) {
 
     if (
-        !Number.isFinite(seconds) ||
-        seconds < 0
+        !Number.isFinite(
+            seconds
+        )
     ) {
 
         return "0:00";
 
     }
 
+
     const minutes =
         Math.floor(
             seconds / 60
         );
+
 
     const secondes =
         Math.floor(
             seconds % 60
         );
 
+
     return (
         minutes +
         ":" +
         secondes
             .toString()
-            .padStart(2, "0")
+            .padStart(
+                2,
+                "0"
+            )
     );
 
 }
 
 
 // ============================================================
-// 🎵 CHARGER MUSIQUE
+// 🎵 CHARGER UNE MUSIQUE
 // ============================================================
 
-function loadSong(index) {
+function loadSong(
+    index
+) {
 
     if (
         !audio ||
@@ -842,19 +519,24 @@ function loadSong(index) {
 
     }
 
-    currentIndex = index;
+
+    currentIndex =
+        index;
+
 
     const song =
-        currentPlaylist[currentIndex];
+        currentPlaylist[
+            currentIndex
+        ];
 
 
     audio.src =
         song.file;
 
-    audio.load();
 
-
-    if (currentTitle) {
+    if (
+        currentTitle
+    ) {
 
         currentTitle.textContent =
             song.title;
@@ -862,7 +544,9 @@ function loadSong(index) {
     }
 
 
-    if (currentArtist) {
+    if (
+        currentArtist
+    ) {
 
         currentArtist.textContent =
             song.artist;
@@ -870,18 +554,33 @@ function loadSong(index) {
     }
 
 
-    if (progressBar) {
-        progressBar.value = 0;
+    if (
+        progressBar
+    ) {
+
+        progressBar.value =
+            0;
+
     }
 
 
-    if (currentTime) {
-        currentTime.textContent = "0:00";
+    if (
+        currentTime
+    ) {
+
+        currentTime.textContent =
+            "0:00";
+
     }
 
 
-    if (duration) {
-        duration.textContent = "0:00";
+    if (
+        duration
+    ) {
+
+        duration.textContent =
+            "0:00";
+
     }
 
 }
@@ -893,8 +592,12 @@ function loadSong(index) {
 
 async function playRadio() {
 
-    if (!audio) {
+    if (
+        !audio
+    ) {
+
         return;
+
     }
 
 
@@ -902,26 +605,34 @@ async function playRadio() {
 
         await audio.play();
 
-        isPlaying = true;
+
+        isPlaying =
+            true;
+
 
         updatePlayer();
 
 
-        if (radioStatus) {
+        if (
+            radioStatus
+        ) {
 
             radioStatus.textContent =
-                "🔴 EN LECTURE";
+                "🤖 PROGRAMME AUTOMATIQUE";
 
         }
 
     } catch (error) {
 
-        isPlaying = false;
+        isPlaying =
+            false;
+
 
         updatePlayer();
 
+
         console.error(
-            "❌ Lecture impossible :",
+            "❌ Lecture audio impossible :",
             error
         );
 
@@ -936,49 +647,64 @@ async function playRadio() {
 
 function pauseRadio() {
 
-    if (!audio) {
+    if (
+        !audio
+    ) {
+
         return;
+
     }
+
 
     audio.pause();
 
-    isPlaying = false;
+
+    isPlaying =
+        false;
+
 
     updatePlayer();
-
-
-    if (radioStatus) {
-
-        radioStatus.textContent =
-            "🤖 PROGRAMME AUTOMATIQUE";
-
-    }
 
 }
 
 
 // ============================================================
-// 🔄 INTERFACE
+// 🔄 INTERFACE DU LECTEUR
 // ============================================================
 
 function updatePlayer() {
 
-    if (playButton) {
+    if (
+        !playButton ||
+        !mainPlay
+    ) {
 
-        playButton.textContent =
-            isPlaying
-                ? "⏸ Mettre en pause"
-                : "▶ Écouter GaloulouRadio";
+        return;
 
     }
 
 
-    if (mainPlay) {
+    if (
+        isPlaying
+    ) {
+
+        playButton.textContent =
+            "⏸ Mettre en pause";
+
 
         mainPlay.textContent =
-            isPlaying
-                ? "⏸"
-                : "▶";
+            "⏸";
+
+    }
+
+    else {
+
+        playButton.textContent =
+            "▶ Écouter GaloulouRadio";
+
+
+        mainPlay.textContent =
+            "▶";
 
     }
 
@@ -1003,17 +729,22 @@ function nextSong() {
 
     currentIndex++;
 
+
     if (
         currentIndex >=
         currentPlaylist.length
     ) {
 
-        currentIndex = 0;
+        currentIndex =
+            0;
 
     }
 
 
-    loadSong(currentIndex);
+    loadSong(
+        currentIndex
+    );
+
 
     playRadio();
 
@@ -1021,19 +752,29 @@ function nextSong() {
 
 
 // ============================================================
-// ▶️ BOUTON PRINCIPAL
+// ▶️ BOUTON PLAY PRINCIPAL
 // ============================================================
 
-if (playButton) {
+if (
+    playButton
+) {
 
     playButton.addEventListener(
         "click",
         () => {
 
-            if (isPlaying) {
+            if (
+                isPlaying
+            ) {
+
                 pauseRadio();
-            } else {
+
+            }
+
+            else {
+
                 playRadio();
+
             }
 
         }
@@ -1043,19 +784,29 @@ if (playButton) {
 
 
 // ============================================================
-// ▶️ BOUTON LECTEUR
+// ▶️ BOUTON DU LECTEUR
 // ============================================================
 
-if (mainPlay) {
+if (
+    mainPlay
+) {
 
     mainPlay.addEventListener(
         "click",
         () => {
 
-            if (isPlaying) {
+            if (
+                isPlaying
+            ) {
+
                 pauseRadio();
-            } else {
+
+            }
+
+            else {
+
                 playRadio();
+
             }
 
         }
@@ -1068,7 +819,9 @@ if (mainPlay) {
 // ⏭️ BOUTON SUIVANT
 // ============================================================
 
-if (nextButton) {
+if (
+    nextButton
+) {
 
     nextButton.addEventListener(
         "click",
@@ -1094,12 +847,13 @@ playlistButtons.forEach(
 
 
                 if (
-                    !playlists[playlistName]
+                    !playlists[
+                        playlistName
+                    ]
                 ) {
 
                     console.error(
-                        "❌ Playlist inconnue :",
-                        playlistName
+                        "❌ Playlist inconnue."
                     );
 
                     return;
@@ -1108,11 +862,19 @@ playlistButtons.forEach(
 
 
                 currentPlaylist =
-                    playlists[playlistName];
+                    playlists[
+                        playlistName
+                    ];
 
-                currentIndex = 0;
 
-                loadSong(currentIndex);
+                currentIndex =
+                    0;
+
+
+                loadSong(
+                    currentIndex
+                );
+
 
                 playRadio();
 
@@ -1124,38 +886,31 @@ playlistButtons.forEach(
 
 
 // ============================================================
-// 🔊 VOLUME LECTEUR
+// 🔊 VOLUME
 // ============================================================
 
-if (volumeBar) {
+if (
+    volumeBar
+) {
 
     volumeBar.addEventListener(
         "input",
         () => {
 
             const volume =
-                Number(volumeBar.value);
+                Number(
+                    volumeBar.value
+                );
 
-            if (audio) {
-                audio.volume = volume;
+
+            if (
+                audio
+            ) {
+
+                audio.volume =
+                    volume;
+
             }
-
-            if (settingsVolume) {
-                settingsVolume.value = volume;
-            }
-
-        }
-    );
-
-
-    volumeBar.addEventListener(
-        "change",
-        () => {
-
-            sauvegarderParametre(
-                "volume",
-                Number(volumeBar.value)
-            );
 
         }
     );
@@ -1164,16 +919,20 @@ if (volumeBar) {
 
 
 // ============================================================
-// ⏱️ DURÉE
+// ⏱️ DURÉE DE LA MUSIQUE
 // ============================================================
 
-if (audio) {
+if (
+    audio
+) {
 
     audio.addEventListener(
         "loadedmetadata",
         () => {
 
-            if (duration) {
+            if (
+                duration
+            ) {
 
                 duration.textContent =
                     formatTime(
@@ -1192,7 +951,9 @@ if (audio) {
 // 📈 PROGRESSION
 // ============================================================
 
-if (audio) {
+if (
+    audio
+) {
 
     audio.addEventListener(
         "timeupdate",
@@ -1201,8 +962,7 @@ if (audio) {
             if (
                 !Number.isFinite(
                     audio.duration
-                ) ||
-                audio.duration <= 0
+                )
             ) {
 
                 return;
@@ -1214,10 +974,13 @@ if (audio) {
                 (
                     audio.currentTime /
                     audio.duration
-                ) * 100;
+                ) *
+                100;
 
 
-            if (progressBar) {
+            if (
+                progressBar
+            ) {
 
                 progressBar.value =
                     pourcentage;
@@ -1225,7 +988,9 @@ if (audio) {
             }
 
 
-            if (currentTime) {
+            if (
+                currentTime
+            ) {
 
                 currentTime.textContent =
                     formatTime(
@@ -1235,7 +1000,9 @@ if (audio) {
             }
 
 
-            if (duration) {
+            if (
+                duration
+            ) {
 
                 duration.textContent =
                     formatTime(
@@ -1254,7 +1021,9 @@ if (audio) {
 // 🎚️ BARRE DE PROGRESSION
 // ============================================================
 
-if (progressBar) {
+if (
+    progressBar
+) {
 
     progressBar.addEventListener(
         "input",
@@ -1264,8 +1033,7 @@ if (progressBar) {
                 !audio ||
                 !Number.isFinite(
                     audio.duration
-                ) ||
-                audio.duration <= 0
+                )
             ) {
 
                 return;
@@ -1277,7 +1045,8 @@ if (progressBar) {
                 (
                     Number(
                         progressBar.value
-                    ) / 100
+                    ) /
+                    100
                 ) *
                 audio.duration;
 
@@ -1291,7 +1060,9 @@ if (progressBar) {
 // 🎵 MUSIQUE TERMINÉE
 // ============================================================
 
-if (audio) {
+if (
+    audio
+) {
 
     audio.addEventListener(
         "ended",
@@ -1309,18 +1080,24 @@ if (audio) {
 // ❌ ERREUR AUDIO
 // ============================================================
 
-if (audio) {
+if (
+    audio
+) {
 
     audio.addEventListener(
         "error",
         () => {
 
-            isPlaying = false;
+            isPlaying =
+                false;
+
 
             updatePlayer();
 
 
-            if (currentTitle) {
+            if (
+                currentTitle
+            ) {
 
                 currentTitle.textContent =
                     "Erreur audio ❌";
@@ -1328,7 +1105,9 @@ if (audio) {
             }
 
 
-            if (currentArtist) {
+            if (
+                currentArtist
+            ) {
 
                 currentArtist.textContent =
                     "Impossible de charger ce morceau.";
@@ -1345,15 +1124,20 @@ if (audio) {
 // 🚀 DÉMARRAGE
 // ============================================================
 
-loadSong(0);
+loadSong(
+    0
+);
+
 
 updatePlayer();
 
 
-if (settingsPanel) {
+if (
+    audio
+) {
 
-    settingsPanel.hidden = true;
-    settingsPanel.style.display = "none";
+    audio.volume =
+        1;
 
 }
 
@@ -1362,10 +1146,7 @@ console.log(
     "📻 GaloulouRadio démarré."
 );
 
-console.log(
-    "🔥 Firebase Authentication chargé."
-);
 
 console.log(
-    "☁️ Firebase Realtime Database chargé."
+    "🔥 Firebase Authentication chargé."
 );
