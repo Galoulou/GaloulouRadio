@@ -16,17 +16,34 @@ import {
 
 
 // ============================================================
-// ⚙️ CONFIGURATION
+// ⚙️ CONFIGURATION FIREBASE
 // ============================================================
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCy8s8uLzPXkfa7puZTSYc9bW8CTnj9kkQ",
-    authDomain: "galoulouradio.firebaseapp.com",
-    projectId: "galoulouradio",
-    storageBucket: "galoulouradio.firebasestorage.app",
-    messagingSenderId: "831136925828",
-    appId: "1:831136925828:web:74cc1a0e6c2c6dade75ad1",
-    measurementId: "G-DX74GTQNT0"
+
+    apiKey:
+        "AIzaSyCy8s8uLzPXkfa7puZTSYc9bW8CTnj9kkQ",
+
+    authDomain:
+        "galoulouradio.firebaseapp.com",
+
+    databaseURL:
+        "https://galoulouradio-default-rtdb.europe-west1.firebasedatabase.app",
+
+    projectId:
+        "galoulouradio",
+
+    storageBucket:
+        "galoulouradio.firebasestorage.app",
+
+    messagingSenderId:
+        "831136925828",
+
+    appId:
+        "1:831136925828:web:74cc1a0e6c2c6dade75ad1",
+
+    measurementId:
+        "G-DX74GTQNT0"
 };
 
 
@@ -34,21 +51,24 @@ const firebaseConfig = {
 // 🚀 INITIALISATION
 // ============================================================
 
-const app = initializeApp(firebaseConfig);
+const app =
+    initializeApp(firebaseConfig);
 
 
 // ============================================================
 // 🔐 AUTHENTICATION
 // ============================================================
 
-const auth = getAuth(app);
+const auth =
+    getAuth(app);
 
 
 // ============================================================
 // ☁️ REALTIME DATABASE
 // ============================================================
 
-const db = getDatabase(app);
+const db =
+    getDatabase(app);
 
 
 // ============================================================
@@ -62,6 +82,10 @@ export {
 };
 
 
-console.log("🔥 Firebase chargé !");
-console.log("🔐 Authentication chargé !");
-console.log("☁️ Database chargée !");
+// ============================================================
+// 🟢 MESSAGE DE DÉMARRAGE
+// ============================================================
+
+console.log(
+    "🔥 Firebase initialisé."
+);
