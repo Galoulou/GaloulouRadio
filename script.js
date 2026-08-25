@@ -1,73 +1,255 @@
 // ============================================================
-// 📻 GALOULOURADIO - LECTEUR
+// 📻 GALOULOURADIO - LECTEUR + FIREBASE AUTHENTICATION
 // ============================================================
+
+
+// ============================================================
+// 🔥 FIREBASE AUTHENTICATION
+// ============================================================
+
+import { auth } from "./firebase.js";
+
+import {
+    GoogleAuthProvider,
+    signInWithPopup,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+// ------------------------------------------------------------
+// 🔵 CONNEXION GOOGLE
+// ------------------------------------------------------------
+
+const googleProvider = new GoogleAuthProvider();
+
+window.connexionGoogle = async function () {
+
+    try {
+
+        const result =
+            await signInWithPopup(
+                auth,
+                googleProvider
+            );
+
+        const user =
+            result.user;
+
+        console.log(
+            "✅ Connexion Google réussie !"
+        );
+
+        console.log(
+            "👤 Nom :",
+            user.displayName
+        );
+
+        console.log(
+            "📧 Email :",
+            user.email
+        );
+
+        console.log(
+            "🆔 UID :",
+            user.uid
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ Erreur de connexion Google :",
+            error
+        );
+
+    }
+
+};
+
+
+// ------------------------------------------------------------
+// 🚪 DÉCONNEXION
+// ------------------------------------------------------------
+
+window.deconnexion = async function () {
+
+    try {
+
+        await signOut(auth);
+
+        console.log(
+            "🚪 Déconnexion réussie !"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ Erreur de déconnexion :",
+            error
+        );
+
+    }
+
+};
+
+
+// ------------------------------------------------------------
+// 👤 SURVEILLER L'ÉTAT DE CONNEXION
+// ------------------------------------------------------------
+
+onAuthStateChanged(
+    auth,
+    (user) => {
+
+        if (user) {
+
+            console.log(
+                "👤 Utilisateur connecté :",
+                user.displayName
+            );
+
+            console.log(
+                "📧 Email :",
+                user.email
+            );
+
+        } else {
+
+            console.log(
+                "🚪 Aucun utilisateur connecté"
+            );
+
+        }
+
+    }
+);
+
+
+// ============================================================
+// 📻 LECTEUR GALOULOURADIO
+// ============================================================
+
 
 // ------------------------------------------------------------
 // ÉLÉMENTS HTML
 // ------------------------------------------------------------
 
-import { auth } from "./firebase.js";
+const audio =
+    document.getElementById(
+        "radioAudio"
+    );
 
-console.log("🔥 Firebase Authentication est connecté !");
-const audio = document.getElementById("radioAudio");
+const playButton =
+    document.getElementById(
+        "playButton"
+    );
 
-const playButton = document.getElementById("playButton");
-const mainPlay = document.getElementById("mainPlay");
-const nextButton = document.getElementById("nextButton");
+const mainPlay =
+    document.getElementById(
+        "mainPlay"
+    );
 
-const currentTitle = document.getElementById("currentTitle");
-const currentArtist = document.getElementById("currentArtist");
+const nextButton =
+    document.getElementById(
+        "nextButton"
+    );
 
-const progressBar = document.getElementById("progressBar");
-const currentTime = document.getElementById("currentTime");
-const duration = document.getElementById("duration");
+const currentTitle =
+    document.getElementById(
+        "currentTitle"
+    );
 
-const volumeBar = document.getElementById("volumeBar");
+const currentArtist =
+    document.getElementById(
+        "currentArtist"
+    );
 
-const radioStatus = document.getElementById("radioStatus");
+const progressBar =
+    document.getElementById(
+        "progressBar"
+    );
+
+const currentTime =
+    document.getElementById(
+        "currentTime"
+    );
+
+const duration =
+    document.getElementById(
+        "duration"
+    );
+
+const volumeBar =
+    document.getElementById(
+        "volumeBar"
+    );
+
+const radioStatus =
+    document.getElementById(
+        "radioStatus"
+    );
 
 const playlistButtons =
-    document.querySelectorAll(".playlist-button");
+    document.querySelectorAll(
+        ".playlist-button"
+    );
 
 
-// ------------------------------------------------------------
+// ============================================================
 // 🎵 TES MUSIQUES
-// ------------------------------------------------------------
+// ============================================================
 
 const playlists = {
 
     hits: [
 
         {
-            title: "Le Site sera prêt en Noel 2026 !",
-            artist: "GaloulouStudio",
-            file: "music/music2.mp3"
+            title:
+                "Le Site sera prêt en Noel 2026 !",
+
+            artist:
+                "GaloulouStudio",
+
+            file:
+                "music/music2.mp3"
         },
 
         {
-            title: "Music 1",
-            artist: "GaloulouRadio",
-            file: "music/music1.mp3"
+            title:
+                "Music 1",
+
+            artist:
+                "GaloulouRadio",
+
+            file:
+                "music/music1.mp3"
         }
 
     ],
 
 
-    // Pour l'instant on utilise les mêmes musiques.
-    // On pourra créer de vraies playlists plus tard.
-
     morning: [
 
         {
-            title: "Chill",
-            artist: "Kulakovka",
-            file: "music/kulakovka-chill-reel-570198.mp3"
+            title:
+                "Chill",
+
+            artist:
+                "Kulakovka",
+
+            file:
+                "music/kulakovka-chill-reel-570198.mp3"
         },
 
         {
-            title: "Reveille Doux",
-            artist: "Kulakovka",
-            file: "music/kulakovka-lofi-relax-570489.mp3"
+            title:
+                "Reveille Doux",
+
+            artist:
+                "Kulakovka",
+
+            file:
+                "music/kulakovka-lofi-relax-570489.mp3"
         }
 
     ],
@@ -76,15 +258,25 @@ const playlists = {
     night: [
 
         {
-            title: "Music 1",
-            artist: "GaloulouRadio",
-            file: "music/music1.mp3"
+            title:
+                "Music 1",
+
+            artist:
+                "GaloulouRadio",
+
+            file:
+                "music/music1.mp3"
         },
 
         {
-            title: "Chill",
-            artist: "Kulakovka",
-            file: "music/kulakovka-chill-reel-570198.mp3"
+            title:
+                "Chill",
+
+            artist:
+                "Kulakovka",
+
+            file:
+                "music/kulakovka-chill-reel-570198.mp3"
         }
 
     ],
@@ -93,15 +285,25 @@ const playlists = {
     chill: [
 
         {
-            title: "Chill",
-            artist: "Kulakovka",
-            file: "music/kulakovka-chill-reel-570198.mp3"
+            title:
+                "Chill",
+
+            artist:
+                "Kulakovka",
+
+            file:
+                "music/kulakovka-chill-reel-570198.mp3"
         },
 
         {
-            title: "Music 1",
-            artist: "GaloulouRadio",
-            file: "music/music1.mp3"
+            title:
+                "Music 1",
+
+            artist:
+                "GaloulouRadio",
+
+            file:
+                "music/music1.mp3"
         }
 
     ]
@@ -109,41 +311,54 @@ const playlists = {
 };
 
 
-// ------------------------------------------------------------
+// ============================================================
 // ⚙️ VARIABLES
-// ------------------------------------------------------------
+// ============================================================
 
-let currentPlaylist = playlists.hits;
+let currentPlaylist =
+    playlists.hits;
 
-let currentIndex = 0;
+let currentIndex =
+    0;
 
-let isPlaying = false;
+let isPlaying =
+    false;
 
 
-// ------------------------------------------------------------
+// ============================================================
 // 🕐 FORMAT DU TEMPS
-// ------------------------------------------------------------
+// ============================================================
 
 function formatTime(seconds) {
 
-    if (!Number.isFinite(seconds)) {
+    if (
+        !Number.isFinite(seconds)
+    ) {
+
         return "0:00";
+
     }
 
-    const minutes = Math.floor(seconds / 60);
+    const minutes =
+        Math.floor(
+            seconds / 60
+        );
 
     const remainingSeconds =
-        Math.floor(seconds % 60);
+        Math.floor(
+            seconds % 60
+        );
 
     return `${minutes}:${remainingSeconds
         .toString()
         .padStart(2, "0")}`;
+
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // 🎵 CHARGER UNE MUSIQUE
-// ------------------------------------------------------------
+// ============================================================
 
 function loadSong(index) {
 
@@ -151,30 +366,43 @@ function loadSong(index) {
         !currentPlaylist ||
         currentPlaylist.length === 0
     ) {
+
         return;
+
     }
 
-    currentIndex = index;
+    currentIndex =
+        index;
 
-    const song = currentPlaylist[currentIndex];
+    const song =
+        currentPlaylist[
+            currentIndex
+        ];
 
-    audio.src = song.file;
+    audio.src =
+        song.file;
 
-    currentTitle.textContent = song.title;
+    currentTitle.textContent =
+        song.title;
 
-    currentArtist.textContent = song.artist;
+    currentArtist.textContent =
+        song.artist;
 
-    progressBar.value = 0;
+    progressBar.value =
+        0;
 
-    currentTime.textContent = "0:00";
+    currentTime.textContent =
+        "0:00";
 
-    duration.textContent = "0:00";
+    duration.textContent =
+        "0:00";
+
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // ▶️ LECTURE
-// ------------------------------------------------------------
+// ============================================================
 
 async function playRadio() {
 
@@ -182,7 +410,8 @@ async function playRadio() {
 
         await audio.play();
 
-        isPlaying = true;
+        isPlaying =
+            true;
 
         updatePlayer();
 
@@ -207,24 +436,25 @@ async function playRadio() {
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // ⏸️ PAUSE
-// ------------------------------------------------------------
+// ============================================================
 
 function pauseRadio() {
 
     audio.pause();
 
-    isPlaying = false;
+    isPlaying =
+        false;
 
     updatePlayer();
 
 }
 
 
-// ------------------------------------------------------------
-// 🔄 BOUTONS
-// ------------------------------------------------------------
+// ============================================================
+// 🔄 METTRE À JOUR LE LECTEUR
+// ============================================================
 
 function updatePlayer() {
 
@@ -233,23 +463,25 @@ function updatePlayer() {
         playButton.textContent =
             "⏸ Mettre en pause";
 
-        mainPlay.textContent = "⏸";
+        mainPlay.textContent =
+            "⏸";
 
     } else {
 
         playButton.textContent =
             "▶ Écouter GaloulouRadio";
 
-        mainPlay.textContent = "▶";
+        mainPlay.textContent =
+            "▶";
 
     }
 
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // ⏭️ MUSIQUE SUIVANTE
-// ------------------------------------------------------------
+// ============================================================
 
 function nextSong() {
 
@@ -257,7 +489,9 @@ function nextSong() {
         !currentPlaylist ||
         currentPlaylist.length === 0
     ) {
+
         return;
+
     }
 
     currentIndex++;
@@ -267,20 +501,23 @@ function nextSong() {
         currentPlaylist.length
     ) {
 
-        currentIndex = 0;
+        currentIndex =
+            0;
 
     }
 
-    loadSong(currentIndex);
+    loadSong(
+        currentIndex
+    );
 
     playRadio();
 
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // 🎵 BOUTON PRINCIPAL
-// ------------------------------------------------------------
+// ============================================================
 
 if (playButton) {
 
@@ -304,9 +541,9 @@ if (playButton) {
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // 🎵 BOUTON DU LECTEUR
-// ------------------------------------------------------------
+// ============================================================
 
 if (mainPlay) {
 
@@ -330,9 +567,9 @@ if (mainPlay) {
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // ⏭️ BOUTON SUIVANT
-// ------------------------------------------------------------
+// ============================================================
 
 if (nextButton) {
 
@@ -348,61 +585,75 @@ if (nextButton) {
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // 🎧 PLAYLISTS
-// ------------------------------------------------------------
+// ============================================================
 
-playlistButtons.forEach(button => {
+playlistButtons.forEach(
+    button => {
 
-    button.addEventListener(
-        "click",
-        () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-            const playlistName =
-                button.dataset.playlist;
+                const playlistName =
+                    button.dataset.playlist;
 
-            if (
-                !playlists[playlistName]
-            ) {
+                if (
+                    !playlists[
+                        playlistName
+                    ]
+                ) {
 
-                console.error(
-                    "Playlist inconnue :",
-                    playlistName
+                    console.error(
+                        "Playlist inconnue :",
+                        playlistName
+                    );
+
+                    return;
+
+                }
+
+                currentPlaylist =
+                    playlists[
+                        playlistName
+                    ];
+
+                currentIndex =
+                    0;
+
+                loadSong(
+                    currentIndex
                 );
 
-                return;
+                playRadio();
+
             }
+        );
 
-            currentPlaylist =
-                playlists[playlistName];
-
-            currentIndex = 0;
-
-            loadSong(currentIndex);
-
-            playRadio();
-
-        }
-    );
-
-});
+    }
+);
 
 
-// ------------------------------------------------------------
+// ============================================================
 // 🔊 VOLUME
-// ------------------------------------------------------------
+// ============================================================
 
 if (volumeBar) {
 
     audio.volume =
-        Number(volumeBar.value);
+        Number(
+            volumeBar.value
+        );
 
     volumeBar.addEventListener(
         "input",
         () => {
 
             audio.volume =
-                Number(volumeBar.value);
+                Number(
+                    volumeBar.value
+                );
 
         }
     );
@@ -410,53 +661,67 @@ if (volumeBar) {
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // ⏱️ DURÉE DE LA MUSIQUE
-// ------------------------------------------------------------
+// ============================================================
 
 audio.addEventListener(
     "loadedmetadata",
     () => {
 
         duration.textContent =
-            formatTime(audio.duration);
+            formatTime(
+                audio.duration
+            );
 
     }
 );
 
 
-// ------------------------------------------------------------
+// ============================================================
 // 📈 PROGRESSION
-// ------------------------------------------------------------
+// ============================================================
 
 audio.addEventListener(
     "timeupdate",
     () => {
 
-        if (!Number.isFinite(audio.duration)) {
+        if (
+            !Number.isFinite(
+                audio.duration
+            )
+        ) {
+
             return;
+
         }
 
         const percentage =
-            (audio.currentTime /
-                audio.duration) * 100;
+            (
+                audio.currentTime /
+                audio.duration
+            ) * 100;
 
         progressBar.value =
             percentage;
 
         currentTime.textContent =
-            formatTime(audio.currentTime);
+            formatTime(
+                audio.currentTime
+            );
 
         duration.textContent =
-            formatTime(audio.duration);
+            formatTime(
+                audio.duration
+            );
 
     }
 );
 
 
-// ------------------------------------------------------------
+// ============================================================
 // 🎚️ DÉPLACER LA BARRE
-// ------------------------------------------------------------
+// ============================================================
 
 if (progressBar) {
 
@@ -464,13 +729,23 @@ if (progressBar) {
         "input",
         () => {
 
-            if (!Number.isFinite(audio.duration)) {
+            if (
+                !Number.isFinite(
+                    audio.duration
+                )
+            ) {
+
                 return;
+
             }
 
             const newTime =
-                (Number(progressBar.value) / 100)
-                * audio.duration;
+                (
+                    Number(
+                        progressBar.value
+                    ) / 100
+                ) *
+                audio.duration;
 
             audio.currentTime =
                 newTime;
@@ -481,9 +756,9 @@ if (progressBar) {
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // 🎵 MUSIQUE TERMINÉE
-// ------------------------------------------------------------
+// ============================================================
 
 audio.addEventListener(
     "ended",
@@ -495,15 +770,16 @@ audio.addEventListener(
 );
 
 
-// ------------------------------------------------------------
+// ============================================================
 // ❌ ERREUR AUDIO
-// ------------------------------------------------------------
+// ============================================================
 
 audio.addEventListener(
     "error",
     () => {
 
-        isPlaying = false;
+        isPlaying =
+            false;
 
         updatePlayer();
 
@@ -517,12 +793,18 @@ audio.addEventListener(
 );
 
 
-// ------------------------------------------------------------
+// ============================================================
 // 🚀 DÉMARRAGE
-// ------------------------------------------------------------
-
-audio.volume = 1;
+// ============================================================
 
 loadSong(0);
 
 updatePlayer();
+
+console.log(
+    "📻 GaloulouRadio est démarré !"
+);
+
+console.log(
+    "🔥 Firebase Authentication est chargé !"
+);
