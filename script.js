@@ -1,110 +1,153 @@
 // ============================================================
-// 🎵 GALOULOURADIO - LECTEUR AUTOMATIQUE
+// 📻 GALOULOURADIO - LECTEUR
 // ============================================================
 
-// Éléments du site
+// ------------------------------------------------------------
+// ÉLÉMENTS HTML
+// ------------------------------------------------------------
+
+const audio = document.getElementById("radioAudio");
+
 const playButton = document.getElementById("playButton");
 const mainPlay = document.getElementById("mainPlay");
+const nextButton = document.getElementById("nextButton");
 
 const currentTitle = document.getElementById("currentTitle");
 const currentArtist = document.getElementById("currentArtist");
 
-const radioAudio = document.getElementById("radioAudio");
+const progressBar = document.getElementById("progressBar");
+const currentTime = document.getElementById("currentTime");
+const duration = document.getElementById("duration");
 
-const playlistButtons = document.querySelectorAll(".playlist-button");
+const volumeBar = document.getElementById("volumeBar");
 
-// ============================================================
-// 🎶 TES MUSIQUES
-// ============================================================
-//
-// IMPORTANT :
-// Mets tes fichiers MP3 dans un dossier "music"
-// à côté de index.html.
-//
-// Exemple :
-//
-// music/
-//   musique1.mp3
-//   musique2.mp3
-//   musique3.mp3
-//
-// Puis ajoute-les ici.
-//
-// ============================================================
+const radioStatus = document.getElementById("radioStatus");
+
+const playlistButtons =
+    document.querySelectorAll(".playlist-button");
+
+
+// ------------------------------------------------------------
+// 🎵 TES MUSIQUES
+// ------------------------------------------------------------
 
 const playlists = {
 
     hits: [
+
         {
-            title: "RADIO DISPONIBLE POUR NOEL 2026",
-            artist: "GaloulouRadio",
-            file: "music/musique1.mp3"
+            title: "Le Site sera prêt en Noel 2026 !",
+            artist: "Kulakovka",
+            file: "music/music2.mp3"
         },
+
         {
-            title: "Musique 2",
+            title: "Music 1",
             artist: "GaloulouRadio",
-            file: "music/musique2.mp3"
+            file: "music/music1.mp3"
         }
+
     ],
+
+
+    // Pour l'instant on utilise les mêmes musiques.
+    // On pourra créer de vraies playlists plus tard.
 
     morning: [
-        {
-            title: "Morning 1",
-            artist: "GaloulouRadio",
-            file: "music/musique1.mp3"
-        },
-        {
-            title: "Morning 2",
-            artist: "GaloulouRadio",
-            file: "music/musique2.mp3"
-        }
-    ],
 
-    night: [
         {
-            title: "Night 1",
-            artist: "GaloulouRadio",
-            file: "music/musique2.mp3"
-        },
-        {
-            title: "Night 2",
-            artist: "GaloulouRadio",
-            file: "music/musique1.mp3"
-        }
-    ],
-
-    chill: [
-        {
-            title: "Chill 1",
+            title: "Chill",
             artist: "Kulakovka",
             file: "music/kulakovka-chill-reel-570198.mp3"
         },
+
         {
-            title: "Chill 2",
-            artist: "Kulakovka",
-            file: "music/kulakovka-lofi-relax-570489.mp3"
+            title: "Music 1",
+            artist: "GaloulouRadio",
+            file: "music/music1.mp3"
         }
+
+    ],
+
+
+    night: [
+
+        {
+            title: "Music 1",
+            artist: "GaloulouRadio",
+            file: "music/music1.mp3"
+        },
+
+        {
+            title: "Chill",
+            artist: "Kulakovka",
+            file: "music/kulakovka-chill-reel-570198.mp3"
+        }
+
+    ],
+
+
+    chill: [
+
+        {
+            title: "Chill",
+            artist: "Kulakovka",
+            file: "music/kulakovka-chill-reel-570198.mp3"
+        },
+
+        {
+            title: "Music 1",
+            artist: "GaloulouRadio",
+            file: "music/music1.mp3"
+        }
+
     ]
 
 };
 
 
-// ============================================================
+// ------------------------------------------------------------
 // ⚙️ VARIABLES
-// ============================================================
+// ------------------------------------------------------------
 
 let currentPlaylist = playlists.hits;
+
 let currentIndex = 0;
-let playing = false;
+
+let isPlaying = false;
 
 
-// ============================================================
+// ------------------------------------------------------------
+// 🕐 FORMAT DU TEMPS
+// ------------------------------------------------------------
+
+function formatTime(seconds) {
+
+    if (!Number.isFinite(seconds)) {
+        return "0:00";
+    }
+
+    const minutes = Math.floor(seconds / 60);
+
+    const remainingSeconds =
+        Math.floor(seconds % 60);
+
+    return `${minutes}:${remainingSeconds
+        .toString()
+        .padStart(2, "0")}`;
+}
+
+
+// ------------------------------------------------------------
 // 🎵 CHARGER UNE MUSIQUE
-// ============================================================
+// ------------------------------------------------------------
 
 function loadSong(index) {
 
-    if (!currentPlaylist || currentPlaylist.length === 0) {
+    if (
+        !currentPlaylist ||
+        currentPlaylist.length === 0
+    ) {
         return;
     }
 
@@ -112,223 +155,371 @@ function loadSong(index) {
 
     const song = currentPlaylist[currentIndex];
 
-    radioAudio.src = song.file;
+    audio.src = song.file;
 
     currentTitle.textContent = song.title;
+
     currentArtist.textContent = song.artist;
 
+    progressBar.value = 0;
+
+    currentTime.textContent = "0:00";
+
+    duration.textContent = "0:00";
 }
 
 
-// ============================================================
-// ▶️ DÉMARRER
-// ============================================================
+// ------------------------------------------------------------
+// ▶️ LECTURE
+// ------------------------------------------------------------
 
-async function startRadio() {
+async function playRadio() {
 
     try {
 
-        await radioAudio.play();
+        await audio.play();
 
-        playing = true;
+        isPlaying = true;
 
-        updateButtons();
+        updatePlayer();
+
+        radioStatus.textContent =
+            "🤖 PROGRAMME AUTOMATIQUE";
 
     } catch (error) {
 
-        console.log("Impossible de lancer la musique :", error);
+        console.error(
+            "Erreur de lecture audio :",
+            error
+        );
 
-        currentTitle.textContent = "Impossible de lancer la musique";
+        currentTitle.textContent =
+            "Lecture impossible ❌";
+
         currentArtist.textContent =
-            "Vérifie que le fichier MP3 existe dans le dossier music.";
+            "Vérifie ton fichier MP3.";
 
     }
 
 }
 
 
-// ============================================================
-// ⏸️ ARRÊTER
-// ============================================================
+// ------------------------------------------------------------
+// ⏸️ PAUSE
+// ------------------------------------------------------------
 
-function stopRadio() {
+function pauseRadio() {
 
-    radioAudio.pause();
+    audio.pause();
 
-    playing = false;
+    isPlaying = false;
 
-    updateButtons();
+    updatePlayer();
 
 }
 
 
-// ============================================================
-// 🔘 METTRE À JOUR LES BOUTONS
-// ============================================================
+// ------------------------------------------------------------
+// 🔄 BOUTONS
+// ------------------------------------------------------------
 
-function updateButtons() {
+function updatePlayer() {
 
-    if (playing) {
+    if (isPlaying) {
 
-        if (playButton) {
-            playButton.textContent = "⏸ Mettre en pause";
-        }
+        playButton.textContent =
+            "⏸ Mettre en pause";
 
-        if (mainPlay) {
-            mainPlay.textContent = "⏸";
-        }
+        mainPlay.textContent = "⏸";
 
     } else {
 
-        if (playButton) {
-            playButton.textContent = "▶ Écouter GaloulouRadio";
-        }
+        playButton.textContent =
+            "▶ Écouter GaloulouRadio";
 
-        if (mainPlay) {
-            mainPlay.textContent = "▶";
-        }
+        mainPlay.textContent = "▶";
 
     }
 
 }
 
 
-// ============================================================
-// 🎵 MUSIQUE SUIVANTE
-// ============================================================
+// ------------------------------------------------------------
+// ⏭️ MUSIQUE SUIVANTE
+// ------------------------------------------------------------
 
 function nextSong() {
 
-    if (!currentPlaylist || currentPlaylist.length === 0) {
+    if (
+        !currentPlaylist ||
+        currentPlaylist.length === 0
+    ) {
         return;
     }
 
     currentIndex++;
 
-    if (currentIndex >= currentPlaylist.length) {
+    if (
+        currentIndex >=
+        currentPlaylist.length
+    ) {
+
         currentIndex = 0;
+
     }
 
     loadSong(currentIndex);
 
-    startRadio();
+    playRadio();
 
 }
 
 
-// ============================================================
-// ▶️ BOUTON PRINCIPAL
-// ============================================================
+// ------------------------------------------------------------
+// 🎵 BOUTON PRINCIPAL
+// ------------------------------------------------------------
 
 if (playButton) {
 
-    playButton.addEventListener("click", () => {
+    playButton.addEventListener(
+        "click",
+        () => {
 
-        if (playing) {
+            if (isPlaying) {
 
-            stopRadio();
+                pauseRadio();
 
-        } else {
+            } else {
 
-            startRadio();
+                playRadio();
+
+            }
 
         }
-
-    });
+    );
 
 }
 
 
-// ============================================================
-// ▶️ BOUTON DU LECTEUR
-// ============================================================
+// ------------------------------------------------------------
+// 🎵 BOUTON DU LECTEUR
+// ------------------------------------------------------------
 
 if (mainPlay) {
 
-    mainPlay.addEventListener("click", () => {
+    mainPlay.addEventListener(
+        "click",
+        () => {
 
-        if (playing) {
+            if (isPlaying) {
 
-            stopRadio();
+                pauseRadio();
 
-        } else {
+            } else {
 
-            startRadio();
+                playRadio();
+
+            }
 
         }
-
-    });
+    );
 
 }
 
 
-// ============================================================
-// 🎵 BOUTONS DES PLAYLISTS
-// ============================================================
+// ------------------------------------------------------------
+// ⏭️ BOUTON SUIVANT
+// ------------------------------------------------------------
+
+if (nextButton) {
+
+    nextButton.addEventListener(
+        "click",
+        () => {
+
+            nextSong();
+
+        }
+    );
+
+}
+
+
+// ------------------------------------------------------------
+// 🎧 PLAYLISTS
+// ------------------------------------------------------------
 
 playlistButtons.forEach(button => {
 
-    button.addEventListener("click", () => {
+    button.addEventListener(
+        "click",
+        () => {
 
-        const playlistName = button.dataset.playlist;
+            const playlistName =
+                button.dataset.playlist;
 
-        if (!playlists[playlistName]) {
-            console.log("Playlist inconnue :", playlistName);
+            if (
+                !playlists[playlistName]
+            ) {
+
+                console.error(
+                    "Playlist inconnue :",
+                    playlistName
+                );
+
+                return;
+            }
+
+            currentPlaylist =
+                playlists[playlistName];
+
+            currentIndex = 0;
+
+            loadSong(currentIndex);
+
+            playRadio();
+
+        }
+    );
+
+});
+
+
+// ------------------------------------------------------------
+// 🔊 VOLUME
+// ------------------------------------------------------------
+
+if (volumeBar) {
+
+    audio.volume =
+        Number(volumeBar.value);
+
+    volumeBar.addEventListener(
+        "input",
+        () => {
+
+            audio.volume =
+                Number(volumeBar.value);
+
+        }
+    );
+
+}
+
+
+// ------------------------------------------------------------
+// ⏱️ DURÉE DE LA MUSIQUE
+// ------------------------------------------------------------
+
+audio.addEventListener(
+    "loadedmetadata",
+    () => {
+
+        duration.textContent =
+            formatTime(audio.duration);
+
+    }
+);
+
+
+// ------------------------------------------------------------
+// 📈 PROGRESSION
+// ------------------------------------------------------------
+
+audio.addEventListener(
+    "timeupdate",
+    () => {
+
+        if (!Number.isFinite(audio.duration)) {
             return;
         }
 
-        currentPlaylist = playlists[playlistName];
+        const percentage =
+            (audio.currentTime /
+                audio.duration) * 100;
 
-        currentIndex = 0;
+        progressBar.value =
+            percentage;
 
-        loadSong(currentIndex);
+        currentTime.textContent =
+            formatTime(audio.currentTime);
 
-        startRadio();
+        duration.textContent =
+            formatTime(audio.duration);
 
-        // Retour vers le lecteur
-        document.querySelector(".player-section")
-            ?.scrollIntoView({
-                behavior: "smooth"
-            });
-
-    });
-
-});
+    }
+);
 
 
-// ============================================================
-// 🎶 PASSER AUTOMATIQUEMENT À LA MUSIQUE SUIVANTE
-// ============================================================
+// ------------------------------------------------------------
+// 🎚️ DÉPLACER LA BARRE
+// ------------------------------------------------------------
 
-radioAudio.addEventListener("ended", () => {
+if (progressBar) {
 
-    nextSong();
+    progressBar.addEventListener(
+        "input",
+        () => {
 
-});
+            if (!Number.isFinite(audio.duration)) {
+                return;
+            }
 
+            const newTime =
+                (Number(progressBar.value) / 100)
+                * audio.duration;
 
-// ============================================================
-// ⚠️ ERREUR DE LECTURE
-// ============================================================
+            audio.currentTime =
+                newTime;
 
-radioAudio.addEventListener("error", () => {
+        }
+    );
 
-    playing = false;
-
-    updateButtons();
-
-    currentTitle.textContent = "Erreur audio ❌";
-
-    currentArtist.textContent =
-        "Le fichier musical est introuvable ou ne peut pas être lu.";
-
-});
+}
 
 
-// ============================================================
-// 🚀 INITIALISATION
-// ============================================================
+// ------------------------------------------------------------
+// 🎵 MUSIQUE TERMINÉE
+// ------------------------------------------------------------
+
+audio.addEventListener(
+    "ended",
+    () => {
+
+        nextSong();
+
+    }
+);
+
+
+// ------------------------------------------------------------
+// ❌ ERREUR AUDIO
+// ------------------------------------------------------------
+
+audio.addEventListener(
+    "error",
+    () => {
+
+        isPlaying = false;
+
+        updatePlayer();
+
+        currentTitle.textContent =
+            "Erreur audio ❌";
+
+        currentArtist.textContent =
+            "Impossible de charger ce morceau. Le site sera prêt le 26/12/2026.";
+
+    }
+);
+
+
+// ------------------------------------------------------------
+// 🚀 DÉMARRAGE
+// ------------------------------------------------------------
+
+audio.volume = 1;
 
 loadSong(0);
 
-updateButtons();
+updatePlayer();
