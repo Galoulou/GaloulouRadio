@@ -1,3 +1,24 @@
+function showChristmasMessage() {
+
+    const message = document.createElement("div");
+
+    message.className = "christmas-message";
+
+    message.innerHTML = `
+        🎁 <strong>VOTRE CADEAU DE NOËL 2026 !</strong>
+        <span>GaloulouRadio arrive bientôt...</span>
+    `;
+
+    document.body.appendChild(message);
+
+    setTimeout(() => {
+        message.classList.add("hide");
+    }, 4500);
+
+    setTimeout(() => {
+        message.remove();
+    }, 5000);
+}
 const playButton = document.getElementById("playButton");
 const mainPlay = document.getElementById("mainPlay");
 
@@ -20,19 +41,18 @@ let playing = false;
 */
 
 
-function startRadio() {
+if (!radioAudio.src) {
 
-    if (!radioAudio.src) {
+    currentTitle.textContent = "GaloulouRadio";
 
-        currentTitle.textContent = "GaloulouRadio";
+    currentArtist.textContent =
+        "Le direct sera bientôt disponible 🎙️";
 
-        currentArtist.textContent =
-            "Le direct sera bientôt disponible 🎙️";
+    showChristmasMessage();
 
-        return;
+    return;
 
-    }
-
+}
     radioAudio.play();
 
     playing = true;
