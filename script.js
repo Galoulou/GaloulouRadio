@@ -1295,4 +1295,300 @@ updatePlayer();
 
 console.log(
     "📻 GaloulouRadio démarré."
-);
+// ============================================================
+// ⚙️ SETTINGS
+// ============================================================
+
+const settingsButton =
+    document.getElementById(
+        "settingsButton"
+    );
+
+
+const settingsPanel =
+    document.getElementById(
+        "settingsPanel"
+    );
+
+
+const closeSettingsButton =
+    document.getElementById(
+        "closeSettingsButton"
+    );
+
+
+const themeSetting =
+    document.getElementById(
+        "themeSetting"
+    );
+
+
+const accentColorSetting =
+    document.getElementById(
+        "accentColorSetting"
+    );
+
+
+const backgroundSetting =
+    document.getElementById(
+        "backgroundSetting"
+    );
+
+
+const settingsVolume =
+    document.getElementById(
+        "settingsVolume"
+    );
+
+
+const autoplaySetting =
+    document.getElementById(
+        "autoplaySetting"
+    );
+
+
+// ============================================================
+// ⚙️ OUVRIR LES SETTINGS
+// ============================================================
+
+if (settingsButton) {
+
+    settingsButton.addEventListener(
+        "click",
+        () => {
+
+            if (!settingsPanel) {
+                return;
+            }
+
+
+            settingsPanel.hidden =
+                false;
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// ❌ FERMER LES SETTINGS
+// ============================================================
+
+if (closeSettingsButton) {
+
+    closeSettingsButton.addEventListener(
+        "click",
+        () => {
+
+            if (!settingsPanel) {
+                return;
+            }
+
+
+            settingsPanel.hidden =
+                true;
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// 🖱️ CLIQUER EN DEHORS
+// ============================================================
+
+if (settingsPanel) {
+
+    settingsPanel.addEventListener(
+        "click",
+        (event) => {
+
+            if (
+                event.target ===
+                settingsPanel
+            ) {
+
+                settingsPanel.hidden =
+                    true;
+
+            }
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// 🌙 THÈME
+// ============================================================
+
+if (themeSetting) {
+
+    themeSetting.addEventListener(
+        "change",
+        () => {
+
+            const theme =
+                themeSetting.value;
+
+
+            document.documentElement
+                .setAttribute(
+                    "data-theme",
+                    theme
+                );
+
+
+            sauvegarderParametre(
+                "theme",
+                theme
+            );
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// 🎨 COULEUR D'ACCENT
+// ============================================================
+
+if (accentColorSetting) {
+
+    accentColorSetting.addEventListener(
+        "input",
+        () => {
+
+            const color =
+                accentColorSetting.value;
+
+
+            document.documentElement.style
+                .setProperty(
+                    "--accent-color",
+                    color
+                );
+
+        }
+    );
+
+
+    accentColorSetting.addEventListener(
+        "change",
+        () => {
+
+            sauvegarderParametre(
+                "accentColor",
+                accentColorSetting.value
+            );
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// 🖼️ FOND
+// ============================================================
+
+if (backgroundSetting) {
+
+    backgroundSetting.addEventListener(
+        "input",
+        () => {
+
+            document.body.style
+                .backgroundColor =
+                backgroundSetting.value;
+
+        }
+    );
+
+
+    backgroundSetting.addEventListener(
+        "change",
+        () => {
+
+            sauvegarderParametre(
+                "background",
+                backgroundSetting.value
+            );
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// 🔊 VOLUME
+// ============================================================
+
+if (settingsVolume) {
+
+    settingsVolume.addEventListener(
+        "input",
+        () => {
+
+            const volume =
+                Number(
+                    settingsVolume.value
+                );
+
+
+            audio.volume =
+                volume;
+
+
+            if (volumeBar) {
+
+                volumeBar.value =
+                    volume;
+
+            }
+
+        }
+    );
+
+
+    settingsVolume.addEventListener(
+        "change",
+        () => {
+
+            sauvegarderParametre(
+                "volume",
+                Number(
+                    settingsVolume.value
+                )
+            );
+
+        }
+    );
+
+}
+
+
+// ============================================================
+// ▶️ AUTOPLAY
+// ============================================================
+
+if (autoplaySetting) {
+
+    autoplaySetting.addEventListener(
+        "change",
+        () => {
+
+            sauvegarderParametre(
+                "autoplay",
+                autoplaySetting.checked
+            );
+
+        }
+    );
+
+}
