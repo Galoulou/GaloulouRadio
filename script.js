@@ -36,8 +36,8 @@ const playlists = {
 
     hits: [
         {
-            title: "chill",
-            artist: "Kulakovka",
+            title: "RADIO DISPONIBLE POUR NOEL 2026",
+            artist: "GaloulouRadio",
             file: "music/kulakovka-chill-reel-570198.mp3"
         },
         {
@@ -76,8 +76,8 @@ const playlists = {
     chill: [
         {
             title: "Chill 1",
-            artist: "GaloulouRadio",
-            file: "music/musique1.mp3"
+            artist: "Kulakovka",
+            file: "music/kulakovka-chill-reel-570198.mp3"
         },
         {
             title: "Chill 2",
