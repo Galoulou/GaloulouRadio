@@ -1,0 +1,11 @@
+{
+    "name": "GaloulouRadio",
+    "short_name": "GaloulouRadio",
+    "description": "La radio de Galoulou.",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#050b18",
+    "theme_color": "#2563eb",
+    "orientation": "portrait-primary",
+    "lang": "fr"
+}
