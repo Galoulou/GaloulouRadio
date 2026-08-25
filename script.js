@@ -1,13 +1,16 @@
 // ============================================================
-// 📻 GALOULOURADIO - LECTEUR + FIREBASE AUTHENTICATION
+// 📻 GALOULOURADIO - LECTEUR + FIREBASE + PARAMÈTRES
 // ============================================================
 
 
 // ============================================================
-// 🔥 FIREBASE AUTHENTICATION
+// 🔥 FIREBASE AUTHENTICATION + DATABASE
 // ============================================================
 
-import { auth } from "./firebase.js";
+import {
+    auth,
+    db
+} from "./firebase.js";
 
 import {
     GoogleAuthProvider,
@@ -15,6 +18,13 @@ import {
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+    ref,
+    get,
+    set,
+    update
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 
 // ============================================================
@@ -31,7 +41,28 @@ const googleLoginButton =
 
 
 // ============================================================
-// 🔐 CONNEXION / DÉCONNEXION
+// 👤 PARAMÈTRES PAR DÉFAUT
+// ============================================================
+
+const parametresParDefaut = {
+
+    theme: "system",
+
+    accentColor: "#ff9800",
+
+    background: "#ffffff",
+
+    volume: 1,
+
+    autoplay: true,
+
+    favorites: []
+
+};
+
+
+// ============================================================
+// 🔐 CONNEXION GOOGLE
 // ============================================================
 
 async function gererConnexion() {
@@ -105,12 +136,251 @@ async function deconnexion() {
 
 
 // ============================================================
+// 📥 CHARGER LES PARAMÈTRES UTILISATEUR
+// ============================================================
+
+async function chargerParametres(user) {
+
+    if (!user) {
+        return;
+    }
+
+    try {
+
+        const userRef =
+            ref(
+                db,
+                "users/" + user.uid
+            );
+
+        const snapshot =
+            await get(userRef);
+
+
+        // ----------------------------------------------------
+        // 🆕 PREMIÈRE CONNEXION
+        // ----------------------------------------------------
+
+        if (!snapshot.exists()) {
+
+            console.log(
+                "🆕 Aucun profil trouvé."
+            );
+
+            console.log(
+                "☁️ Création du profil..."
+            );
+
+
+            await set(
+                userRef,
+                parametresParDefaut
+            );
+
+
+            console.log(
+                "✅ Profil utilisateur créé !"
+            );
+
+
+            appliquerParametres(
+                parametresParDefaut
+            );
+
+            return;
+        }
+
+
+        // ----------------------------------------------------
+        // ☁️ PROFIL EXISTANT
+        // ----------------------------------------------------
+
+        const parametres =
+            snapshot.val();
+
+
+        console.log(
+            "☁️ Paramètres récupérés :",
+            parametres
+        );
+
+
+        appliquerParametres(
+            parametres
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Erreur lors du chargement des paramètres :",
+            error
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// 🎨 APPLIQUER LES PARAMÈTRES
+// ============================================================
+
+function appliquerParametres(parametres) {
+
+    if (!parametres) {
+        return;
+    }
+
+
+    // --------------------------------------------------------
+    // 🎨 FOND
+    // --------------------------------------------------------
+
+    if (
+        parametres.background
+    ) {
+
+        document.body.style.backgroundColor =
+            parametres.background;
+
+    }
+
+
+    // --------------------------------------------------------
+    // 🟠 COULEUR D'ACCENT
+    // --------------------------------------------------------
+
+    if (
+        parametres.accentColor
+    ) {
+
+        document.documentElement.style
+            .setProperty(
+                "--accent-color",
+                parametres.accentColor
+            );
+
+    }
+
+
+    // --------------------------------------------------------
+    // 🔊 VOLUME
+    // --------------------------------------------------------
+
+    if (
+        typeof parametres.volume ===
+        "number"
+    ) {
+
+        if (audio) {
+
+            audio.volume =
+                parametres.volume;
+
+        }
+
+        if (volumeBar) {
+
+            volumeBar.value =
+                parametres.volume;
+
+        }
+
+    }
+
+
+    // --------------------------------------------------------
+    // 🌙 THÈME
+    // --------------------------------------------------------
+
+    if (
+        parametres.theme
+    ) {
+
+        document.documentElement
+            .setAttribute(
+                "data-theme",
+                parametres.theme
+            );
+
+    }
+
+
+    console.log(
+        "🎨 Paramètres appliqués !"
+    );
+
+}
+
+
+// ============================================================
+// 💾 SAUVEGARDER UN PARAMÈTRE
+// ============================================================
+
+async function sauvegarderParametre(
+    nom,
+    valeur
+) {
+
+    const user =
+        auth.currentUser;
+
+
+    if (!user) {
+
+        console.log(
+            "⚠️ Impossible de sauvegarder : aucun utilisateur connecté."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const userRef =
+            ref(
+                db,
+                "users/" + user.uid
+            );
+
+
+        await update(
+            userRef,
+            {
+                [nom]: valeur
+            }
+        );
+
+
+        console.log(
+            "💾 Paramètre sauvegardé :",
+            nom,
+            valeur
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Erreur lors de la sauvegarde :",
+            error
+        );
+
+    }
+
+}
+
+
+// ============================================================
 // 👤 SURVEILLER L'ÉTAT DU COMPTE
 // ============================================================
 
 onAuthStateChanged(
     auth,
-    (user) => {
+    async (user) => {
 
         if (user) {
 
@@ -125,11 +395,28 @@ onAuthStateChanged(
             );
 
 
-            // --------------------------------------------
-            // Bouton compte
-            // --------------------------------------------
+            console.log(
+                "🆔 UID :",
+                user.uid
+            );
 
-            if (googleLoginButton) {
+
+            // ------------------------------------------------
+            // ☁️ CHARGER LES PARAMÈTRES
+            // ------------------------------------------------
+
+            await chargerParametres(
+                user
+            );
+
+
+            // ------------------------------------------------
+            // 👤 BOUTON COMPTE
+            // ------------------------------------------------
+
+            if (
+                googleLoginButton
+            ) {
 
                 googleLoginButton.textContent =
                     "👤 " +
@@ -153,11 +440,13 @@ onAuthStateChanged(
             );
 
 
-            // --------------------------------------------
-            // Bouton connexion
-            // --------------------------------------------
+            // ------------------------------------------------
+            // 🔵 BOUTON CONNEXION
+            // ------------------------------------------------
 
-            if (googleLoginButton) {
+            if (
+                googleLoginButton
+            ) {
 
                 googleLoginButton.textContent =
                     "🔵 Se connecter avec Google";
@@ -188,55 +477,66 @@ const audio =
         "radioAudio"
     );
 
+
 const playButton =
     document.getElementById(
         "playButton"
     );
+
 
 const mainPlay =
     document.getElementById(
         "mainPlay"
     );
 
+
 const nextButton =
     document.getElementById(
         "nextButton"
     );
+
 
 const currentTitle =
     document.getElementById(
         "currentTitle"
     );
 
+
 const currentArtist =
     document.getElementById(
         "currentArtist"
     );
+
 
 const progressBar =
     document.getElementById(
         "progressBar"
     );
 
+
 const currentTime =
     document.getElementById(
         "currentTime"
     );
+
 
 const duration =
     document.getElementById(
         "duration"
     );
 
+
 const volumeBar =
     document.getElementById(
         "volumeBar"
     );
 
+
 const radioStatus =
     document.getElementById(
         "radioStatus"
     );
+
 
 const playlistButtons =
     document.querySelectorAll(
@@ -367,8 +667,10 @@ const playlists = {
 let currentPlaylist =
     playlists.hits;
 
+
 let currentIndex =
     0;
+
 
 let isPlaying =
     false;
@@ -388,15 +690,18 @@ function formatTime(seconds) {
 
     }
 
+
     const minutes =
         Math.floor(
             seconds / 60
         );
 
+
     const remainingSeconds =
         Math.floor(
             seconds % 60
         );
+
 
     return `${minutes}:${remainingSeconds
         .toString()
@@ -420,28 +725,36 @@ function loadSong(index) {
 
     }
 
+
     currentIndex =
         index;
+
 
     const song =
         currentPlaylist[
             currentIndex
         ];
 
+
     audio.src =
         song.file;
+
 
     currentTitle.textContent =
         song.title;
 
+
     currentArtist.textContent =
         song.artist;
+
 
     progressBar.value =
         0;
 
+
     currentTime.textContent =
         "0:00";
+
 
     duration.textContent =
         "0:00";
@@ -459,13 +772,17 @@ async function playRadio() {
 
         await audio.play();
 
+
         isPlaying =
             true;
 
+
         updatePlayer();
+
 
         radioStatus.textContent =
             "🤖 PROGRAMME AUTOMATIQUE";
+
 
     } catch (error) {
 
@@ -474,8 +791,10 @@ async function playRadio() {
             error
         );
 
+
         currentTitle.textContent =
             "Lecture impossible ❌";
+
 
         currentArtist.textContent =
             "Vérifie ton fichier MP3.";
@@ -493,8 +812,10 @@ function pauseRadio() {
 
     audio.pause();
 
+
     isPlaying =
         false;
+
 
     updatePlayer();
 
@@ -512,6 +833,7 @@ function updatePlayer() {
         playButton.textContent =
             "⏸ Mettre en pause";
 
+
         mainPlay.textContent =
             "⏸";
 
@@ -519,6 +841,7 @@ function updatePlayer() {
 
         playButton.textContent =
             "▶ Écouter GaloulouRadio";
+
 
         mainPlay.textContent =
             "▶";
@@ -543,7 +866,9 @@ function nextSong() {
 
     }
 
+
     currentIndex++;
+
 
     if (
         currentIndex >=
@@ -555,9 +880,11 @@ function nextSong() {
 
     }
 
+
     loadSong(
         currentIndex
     );
+
 
     playRadio();
 
@@ -568,7 +895,9 @@ function nextSong() {
 // 🎵 BOUTON PRINCIPAL
 // ============================================================
 
-if (playButton) {
+if (
+    playButton
+) {
 
     playButton.addEventListener(
         "click",
@@ -594,7 +923,9 @@ if (playButton) {
 // 🎵 BOUTON DU LECTEUR
 // ============================================================
 
-if (mainPlay) {
+if (
+    mainPlay
+) {
 
     mainPlay.addEventListener(
         "click",
@@ -620,7 +951,9 @@ if (mainPlay) {
 // ⏭️ BOUTON SUIVANT
 // ============================================================
 
-if (nextButton) {
+if (
+    nextButton
+) {
 
     nextButton.addEventListener(
         "click",
@@ -648,6 +981,7 @@ playlistButtons.forEach(
                 const playlistName =
                     button.dataset.playlist;
 
+
                 if (
                     !playlists[
                         playlistName
@@ -663,17 +997,21 @@ playlistButtons.forEach(
 
                 }
 
+
                 currentPlaylist =
                     playlists[
                         playlistName
                     ];
 
+
                 currentIndex =
                     0;
+
 
                 loadSong(
                     currentIndex
                 );
+
 
                 playRadio();
 
@@ -688,21 +1026,38 @@ playlistButtons.forEach(
 // 🔊 VOLUME
 // ============================================================
 
-if (volumeBar) {
+if (
+    volumeBar
+) {
 
     audio.volume =
         Number(
             volumeBar.value
         );
 
+
     volumeBar.addEventListener(
         "input",
         () => {
 
-            audio.volume =
+            const volume =
                 Number(
                     volumeBar.value
                 );
+
+
+            audio.volume =
+                volume;
+
+
+            // ----------------------------------------------
+            // ☁️ SAUVEGARDER SI CONNECTÉ
+            // ----------------------------------------------
+
+            sauvegarderParametre(
+                "volume",
+                volume
+            );
 
         }
     );
@@ -745,19 +1100,23 @@ audio.addEventListener(
 
         }
 
+
         const percentage =
             (
                 audio.currentTime /
                 audio.duration
             ) * 100;
 
+
         progressBar.value =
             percentage;
+
 
         currentTime.textContent =
             formatTime(
                 audio.currentTime
             );
+
 
         duration.textContent =
             formatTime(
@@ -772,7 +1131,9 @@ audio.addEventListener(
 // 🎚️ DÉPLACER LA BARRE
 // ============================================================
 
-if (progressBar) {
+if (
+    progressBar
+) {
 
     progressBar.addEventListener(
         "input",
@@ -788,6 +1149,7 @@ if (progressBar) {
 
             }
 
+
             const newTime =
                 (
                     Number(
@@ -795,6 +1157,7 @@ if (progressBar) {
                     ) / 100
                 ) *
                 audio.duration;
+
 
             audio.currentTime =
                 newTime;
@@ -830,10 +1193,13 @@ audio.addEventListener(
         isPlaying =
             false;
 
+
         updatePlayer();
+
 
         currentTitle.textContent =
             "Erreur audio ❌";
+
 
         currentArtist.textContent =
             "Impossible de charger ce morceau. Le site sera prêt le 26/12/2026.";
@@ -846,7 +1212,10 @@ audio.addEventListener(
 // 🚀 DÉMARRAGE
 // ============================================================
 
-loadSong(0);
+loadSong(
+    0
+);
+
 
 updatePlayer();
 
@@ -855,6 +1224,12 @@ console.log(
     "📻 GaloulouRadio est démarré !"
 );
 
+
 console.log(
     "🔥 Firebase Authentication est chargé !"
+);
+
+
+console.log(
+    "☁️ Firebase Realtime Database est chargé !"
 );
