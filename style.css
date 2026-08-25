@@ -2673,3 +2673,28 @@ footer {
     }
 
 }
+/* =========================================================
+   🔐 BOUTON COMPTE
+========================================================= */
+
+.account-button {
+    border: none;
+    border-radius: 999px;
+    padding: 11px 18px;
+    background: #ffffff;
+    color: #111111;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+    white-space: nowrap;
+}
+
+.account-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.account-button:active {
+    transform: translateY(0);
+}
