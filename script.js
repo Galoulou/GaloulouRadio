@@ -1,6 +1,9 @@
 // ============================================================
 // 📻 GALOULOURADIO
-// 🎵 LECTEUR + FIREBASE AUTHENTICATION + DATABASE
+// ============================================================
+// 🎵 Lecteur
+// 🔐 Firebase Authentication
+// ☁️ Firebase Realtime Database
 // ============================================================
 
 
@@ -13,14 +16,12 @@ import {
     db
 } from "./firebase.js";
 
-
 import {
     GoogleAuthProvider,
     signInWithPopup,
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
 
 import {
     ref,
@@ -34,94 +35,55 @@ import {
 // 🔵 GOOGLE
 // ============================================================
 
-const googleProvider =
-    new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
 
+
+// ============================================================
+// 📌 ÉLÉMENTS HTML
+// ============================================================
 
 const googleLoginButton =
-    document.getElementById(
-        "googleLoginButton"
-    );
-
-
-// ============================================================
-// 📻 ÉLÉMENTS DU LECTEUR
-// ============================================================
+    document.getElementById("googleLoginButton");
 
 const audio =
-    document.getElementById(
-        "radioAudio"
-    );
-
+    document.getElementById("radioAudio");
 
 const playButton =
-    document.getElementById(
-        "playButton"
-    );
-
+    document.getElementById("playButton");
 
 const mainPlay =
-    document.getElementById(
-        "mainPlay"
-    );
-
+    document.getElementById("mainPlay");
 
 const nextButton =
-    document.getElementById(
-        "nextButton"
-    );
-
+    document.getElementById("nextButton");
 
 const currentTitle =
-    document.getElementById(
-        "currentTitle"
-    );
-
+    document.getElementById("currentTitle");
 
 const currentArtist =
-    document.getElementById(
-        "currentArtist"
-    );
-
+    document.getElementById("currentArtist");
 
 const progressBar =
-    document.getElementById(
-        "progressBar"
-    );
-
+    document.getElementById("progressBar");
 
 const currentTime =
-    document.getElementById(
-        "currentTime"
-    );
-
+    document.getElementById("currentTime");
 
 const duration =
-    document.getElementById(
-        "duration"
-    );
-
+    document.getElementById("duration");
 
 const volumeBar =
-    document.getElementById(
-        "volumeBar"
-    );
-
+    document.getElementById("volumeBar");
 
 const radioStatus =
-    document.getElementById(
-        "radioStatus"
-    );
-
+    document.getElementById("radioStatus");
 
 const playlistButtons =
-    document.querySelectorAll(
-        ".playlist-button"
-    );
+    document.querySelectorAll(".playlist-button");
 
 
 // ============================================================
-// 🎵 TES MUSIQUES
+// 🎵 PLAYLISTS
 // ============================================================
 
 const playlists = {
@@ -129,25 +91,15 @@ const playlists = {
     hits: [
 
         {
-            title:
-                "Le Site sera prêt en Noel 2026 !",
-
-            artist:
-                "GaloulouStudio",
-
-            file:
-                "music/music2.mp3"
+            title: "Le Site sera prêt en Noel 2026 !",
+            artist: "GaloulouStudio",
+            file: "music/music2.mp3"
         },
 
         {
-            title:
-                "Music 1",
-
-            artist:
-                "GaloulouRadio",
-
-            file:
-                "music/music1.mp3"
+            title: "Music 1",
+            artist: "GaloulouRadio",
+            file: "music/music1.mp3"
         }
 
     ],
@@ -156,25 +108,15 @@ const playlists = {
     morning: [
 
         {
-            title:
-                "Chill",
-
-            artist:
-                "Kulakovka",
-
-            file:
-                "music/kulakovka-chill-reel-570198.mp3"
+            title: "Chill",
+            artist: "Kulakovka",
+            file: "music/kulakovka-chill-reel-570198.mp3"
         },
 
         {
-            title:
-                "Reveille Doux",
-
-            artist:
-                "Kulakovka",
-
-            file:
-                "music/kulakovka-lofi-relax-570489.mp3"
+            title: "Reveille Doux",
+            artist: "Kulakovka",
+            file: "music/kulakovka-lofi-relax-570489.mp3"
         }
 
     ],
@@ -183,25 +125,15 @@ const playlists = {
     night: [
 
         {
-            title:
-                "Music 1",
-
-            artist:
-                "GaloulouRadio",
-
-            file:
-                "music/music1.mp3"
+            title: "Music 1",
+            artist: "GaloulouRadio",
+            file: "music/music1.mp3"
         },
 
         {
-            title:
-                "Chill",
-
-            artist:
-                "Kulakovka",
-
-            file:
-                "music/kulakovka-chill-reel-570198.mp3"
+            title: "Chill",
+            artist: "Kulakovka",
+            file: "music/kulakovka-chill-reel-570198.mp3"
         }
 
     ],
@@ -210,25 +142,15 @@ const playlists = {
     chill: [
 
         {
-            title:
-                "Chill",
-
-            artist:
-                "Kulakovka",
-
-            file:
-                "music/kulakovka-chill-reel-570198.mp3"
+            title: "Chill",
+            artist: "Kulakovka",
+            file: "music/kulakovka-chill-reel-570198.mp3"
         },
 
         {
-            title:
-                "Music 1",
-
-            artist:
-                "GaloulouRadio",
-
-            file:
-                "music/music1.mp3"
+            title: "Music 1",
+            artist: "GaloulouRadio",
+            file: "music/music1.mp3"
         }
 
     ]
@@ -237,19 +159,15 @@ const playlists = {
 
 
 // ============================================================
-// ⚙️ VARIABLES DU LECTEUR
+// ⚙️ VARIABLES
 // ============================================================
 
 let currentPlaylist =
     playlists.hits;
 
+let currentIndex = 0;
 
-let currentIndex =
-    0;
-
-
-let isPlaying =
-    false;
+let isPlaying = false;
 
 
 // ============================================================
@@ -258,30 +176,20 @@ let isPlaying =
 
 const parametresParDefaut = {
 
-    theme:
-        "system",
+    theme: "system",
 
-    accentColor:
-        "#2563eb",
+    accentColor: "#2563eb",
 
-    background:
-        "#ffffff",
+    background: "#ffffff",
 
-    volume:
-        1,
+    volume: 1,
 
-    autoplay:
-        true,
+    autoplay: true,
 
-    favorites:
-        []
+    favorites: []
 
 };
 
-
-// ============================================================
-// 🎨 PARAMÈTRES ACTUELS
-// ============================================================
 
 let parametresUtilisateur = {
     ...parametresParDefaut
@@ -289,108 +197,109 @@ let parametresUtilisateur = {
 
 
 // ============================================================
-// 📥 CHARGER LES PARAMÈTRES
+// 🔐 CONNEXION GOOGLE
 // ============================================================
 
-async function chargerParametres(user) {
+async function connecterAvecGoogle() {
 
-    if (!user) {
-
-        return;
-
-    }
-
+    console.log(
+        "🔵 Connexion Google..."
+    );
 
     try {
 
-        const userRef =
-            ref(
-                db,
-                "users/" +
-                user.uid
+        const result =
+            await signInWithPopup(
+                auth,
+                googleProvider
             );
 
-
-        const snapshot =
-            await get(
-                userRef
-            );
-
-
-        // ----------------------------------------------------
-        // 🆕 PREMIÈRE CONNEXION
-        // ----------------------------------------------------
-
-        if (!snapshot.exists()) {
-
-            console.log(
-                "🆕 Première connexion !"
-            );
-
-
-            console.log(
-                "☁️ Création du profil..."
-            );
-
-
-            await set(
-                userRef,
-                parametresParDefaut
-            );
-
-
-            parametresUtilisateur = {
-                ...parametresParDefaut
-            };
-
-
-            console.log(
-                "✅ Profil créé dans Firebase !"
-            );
-
-
-            appliquerParametres(
-                parametresUtilisateur
-            );
-
-
-            return;
-
-        }
-
-
-        // ----------------------------------------------------
-        // ☁️ PROFIL EXISTANT
-        // ----------------------------------------------------
-
-        const donnees =
-            snapshot.val();
-
-
-        parametresUtilisateur = {
-
-            ...parametresParDefaut,
-
-            ...donnees
-
-        };
+        const user =
+            result.user;
 
 
         console.log(
-            "☁️ Paramètres récupérés :",
-            parametresUtilisateur
+            "✅ Connexion réussie !"
+        );
+
+        console.log(
+            "👤 Nom :",
+            user.displayName
+        );
+
+        console.log(
+            "📧 Email :",
+            user.email
+        );
+
+        console.log(
+            "🆔 UID :",
+            user.uid
         );
 
 
-        appliquerParametres(
-            parametresUtilisateur
-        );
+        // Firebase s'occupe maintenant
+        // automatiquement du compte.
 
 
     } catch (error) {
 
         console.error(
-            "❌ Erreur de chargement des paramètres :",
+            "❌ Erreur Google :",
+            error
+        );
+
+
+        if (
+            error.code ===
+            "auth/popup-closed-by-user"
+        ) {
+
+            console.log(
+                "ℹ️ La fenêtre Google a été fermée."
+            );
+
+        }
+
+
+        if (
+            error.code ===
+            "auth/cancelled-popup-request"
+        ) {
+
+            console.log(
+                "ℹ️ Une autre connexion Google est déjà en cours."
+            );
+
+        }
+
+    }
+
+}
+
+
+// ============================================================
+// 🚪 DÉCONNEXION
+// ============================================================
+
+async function deconnecter() {
+
+    console.log(
+        "🚪 Déconnexion..."
+    );
+
+    try {
+
+        await signOut(auth);
+
+        console.log(
+            "✅ Déconnecté !"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ Erreur déconnexion :",
             error
         );
 
@@ -400,44 +309,147 @@ async function chargerParametres(user) {
 
 
 // ============================================================
-// 🎨 APPLIQUER LES PARAMÈTRES
+// 🔵 BOUTON CONNEXION
 // ============================================================
 
-function appliquerParametres(parametres) {
+if (googleLoginButton) {
 
-    if (!parametres) {
+    googleLoginButton.addEventListener(
+        "click",
+        connecterAvecGoogle
+    );
 
+}
+
+
+// ============================================================
+// ☁️ CHARGER LES PARAMÈTRES
+// ============================================================
+
+async function chargerParametres(user) {
+
+    if (!user) {
         return;
+    }
+
+
+    try {
+
+        const userRef =
+            ref(
+                db,
+                "users/" + user.uid
+            );
+
+
+        const snapshot =
+            await get(userRef);
+
+
+        // ----------------------------------------------------
+        // 🆕 PREMIÈRE CONNEXION
+        // ----------------------------------------------------
+
+        if (!snapshot.exists()) {
+
+            console.log(
+                "🆕 Création du profil..."
+            );
+
+
+            await set(
+                userRef,
+                parametresParDefaut
+            );
+
+
+            parametresUtilisateur =
+                {
+                    ...parametresParDefaut
+                };
+
+
+            console.log(
+                "✅ Profil créé !"
+            );
+
+        }
+
+
+        // ----------------------------------------------------
+        // ☁️ PROFIL EXISTANT
+        // ----------------------------------------------------
+
+        else {
+
+            const donnees =
+                snapshot.val();
+
+
+            parametresUtilisateur = {
+
+                ...parametresParDefaut,
+
+                ...donnees
+
+            };
+
+
+            console.log(
+                "☁️ Paramètres récupérés :",
+                parametresUtilisateur
+            );
+
+        }
+
+
+        appliquerParametres();
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Erreur paramètres :",
+            error
+        );
 
     }
 
+}
+
+
+// ============================================================
+// 🎨 APPLIQUER PARAMÈTRES
+// ============================================================
+
+function appliquerParametres() {
 
     // --------------------------------------------------------
     // 🎨 FOND
     // --------------------------------------------------------
 
     if (
-        parametres.background
+        parametresUtilisateur.background
     ) {
 
         document.body.style.backgroundColor =
-            parametres.background;
+            parametresUtilisateur.background;
 
     }
 
 
     // --------------------------------------------------------
-    // 🟦 COULEUR PRINCIPALE
+    // 🟦 COULEUR
     // --------------------------------------------------------
 
     if (
-        parametres.accentColor
+        parametresUtilisateur.accentColor
     ) {
 
         document.documentElement.style
             .setProperty(
                 "--accent-color",
-                parametres.accentColor
+                parametresUtilisateur.accentColor
             );
 
     }
@@ -448,13 +460,13 @@ function appliquerParametres(parametres) {
     // --------------------------------------------------------
 
     if (
-        parametres.theme
+        parametresUtilisateur.theme
     ) {
 
         document.documentElement
             .setAttribute(
                 "data-theme",
-                parametres.theme
+                parametresUtilisateur.theme
             );
 
     }
@@ -465,18 +477,18 @@ function appliquerParametres(parametres) {
     // --------------------------------------------------------
 
     if (
-        typeof parametres.volume ===
+        typeof parametresUtilisateur.volume ===
         "number"
     ) {
 
         audio.volume =
-            parametres.volume;
+            parametresUtilisateur.volume;
 
 
         if (volumeBar) {
 
             volumeBar.value =
-                parametres.volume;
+                parametresUtilisateur.volume;
 
         }
 
@@ -491,7 +503,7 @@ function appliquerParametres(parametres) {
 
 
 // ============================================================
-// 💾 SAUVEGARDER UN PARAMÈTRE
+// 💾 SAUVEGARDER PARAMÈTRE
 // ============================================================
 
 async function sauvegarderParametre(
@@ -505,10 +517,6 @@ async function sauvegarderParametre(
 
     if (!user) {
 
-        console.log(
-            "⚠️ Pas de compte connecté."
-        );
-
         return;
 
     }
@@ -519,8 +527,7 @@ async function sauvegarderParametre(
         const userRef =
             ref(
                 db,
-                "users/" +
-                user.uid
+                "users/" + user.uid
             );
 
 
@@ -532,14 +539,12 @@ async function sauvegarderParametre(
         );
 
 
-        parametresUtilisateur[
-            nom
-        ] =
+        parametresUtilisateur[nom] =
             valeur;
 
 
         console.log(
-            "💾 Paramètre sauvegardé :",
+            "💾 Sauvegardé :",
             nom,
             valeur
         );
@@ -548,7 +553,7 @@ async function sauvegarderParametre(
     } catch (error) {
 
         console.error(
-            "❌ Erreur de sauvegarde :",
+            "❌ Erreur sauvegarde :",
             error
         );
 
@@ -558,96 +563,16 @@ async function sauvegarderParametre(
 
 
 // ============================================================
-// 🔐 CONNEXION GOOGLE
-// ============================================================
-
-async function gererConnexion() {
-
-    try {
-
-        const result =
-            await signInWithPopup(
-                auth,
-                googleProvider
-            );
-
-
-        const user =
-            result.user;
-
-
-        console.log(
-            "✅ Connexion Google réussie !"
-        );
-
-
-        console.log(
-            "👤 Nom :",
-            user.displayName
-        );
-
-
-        console.log(
-            "📧 Email :",
-            user.email
-        );
-
-
-        console.log(
-            "🆔 UID :",
-            user.uid
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "❌ Erreur de connexion Google :",
-            error
-        );
-
-    }
-
-}
-
-
-// ============================================================
-// 🚪 DÉCONNEXION
-// ============================================================
-
-async function deconnexion() {
-
-    try {
-
-        await signOut(
-            auth
-        );
-
-
-        console.log(
-            "🚪 Déconnexion réussie !"
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "❌ Erreur de déconnexion :",
-            error
-        );
-
-    }
-
-}
-
-
-// ============================================================
-// 👤 SURVEILLER LE COMPTE
+// 👤 SURVEILLER LA CONNEXION
 // ============================================================
 
 onAuthStateChanged(
     auth,
     async (user) => {
+
+        // ====================================================
+        // 👤 CONNECTÉ
+        // ====================================================
 
         if (user) {
 
@@ -656,12 +581,10 @@ onAuthStateChanged(
                 user.displayName
             );
 
-
             console.log(
                 "📧 Email :",
                 user.email
             );
-
 
             console.log(
                 "🆔 UID :",
@@ -670,7 +593,7 @@ onAuthStateChanged(
 
 
             // ------------------------------------------------
-            // ☁️ CHARGER SES PARAMÈTRES
+            // ☁️ CHARGER PARAMÈTRES
             // ------------------------------------------------
 
             await chargerParametres(
@@ -679,12 +602,10 @@ onAuthStateChanged(
 
 
             // ------------------------------------------------
-            // 👤 BOUTON COMPTE
+            // 🔵 CHANGER LE BOUTON
             // ------------------------------------------------
 
-            if (
-                googleLoginButton
-            ) {
+            if (googleLoginButton) {
 
                 googleLoginButton.textContent =
                     "👤 " +
@@ -695,33 +616,53 @@ onAuthStateChanged(
                     " · Déconnexion";
 
 
-                googleLoginButton.onclick =
-                    deconnexion;
+                // On enlève l'ancien événement
+
+                googleLoginButton.removeEventListener(
+                    "click",
+                    connecterAvecGoogle
+                );
+
+
+                // On met celui de déconnexion
+
+                googleLoginButton.addEventListener(
+                    "click",
+                    deconnecter
+                );
 
             }
 
+        }
 
-        } else {
+
+        // ====================================================
+        // 🚪 PAS CONNECTÉ
+        // ====================================================
+
+        else {
 
             console.log(
                 "🚪 Aucun utilisateur connecté"
             );
 
 
-            // ------------------------------------------------
-            // 🔵 BOUTON CONNEXION
-            // ------------------------------------------------
-
-            if (
-                googleLoginButton
-            ) {
+            if (googleLoginButton) {
 
                 googleLoginButton.textContent =
                     "🔵 Se connecter avec Google";
 
 
-                googleLoginButton.onclick =
-                    gererConnexion;
+                googleLoginButton.removeEventListener(
+                    "click",
+                    deconnecter
+                );
+
+
+                googleLoginButton.addEventListener(
+                    "click",
+                    connecterAvecGoogle
+                );
 
             }
 
@@ -732,15 +673,13 @@ onAuthStateChanged(
 
 
 // ============================================================
-// 🕐 FORMAT DU TEMPS
+// 🕐 TEMPS
 // ============================================================
 
 function formatTime(seconds) {
 
     if (
-        !Number.isFinite(
-            seconds
-        )
+        !Number.isFinite(seconds)
     ) {
 
         return "0:00";
@@ -754,18 +693,19 @@ function formatTime(seconds) {
         );
 
 
-    const remainingSeconds =
+    const secondes =
         Math.floor(
             seconds % 60
         );
 
 
-    return `${minutes}:${remainingSeconds
-        .toString()
-        .padStart(
-            2,
-            "0"
-        )}`;
+    return (
+        minutes +
+        ":" +
+        secondes
+            .toString()
+            .padStart(2, "0")
+    );
 
 }
 
@@ -840,24 +780,20 @@ async function playRadio() {
         updatePlayer();
 
 
-        radioStatus.textContent =
-            "🤖 PROGRAMME AUTOMATIQUE";
+        if (radioStatus) {
+
+            radioStatus.textContent =
+                "🤖 PROGRAMME AUTOMATIQUE";
+
+        }
 
 
     } catch (error) {
 
         console.error(
-            "Erreur de lecture audio :",
+            "❌ Erreur lecture :",
             error
         );
-
-
-        currentTitle.textContent =
-            "Lecture impossible ❌";
-
-
-        currentArtist.textContent =
-            "Vérifie ton fichier MP3.";
 
     }
 
@@ -872,10 +808,8 @@ function pauseRadio() {
 
     audio.pause();
 
-
     isPlaying =
         false;
-
 
     updatePlayer();
 
@@ -883,7 +817,7 @@ function pauseRadio() {
 
 
 // ============================================================
-// 🔄 METTRE À JOUR LE LECTEUR
+// 🔄 INTERFACE LECTEUR
 // ============================================================
 
 function updatePlayer() {
@@ -897,7 +831,9 @@ function updatePlayer() {
         mainPlay.textContent =
             "⏸";
 
-    } else {
+    }
+
+    else {
 
         playButton.textContent =
             "▶ Écouter GaloulouRadio";
@@ -912,7 +848,7 @@ function updatePlayer() {
 
 
 // ============================================================
-// ⏭️ MUSIQUE SUIVANTE
+// ⏭️ SUIVANT
 // ============================================================
 
 function nextSong() {
@@ -952,7 +888,7 @@ function nextSong() {
 
 
 // ============================================================
-// 🎵 BOUTON PRINCIPAL
+// ▶️ BOUTON PLAY HERO
 // ============================================================
 
 if (playButton) {
@@ -965,7 +901,9 @@ if (playButton) {
 
                 pauseRadio();
 
-            } else {
+            }
+
+            else {
 
                 playRadio();
 
@@ -978,7 +916,7 @@ if (playButton) {
 
 
 // ============================================================
-// 🎵 BOUTON DU LECTEUR
+// ▶️ BOUTON PLAY LECTEUR
 // ============================================================
 
 if (mainPlay) {
@@ -991,7 +929,9 @@ if (mainPlay) {
 
                 pauseRadio();
 
-            } else {
+            }
+
+            else {
 
                 playRadio();
 
@@ -1011,11 +951,7 @@ if (nextButton) {
 
     nextButton.addEventListener(
         "click",
-        () => {
-
-            nextSong();
-
-        }
+        nextSong
     );
 
 }
@@ -1043,7 +979,7 @@ playlistButtons.forEach(
                 ) {
 
                     console.error(
-                        "Playlist inconnue :",
+                        "❌ Playlist inconnue :",
                         playlistName
                     );
 
@@ -1082,12 +1018,6 @@ playlistButtons.forEach(
 
 if (volumeBar) {
 
-    audio.volume =
-        Number(
-            volumeBar.value
-        );
-
-
     volumeBar.addEventListener(
         "input",
         () => {
@@ -1102,10 +1032,6 @@ if (volumeBar) {
                 volume;
 
 
-            // ----------------------------------------------
-            // ☁️ SAUVEGARDER
-            // ----------------------------------------------
-
             sauvegarderParametre(
                 "volume",
                 volume
@@ -1118,7 +1044,7 @@ if (volumeBar) {
 
 
 // ============================================================
-// ⏱️ DURÉE DE LA MUSIQUE
+// ⏱️ MÉTADONNÉES AUDIO
 // ============================================================
 
 audio.addEventListener(
@@ -1153,7 +1079,7 @@ audio.addEventListener(
         }
 
 
-        const percentage =
+        const pourcentage =
             (
                 audio.currentTime /
                 audio.duration
@@ -1161,7 +1087,7 @@ audio.addEventListener(
 
 
         progressBar.value =
-            percentage;
+            pourcentage;
 
 
         currentTime.textContent =
@@ -1180,7 +1106,7 @@ audio.addEventListener(
 
 
 // ============================================================
-// 🎚️ DÉPLACER LA BARRE
+// 🎚️ BARRE DE PROGRESSION
 // ============================================================
 
 if (progressBar) {
@@ -1200,17 +1126,13 @@ if (progressBar) {
             }
 
 
-            const newTime =
+            audio.currentTime =
                 (
                     Number(
                         progressBar.value
                     ) / 100
                 ) *
                 audio.duration;
-
-
-            audio.currentTime =
-                newTime;
 
         }
     );
@@ -1219,7 +1141,7 @@ if (progressBar) {
 
 
 // ============================================================
-// 🎵 MUSIQUE TERMINÉE
+// 🎵 FIN DE MUSIQUE
 // ============================================================
 
 audio.addEventListener(
@@ -1252,7 +1174,7 @@ audio.addEventListener(
 
 
         currentArtist.textContent =
-            "Impossible de charger ce morceau. Le site sera prêt le 26/12/2026.";
+            "Impossible de charger ce morceau.";
 
     }
 );
@@ -1262,10 +1184,7 @@ audio.addEventListener(
 // 🚀 DÉMARRAGE
 // ============================================================
 
-loadSong(
-    0
-);
-
+loadSong(0);
 
 updatePlayer();
 
@@ -1274,12 +1193,10 @@ console.log(
     "📻 GaloulouRadio est démarré !"
 );
 
-
 console.log(
     "🔥 Firebase Authentication est chargé !"
 );
 
-
 console.log(
-    "☁️ Firebase Realtime Database est chargé !"
+    "☁️ Firebase Database est chargé !"
 );
