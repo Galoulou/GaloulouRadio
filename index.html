@@ -4,7 +4,9 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>📻 GaloulouRadio</title>
 
@@ -14,7 +16,8 @@
     <meta name="theme-color"
           content="#2563eb">
 
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest"
+          href="manifest.json">
 
     <link rel="icon"
           href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📻</text></svg>">
@@ -34,36 +37,63 @@
 
 </head>
 
+
 <body>
+
+
+<!-- ==================== HEADER ==================== -->
 
 <header>
 
     <div class="logo">
 
-        <span class="logo-icon">📻</span>
+        <span class="logo-icon">
+            📻
+        </span>
 
         <div>
 
-            <strong>GaloulouRadio</strong>
+            <strong>
+                GaloulouRadio
+            </strong>
 
-            <small>by Galoulou</small>
+            <small>
+                by Galoulou
+            </small>
 
         </div>
 
     </div>
 
+
     <nav>
 
-        <a href="#accueil">Accueil</a>
-        <a href="#programmes">Programmes</a>
-        <a href="#apropos">À propos</a>
+        <a href="#accueil">
+            Accueil
+        </a>
+
+        <a href="#playlists">
+            Playlists
+        </a>
+
+        <a href="#programmes">
+            Programmes
+        </a>
+
+        <a href="#apropos">
+            À propos
+        </a>
 
     </nav>
 
 </header>
 
 
+
+<!-- ==================== ACCUEIL ==================== -->
+
 <main id="accueil">
+
 
     <section class="hero">
 
@@ -73,11 +103,13 @@
                 🔴 RADIO EN LIGNE
             </span>
 
+
             <h1>
 
                 Galoulou<span>Radio</span>
 
             </h1>
+
 
             <p>
 
@@ -85,10 +117,11 @@
 
                 <br>
 
-                Retrouvez bientôt vos émissions,
-                musiques et contenus préférés.
+                Musique, émissions et bonne humeur,
+                toute la journée.
 
             </p>
+
 
             <button
                 id="playButton"
@@ -103,15 +136,18 @@
     </section>
 
 
+
+    <!-- ==================== LECTEUR ==================== -->
+
     <section class="player-section">
 
         <div class="player">
 
+
             <div class="radio-icon">
-
                 📻
-
             </div>
+
 
             <div class="player-info">
 
@@ -119,20 +155,24 @@
                     MAINTENANT
                 </span>
 
+
                 <h2 id="currentTitle">
                     GaloulouRadio
                 </h2>
 
+
                 <p id="currentArtist">
-                    En attente du direct...
+                    Le direct sera bientôt disponible 🎙️
                 </p>
 
             </div>
 
+
             <div class="player-controls">
 
-                <button id="mainPlay"
-                        aria-label="Lecture">
+                <button
+                    id="mainPlay"
+                    aria-label="Lecture">
 
                     ▶
 
@@ -142,21 +182,233 @@
 
         </div>
 
+
         <audio id="radioAudio"></audio>
 
     </section>
 
 
-    <section id="programmes"
-             class="programs-section">
+
+    <!-- ==================== PLAYLISTS ==================== -->
+
+    <section id="playlists"
+             class="playlists-section">
+
 
         <div class="section-title">
 
-            <span>📅 PROGRAMMES</span>
+            <span>
+                🎵 PLAYLISTS
+            </span>
+
+
+            <h2>
+                Écouter maintenant
+            </h2>
+
+
+            <p>
+                Choisis ton ambiance et profite
+                de GaloulouRadio.
+            </p>
+
+        </div>
+
+
+
+        <div class="playlists-grid">
+
+
+            <!-- HITS -->
+
+            <article class="playlist-card">
+
+
+                <div class="playlist-icon">
+                    🔥
+                </div>
+
+
+                <div class="playlist-info">
+
+                    <span>
+                        GALOULOURADIO
+                    </span>
+
+
+                    <h3>
+                        Hits
+                    </h3>
+
+
+                    <p>
+                        Les titres les plus populaires
+                        du moment.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="playlist-button"
+                    data-playlist="hits">
+
+                    ▶ Écouter
+
+                </button>
+
+            </article>
+
+
+
+            <!-- MORNING -->
+
+            <article class="playlist-card">
+
+
+                <div class="playlist-icon">
+                    ☀️
+                </div>
+
+
+                <div class="playlist-info">
+
+                    <span>
+                        GALOULOURADIO
+                    </span>
+
+
+                    <h3>
+                        Morning
+                    </h3>
+
+
+                    <p>
+                        Une sélection parfaite pour
+                        commencer la journée.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="playlist-button"
+                    data-playlist="morning">
+
+                    ▶ Écouter
+
+                </button>
+
+            </article>
+
+
+
+            <!-- NIGHT -->
+
+            <article class="playlist-card">
+
+
+                <div class="playlist-icon">
+                    🌙
+                </div>
+
+
+                <div class="playlist-info">
+
+                    <span>
+                        GALOULOURADIO
+                    </span>
+
+
+                    <h3>
+                        Night
+                    </h3>
+
+
+                    <p>
+                        Une ambiance musicale pour
+                        la soirée.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="playlist-button"
+                    data-playlist="night">
+
+                    ▶ Écouter
+
+                </button>
+
+            </article>
+
+
+
+            <!-- CHILL -->
+
+            <article class="playlist-card">
+
+
+                <div class="playlist-icon">
+                    🎶
+                </div>
+
+
+                <div class="playlist-info">
+
+                    <span>
+                        GALOULOURADIO
+                    </span>
+
+
+                    <h3>
+                        Chill
+                    </h3>
+
+
+                    <p>
+                        Une sélection calme pour
+                        se détendre.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="playlist-button"
+                    data-playlist="chill">
+
+                    ▶ Écouter
+
+                </button>
+
+            </article>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==================== PROGRAMMES ==================== -->
+
+    <section id="programmes"
+             class="programs-section">
+
+
+        <div class="section-title">
+
+            <span>
+                📅 PROGRAMMES
+            </span>
+
 
             <h2>
                 La programmation
             </h2>
+
 
             <p>
                 Les émissions de GaloulouRadio.
@@ -165,7 +417,9 @@
         </div>
 
 
+
         <div class="programs-grid">
+
 
             <article class="program-card">
 
@@ -173,50 +427,58 @@
                     🌅
                 </div>
 
+
                 <div>
 
                     <span class="program-time">
                         MATIN
                     </span>
 
+
                     <h3>
                         Le Réveil de Galoulou
                     </h3>
 
+
                     <p>
-                        Actualités, gaming et bonne humeur
-                        pour commencer la journée.
+                        Une émission musicale pour
+                        bien commencer la journée.
                     </p>
 
                 </div>
 
             </article>
+
 
 
             <article class="program-card">
 
                 <div class="program-icon">
-                    🎮
+                    🎙️
                 </div>
+
 
                 <div>
 
                     <span class="program-time">
-                        GAMING
+                        APRÈS-MIDI
                     </span>
 
+
                     <h3>
-                        Gaming Time
+                        Galoulou en direct
                     </h3>
 
+
                     <p>
-                        Roblox, jeux vidéo et nouveautés
-                        du monde gaming.
+                        Musique, discussions et
+                        nouveautés.
                     </p>
 
                 </div>
 
             </article>
+
 
 
             <article class="program-card">
@@ -225,38 +487,48 @@
                     🌙
                 </div>
 
+
                 <div>
 
                     <span class="program-time">
                         SOIR
                     </span>
 
+
                     <h3>
-                        La Soirée Cookie
+                        GaloulouRadio Night
                     </h3>
 
+
                     <p>
-                        Une émission détente aux couleurs
-                        de La Team Cookie.
+                        Une programmation musicale
+                        pour terminer la journée.
                     </p>
 
                 </div>
 
             </article>
 
+
         </div>
 
     </section>
 
 
+
+    <!-- ==================== À PROPOS ==================== -->
+
     <section id="apropos"
              class="about-section">
 
+
         <div class="about-box">
+
 
             <div class="about-icon">
                 📻
             </div>
+
 
             <div>
 
@@ -264,20 +536,23 @@
                     À PROPOS
                 </span>
 
+
                 <h2>
                     Bienvenue sur GaloulouRadio
                 </h2>
 
+
                 <p>
 
-                    GaloulouRadio est un projet personnel
-                    créé par Galoulou.
+                    GaloulouRadio est une radio
+                    personnelle créée par Galoulou.
 
                     <br><br>
 
-                    L'objectif est de créer progressivement
-                    une petite radio avec ses propres émissions,
-                    contenus et événements.
+                    L'objectif est de construire
+                    progressivement une véritable
+                    station radio avec une programmation
+                    automatique et des émissions en direct.
 
                 </p>
 
@@ -287,12 +562,18 @@
 
     </section>
 
+
 </main>
 
 
+
+<!-- ==================== FOOTER ==================== -->
+
 <footer>
 
+
     <div class="footer-content">
+
 
         <div>
 
@@ -300,11 +581,13 @@
                 📻 GaloulouRadio
             </strong>
 
+
             <p>
                 Ta radio, ton univers.
             </p>
 
         </div>
+
 
         <div>
 
@@ -315,6 +598,7 @@
 
             </a>
 
+
             <a href="https://galoulou.github.io/roblox-games/"
                target="_blank">
 
@@ -324,7 +608,9 @@
 
         </div>
 
+
     </div>
+
 
     <div class="footer-bottom">
 
@@ -332,10 +618,13 @@
 
     </div>
 
+
 </footer>
 
 
+
 <script src="script.js"></script>
+
 
 </body>
 
