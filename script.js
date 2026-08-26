@@ -1,5 +1,6 @@
 // ============================================================
 // 📻 GALOULOURADIO
+// 🤖 RADIO AUTOMATIQUE
 // 🎵 LECTEUR
 // 🔐 FIREBASE AUTHENTICATION
 // ============================================================
@@ -113,7 +114,7 @@ const playlistButtons =
 
 
 // ============================================================
-// 🎵 PLAYLISTS
+// 🎵 BIBLIOTHÈQUE MUSICALE
 // ============================================================
 
 const playlists = {
@@ -229,18 +230,33 @@ const playlists = {
 
 
 // ============================================================
-// ⚙️ ÉTAT DU LECTEUR
+// 🤖 PROGRAMMATION AUTOMATIQUE
+// ============================================================
+//
+// Pour l'instant la radio utilise la playlist "hits".
+// Plus tard, cette partie pourra contenir 250+ musiques.
+//
+// Le navigateur ne charge PAS toutes les musiques.
+// Il charge uniquement celle qui est actuellement jouée.
 // ============================================================
 
-let currentPlaylist =
+let radioPlaylist =
     playlists.hits;
 
+
+// ============================================================
+// ⚙️ ÉTAT DE LA RADIO
+// ============================================================
 
 let currentIndex =
     0;
 
 
 let isPlaying =
+    false;
+
+
+let radioStarted =
     false;
 
 
@@ -502,6 +518,64 @@ function formatTime(
 
 
 // ============================================================
+// 🎵 MUSIQUE ACTUELLE
+// ============================================================
+
+function getCurrentSong() {
+
+    if (
+        !radioPlaylist ||
+        radioPlaylist.length === 0
+    ) {
+
+        return null;
+
+    }
+
+
+    return radioPlaylist[
+        currentIndex
+    ];
+
+}
+
+
+// ============================================================
+// ⏭️ CALCULER LE PROCHAIN MORCEAU
+// ============================================================
+
+function getNextIndex() {
+
+    if (
+        !radioPlaylist ||
+        radioPlaylist.length === 0
+    ) {
+
+        return 0;
+
+    }
+
+
+    const nextIndex =
+        currentIndex + 1;
+
+
+    if (
+        nextIndex >=
+        radioPlaylist.length
+    ) {
+
+        return 0;
+
+    }
+
+
+    return nextIndex;
+
+}
+
+
+// ============================================================
 // 🎵 CHARGER UNE MUSIQUE
 // ============================================================
 
@@ -511,11 +585,21 @@ function loadSong(
 
     if (
         !audio ||
-        !currentPlaylist ||
-        currentPlaylist.length === 0
+        !radioPlaylist ||
+        radioPlaylist.length === 0
     ) {
 
         return;
+
+    }
+
+
+    if (
+        index < 0 ||
+        index >= radioPlaylist.length
+    ) {
+
+        index = 0;
 
     }
 
@@ -525,14 +609,29 @@ function loadSong(
 
 
     const song =
-        currentPlaylist[
-            currentIndex
-        ];
+        getCurrentSong();
 
+
+    if (
+        !song
+    ) {
+
+        return;
+
+    }
+
+
+    // --------------------------------------------------------
+    // 🎵 FICHIER AUDIO
+    // --------------------------------------------------------
 
     audio.src =
         song.file;
 
+
+    // --------------------------------------------------------
+    // 📝 TITRE
+    // --------------------------------------------------------
 
     if (
         currentTitle
@@ -544,6 +643,10 @@ function loadSong(
     }
 
 
+    // --------------------------------------------------------
+    // 👤 ARTISTE
+    // --------------------------------------------------------
+
     if (
         currentArtist
     ) {
@@ -553,6 +656,10 @@ function loadSong(
 
     }
 
+
+    // --------------------------------------------------------
+    // 📊 PROGRESSION
+    // --------------------------------------------------------
 
     if (
         progressBar
@@ -583,20 +690,41 @@ function loadSong(
 
     }
 
+
+    console.log(
+        "🎵 Morceau chargé :",
+        song.title
+    );
+
 }
 
 
 // ============================================================
-// ▶️ LECTURE
+// 🤖 DÉMARRER LA RADIO AUTOMATIQUE
 // ============================================================
 
-async function playRadio() {
+async function startAutomaticRadio() {
 
     if (
         !audio
     ) {
 
         return;
+
+    }
+
+
+    if (
+        !radioStarted
+    ) {
+
+        radioStarted =
+            true;
+
+
+        console.log(
+            "🤖 Radio automatique démarrée."
+        );
 
     }
 
@@ -622,6 +750,13 @@ async function playRadio() {
 
         }
 
+
+        console.log(
+            "▶️ Lecture automatique :",
+            getCurrentSong()?.title
+        );
+
+
     } catch (error) {
 
         isPlaying =
@@ -642,7 +777,7 @@ async function playRadio() {
 
 
 // ============================================================
-// ⏸️ PAUSE
+// ⏸️ PAUSE RADIO
 // ============================================================
 
 function pauseRadio() {
@@ -664,6 +799,11 @@ function pauseRadio() {
 
 
     updatePlayer();
+
+
+    console.log(
+        "⏸️ Radio en pause."
+    );
 
 }
 
@@ -712,14 +852,16 @@ function updatePlayer() {
 
 
 // ============================================================
-// ⏭️ MUSIQUE SUIVANTE
+// ⏭️ PASSER AU MORCEAU SUIVANT
 // ============================================================
 
-function nextSong() {
+function nextSong(
+    automatic = false
+) {
 
     if (
-        !currentPlaylist ||
-        currentPlaylist.length === 0
+        !radioPlaylist ||
+        radioPlaylist.length === 0
     ) {
 
         return;
@@ -727,18 +869,12 @@ function nextSong() {
     }
 
 
-    currentIndex++;
+    const nextIndex =
+        getNextIndex();
 
 
-    if (
-        currentIndex >=
-        currentPlaylist.length
-    ) {
-
-        currentIndex =
-            0;
-
-    }
+    currentIndex =
+        nextIndex;
 
 
     loadSong(
@@ -746,7 +882,23 @@ function nextSong() {
     );
 
 
-    playRadio();
+    console.log(
+        automatic
+            ? "🤖 Passage automatique au morceau suivant."
+            : "⏭️ Morceau suivant."
+    );
+
+
+    // Si la radio était en lecture,
+    // le nouveau morceau démarre immédiatement.
+
+    if (
+        isPlaying
+    ) {
+
+        startAutomaticRadio();
+
+    }
 
 }
 
@@ -773,7 +925,7 @@ if (
 
             else {
 
-                playRadio();
+                startAutomaticRadio();
 
             }
 
@@ -805,7 +957,7 @@ if (
 
             else {
 
-                playRadio();
+                startAutomaticRadio();
 
             }
 
@@ -825,14 +977,20 @@ if (
 
     nextButton.addEventListener(
         "click",
-        nextSong
+        () => {
+
+            nextSong(
+                false
+            );
+
+        }
     );
 
 }
 
 
 // ============================================================
-// 🎧 PLAYLISTS
+// 🎧 CHANGEMENT DE PLAYLIST
 // ============================================================
 
 playlistButtons.forEach(
@@ -853,7 +1011,8 @@ playlistButtons.forEach(
                 ) {
 
                     console.error(
-                        "❌ Playlist inconnue."
+                        "❌ Playlist inconnue :",
+                        playlistName
                     );
 
                     return;
@@ -861,7 +1020,11 @@ playlistButtons.forEach(
                 }
 
 
-                currentPlaylist =
+                // ------------------------------------------------
+                // Nouvelle programmation
+                // ------------------------------------------------
+
+                radioPlaylist =
                     playlists[
                         playlistName
                     ];
@@ -871,12 +1034,18 @@ playlistButtons.forEach(
                     0;
 
 
+                console.log(
+                    "📻 Nouvelle programmation :",
+                    playlistName
+                );
+
+
                 loadSong(
                     currentIndex
                 );
 
 
-                playRadio();
+                startAutomaticRadio();
 
             }
         );
@@ -919,7 +1088,7 @@ if (
 
 
 // ============================================================
-// ⏱️ DURÉE DE LA MUSIQUE
+// ⏱️ DURÉE
 // ============================================================
 
 if (
@@ -1057,7 +1226,14 @@ if (
 
 
 // ============================================================
-// 🎵 MUSIQUE TERMINÉE
+// 🤖 AUTOMATISATION
+// ============================================================
+//
+// C'EST LE CŒUR DE LA RADIO.
+//
+// Quand le morceau arrive à la fin,
+// le prochain morceau est automatiquement chargé.
+//
 // ============================================================
 
 if (
@@ -1068,7 +1244,14 @@ if (
         "ended",
         () => {
 
-            nextSong();
+            console.log(
+                "🎵 Morceau terminé."
+            );
+
+
+            nextSong(
+                true
+            );
 
         }
     );
@@ -1114,6 +1297,12 @@ if (
 
             }
 
+
+            console.error(
+                "❌ Impossible de charger :",
+                getCurrentSong()
+            );
+
         }
     );
 
@@ -1123,6 +1312,14 @@ if (
 // ============================================================
 // 🚀 DÉMARRAGE
 // ============================================================
+
+// La radio est préparée,
+// mais elle ne démarre PAS toute seule.
+//
+// Le navigateur bloque généralement
+// la lecture audio automatique sans interaction.
+//
+// Il faut donc cliquer sur ▶ une première fois.
 
 loadSong(
     0
@@ -1144,6 +1341,11 @@ if (
 
 console.log(
     "📻 GaloulouRadio démarré."
+);
+
+
+console.log(
+    "🤖 Système de radio automatique chargé."
 );
 
 
