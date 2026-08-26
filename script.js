@@ -114,119 +114,147 @@ const playlistButtons =
 
 
 // ============================================================
-// 🎵 BIBLIOTHÈQUE MUSICALE
+// 🎵 CATALOGUE MUSICAL — GALOULOURADIO
+// ============================================================
+//
+// Pour ajouter une musique :
+//
+// {
+//     id: "identifiant-unique",
+//     title: "Nom du morceau",
+//     artist: "Artiste",
+//     file: "music/nom-du-fichier.mp3",
+//     playlists: ["hits", "morning"]
+// }
+//
+// playlists possibles :
+// hits
+// morning
+// night
+// chill
+//
+// ============================================================
+
+const catalogueMusical = [
+
+    // ========================================================
+    // 🔥 HITS
+    // ========================================================
+
+    {
+        id: "music2",
+        title: "Le Site sera prêt en Noel 2026 !",
+        artist: "GaloulouStudio",
+        file: "music/music2.mp3",
+        playlists: ["hits"]
+    },
+
+    {
+        id: "music1",
+        title: "Music 1",
+        artist: "GaloulouRadio",
+        file: "music/music1.mp3",
+        playlists: ["hits", "night", "chill"]
+    },
+
+
+    // ========================================================
+    // ☀️ MORNING
+    // ========================================================
+
+    {
+        id: "kulakovka-chill",
+        title: "Chill",
+        artist: "Kulakovka",
+        file: "music/kulakovka-chill-reel-570198.mp3",
+        playlists: ["morning", "chill", "night"]
+    },
+
+    {
+        id: "kulakovka-lofi",
+        title: "Réveil Doux",
+        artist: "Kulakovka",
+        file: "music/kulakovka-lofi-relax-570489.mp3",
+        playlists: ["morning", "chill"]
+    }
+
+];
+
+
+// ============================================================
+// 📻 CONSTRUCTION AUTOMATIQUE DES PLAYLISTS
 // ============================================================
 
 const playlists = {
 
-    hits: [
-
-        {
-            title:
-                "Le Site sera prêt en Noel 2026 !",
-
-            artist:
-                "GaloulouStudio",
-
-            file:
-                "music/music2.mp3"
-        },
-
-        {
-            title:
-                "Music 1",
-
-            artist:
-                "GaloulouRadio",
-
-            file:
-                "music/music1.mp3"
-        }
-
-    ],
-
-
-    morning: [
-
-        {
-            title:
-                "Chill",
-
-            artist:
-                "Kulakovka",
-
-            file:
-                "music/kulakovka-chill-reel-570198.mp3"
-        },
-
-        {
-            title:
-                "Reveille Doux",
-
-            artist:
-                "Kulakovka",
-
-            file:
-                "music/kulakovka-lofi-relax-570489.mp3"
-        }
-
-    ],
-
-
-    night: [
-
-        {
-            title:
-                "Music 1",
-
-            artist:
-                "GaloulouRadio",
-
-            file:
-                "music/music1.mp3"
-        },
-
-        {
-            title:
-                "Chill",
-
-            artist:
-                "Kulakovka",
-
-            file:
-                "music/kulakovka-chill-reel-570198.mp3"
-        }
-
-    ],
-
-
-    chill: [
-
-        {
-            title:
-                "Chill",
-
-            artist:
-                "Kulakovka",
-
-            file:
-                "music/kulakovka-chill-reel-570198.mp3"
-        },
-
-        {
-            title:
-                "Music 1",
-
-            artist:
-                "GaloulouRadio",
-
-            file:
-                "music/music1.mp3"
-        }
-
-    ]
+    hits: [],
+    morning: [],
+    night: [],
+    chill: []
 
 };
+
+
+// ============================================================
+// 🔄 AJOUT DES MUSIQUES AUX PLAYLISTS
+// ============================================================
+
+catalogueMusical.forEach(
+    song => {
+
+        song.playlists.forEach(
+            playlistName => {
+
+                if (
+                    playlists[playlistName]
+                ) {
+
+                    playlists[playlistName].push(
+                        song
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+// ============================================================
+// 📊 INFORMATIONS CATALOGUE
+// ============================================================
+
+console.log(
+    "🎵 Catalogue musical chargé :",
+    catalogueMusical.length,
+    "morceaux"
+);
+
+
+console.log(
+    "🔥 Hits :",
+    playlists.hits.length
+);
+
+
+console.log(
+    "☀️ Morning :",
+    playlists.morning.length
+);
+
+
+console.log(
+    "🌙 Night :",
+    playlists.night.length
+);
+
+
+console.log(
+    "🎶 Chill :",
+    playlists.chill.length
+);
 
 
 // ============================================================
