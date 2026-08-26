@@ -1,12 +1,15 @@
-/* =========================================================
-   📻 GALOULOURADIO — STYLE.CSS
-   Version propre + responsive
-========================================================= */
+=========================================================
+   🎨 GALOULOURADIO — STYLE PRINCIPAL
+=========================================================
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+    scroll-behavior: smooth;
+}
 
-/* =========================================================
-   🎨 VARIABLES
-========================================================= */
 
 :root {
 
@@ -14,35 +17,18 @@
     --blue-light: #60a5fa;
     --blue-dark: #1d4ed8;
 
-    --dark: #050b18;
+    --dark: #030712;
     --dark-2: #0f172a;
+    --dark-3: #111827;
 
-    --card: rgba(255, 255, 255, 0.07);
-    --card-hover: rgba(255, 255, 255, 0.10);
+    --card: rgba(255, 255, 255, .065);
+    --card-hover: rgba(255, 255, 255, .10);
 
-    --border: rgba(255, 255, 255, 0.12);
+    --border: rgba(255, 255, 255, .12);
 
     --text: #ffffff;
     --text-light: #cbd5e1;
     --text-muted: #94a3b8;
-
-}
-
-
-/* =========================================================
-   🔧 RESET
-========================================================= */
-
-* {
-
-    margin: 0;
-    padding: 0;
-
-    box-sizing: border-box;
-
-    font-family: "Inter", sans-serif;
-
-    scroll-behavior: smooth;
 
 }
 
@@ -60,20 +46,20 @@ body {
     background:
 
         radial-gradient(
-            circle at 10% 0%,
-            rgba(37, 99, 235, .35),
+            circle at 15% 0%,
+            rgba(37, 99, 235, .32),
             transparent 30%
         ),
 
         radial-gradient(
-            circle at 90% 20%,
-            rgba(96, 165, 250, .15),
-            transparent 25%
+            circle at 85% 20%,
+            rgba(96, 165, 250, .12),
+            transparent 28%
         ),
 
         linear-gradient(
             135deg,
-            #050b18,
+            #030712,
             #0f172a,
             #111827
         );
@@ -97,18 +83,21 @@ header {
     left: 0;
 
     width: 100%;
-    height: 80px;
+    height: 78px;
 
-    padding: 0 8%;
+    padding: 0 6%;
 
     display: flex;
 
-    justify-content: space-between;
     align-items: center;
 
-    background: rgba(5, 11, 24, .78);
+    justify-content: space-between;
 
-    backdrop-filter: blur(18px);
+    gap: 25px;
+
+    background: rgba(3, 7, 18, .78);
+
+    backdrop-filter: blur(20px);
 
     border-bottom:
         1px solid var(--border);
@@ -118,48 +107,64 @@ header {
 }
 
 
-/* =========================================================
-   📻 LOGO
-========================================================= */
-
 .logo {
 
     display: flex;
 
     align-items: center;
 
-    gap: 12px;
+    gap: 11px;
 
-    user-select: none;
+    color: white;
+
+    text-decoration: none;
+
+    flex-shrink: 0;
 
 }
 
 
 .logo-icon {
 
-    font-size: 35px;
+    display: flex;
 
-    filter:
-        drop-shadow(
-            0 0 12px
-            rgba(96, 165, 250, .4)
+    justify-content: center;
+
+    align-items: center;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--blue-light)
         );
+
+    font-size: 23px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(37, 99, 235, .3);
 
 }
 
 
-.logo strong {
+.logo-text strong {
 
     display: block;
 
-    font-size: 20px;
+    font-size: 18px;
 
     font-weight: 800;
 
 }
 
 
-.logo small {
+.logo-text small {
 
     display: block;
 
@@ -167,14 +172,10 @@ header {
 
     color: var(--text-muted);
 
-    font-size: 11px;
+    font-size: 10px;
 
 }
 
-
-/* =========================================================
-   🧭 NAVIGATION
-========================================================= */
 
 nav {
 
@@ -191,7 +192,7 @@ nav a {
 
     position: relative;
 
-    color: white;
+    color: var(--text-light);
 
     text-decoration: none;
 
@@ -211,14 +212,14 @@ nav a::after {
     position: absolute;
 
     left: 0;
-    bottom: -7px;
+    bottom: -8px;
 
     width: 0;
     height: 2px;
 
-    background: var(--blue-light);
+    border-radius: 999px;
 
-    border-radius: 10px;
+    background: var(--blue-light);
 
     transition: .25s;
 
@@ -227,7 +228,7 @@ nav a::after {
 
 nav a:hover {
 
-    color: var(--blue-light);
+    color: white;
 
 }
 
@@ -240,52 +241,112 @@ nav a:hover::after {
 
 
 /* =========================================================
-   🔐 BOUTON COMPTE
+   🔐 COMPTE
 ========================================================= */
 
 .account-button {
 
-    border: none;
+    border: 1px solid rgba(255, 255, 255, .16);
 
     border-radius: 999px;
 
-    padding:
-        11px
-        18px;
+    padding: 10px 16px;
 
-    background: white;
+    background:
+        rgba(255, 255, 255, .08);
 
-    color: #111111;
+    color: white;
 
-    font-size: 14px;
+    font-size: 12px;
 
-    font-weight: 600;
+    font-weight: 700;
 
     cursor: pointer;
 
-    transition: .2s ease;
-
     white-space: nowrap;
+
+    transition: .25s;
 
 }
 
 
 .account-button:hover {
 
+    background:
+        rgba(255, 255, 255, .14);
+
+    border-color:
+        rgba(96, 165, 250, .45);
+
     transform:
         translateY(-2px);
-
-    box-shadow:
-        0 5px 15px
-        rgba(0, 0, 0, .15);
 
 }
 
 
-.account-button:active {
+/* =========================================================
+   🎄 MESSAGE NOËL
+========================================================= */
+
+.christmas-message {
+
+    position: fixed;
+
+    top: 95px;
+
+    left: 50%;
 
     transform:
-        translateY(0);
+        translateX(-50%);
+
+    width:
+        min(90%, 500px);
+
+    padding:
+        15px 20px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    text-align: center;
+
+    background:
+        rgba(15, 23, 42, .94);
+
+    border:
+        1px solid
+        rgba(96, 165, 250, .35);
+
+    border-radius: 16px;
+
+    backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 20px 50px
+        rgba(0, 0, 0, .35);
+
+    z-index: 900;
+
+}
+
+
+.christmas-message strong {
+
+    color: var(--blue-light);
+
+    font-size: 14px;
+
+}
+
+
+.christmas-message span {
+
+    color: var(--text-light);
+
+    font-size: 12px;
 
 }
 
@@ -296,36 +357,157 @@ nav a:hover::after {
 
 .hero {
 
-    min-height: 90vh;
+    position: relative;
+
+    min-height: 100vh;
+
+    padding:
+        150px 7%
+        80px;
 
     display: flex;
 
     justify-content: center;
+
     align-items: center;
 
-    text-align: center;
+    overflow: hidden;
 
-    padding:
-        140px
-        20px
-        70px;
+}
+
+
+.hero-background {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(37, 99, 235, .12),
+            transparent 50%
+        );
+
+    pointer-events: none;
 
 }
 
 
 .hero-content {
 
-    max-width: 850px;
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    max-width: 1150px;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(280px, 430px)
+        1fr;
+
+    align-items: center;
+
+    gap: 80px;
+
+}
+
+
+.hero-cover {
+
+    position: relative;
+
+    width: min(100%, 420px);
+
+    aspect-ratio: 1;
+
+    justify-self: center;
+
+}
+
+
+.hero-cover img {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 28px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .16);
+
+    box-shadow:
+
+        0 30px 80px
+        rgba(0, 0, 0, .5),
+
+        0 0 80px
+        rgba(37, 99, 235, .2);
+
+    transition:
+        transform .5s ease,
+        box-shadow .5s ease;
+
+}
+
+
+.hero-cover:hover img {
+
+    transform:
+        translateY(-8px)
+        rotate(-1deg)
+        scale(1.02);
+
+    box-shadow:
+
+        0 40px 90px
+        rgba(0, 0, 0, .55),
+
+        0 0 100px
+        rgba(37, 99, 235, .28);
+
+}
+
+
+.cover-glow {
+
+    position: absolute;
+
+    inset: 15%;
+
+    background:
+        rgba(37, 99, 235, .4);
+
+    filter: blur(70px);
+
+    z-index: 1;
+
+}
+
+
+/* =========================================================
+   📝 HERO TEXT
+========================================================= */
+
+.hero-text {
 
     animation:
         heroAppear .8s ease;
 
 }
 
-
-/* =========================================================
-   🔴 LIVE BADGE
-========================================================= */
 
 .live-badge {
 
@@ -334,27 +516,26 @@ nav a:hover::after {
     align-items: center;
 
     padding:
-        8px
-        16px;
+        8px 15px;
 
-    border-radius: 50px;
+    border-radius: 999px;
 
     background:
-        rgba(239, 68, 68, .12);
+        rgba(37, 99, 235, .12);
 
     border:
         1px solid
-        rgba(239, 68, 68, .3);
+        rgba(96, 165, 250, .3);
 
-    color: #fca5a5;
+    color: var(--blue-light);
 
-    font-size: 12px;
+    font-size: 11px;
 
     font-weight: 800;
 
-    letter-spacing: .5px;
+    letter-spacing: .8px;
 
-    margin-bottom: 25px;
+    margin-bottom: 24px;
 
     animation:
         badgePulse 2.5s infinite;
@@ -362,36 +543,30 @@ nav a:hover::after {
 }
 
 
-/* =========================================================
-   📝 TITRE HERO
-========================================================= */
-
 .hero h1 {
 
     font-size:
-        clamp(
-            55px,
-            9vw,
-            100px
-        );
+        clamp(58px, 8vw, 100px);
 
-    font-weight: 800;
+    line-height: .9;
 
     letter-spacing: -5px;
 
-    line-height: .95;
+    font-weight: 800;
 
-    margin-bottom: 28px;
+    margin-bottom: 30px;
 
 }
 
 
 .hero h1 span {
 
+    display: block;
+
     color: var(--blue-light);
 
     text-shadow:
-        0 0 35px
+        0 0 40px
         rgba(96, 165, 250, .25);
 
 }
@@ -399,15 +574,13 @@ nav a:hover::after {
 
 .hero p {
 
-    max-width: 650px;
+    max-width: 600px;
 
-    margin:
-        0 auto
-        35px;
+    margin-bottom: 35px;
 
     color: var(--text-light);
 
-    font-size: 19px;
+    font-size: 18px;
 
     line-height: 1.7;
 
@@ -415,21 +588,25 @@ nav a:hover::after {
 
 
 /* =========================================================
-   ▶️ BOUTON PRINCIPAL
+   ▶ PLAY BUTTON
 ========================================================= */
 
 .play-button {
 
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
     border: none;
 
     padding:
-        17px
-        28px;
+        16px 24px;
 
     border-radius: 14px;
 
     background:
-
         linear-gradient(
             135deg,
             var(--blue),
@@ -438,15 +615,15 @@ nav a:hover::after {
 
     color: white;
 
-    font-size: 16px;
+    font-size: 15px;
 
     font-weight: 700;
 
     cursor: pointer;
 
     box-shadow:
-        0 10px 35px
-        rgba(37, 99, 235, .35);
+        0 15px 40px
+        rgba(37, 99, 235, .3);
 
     transition: .25s;
 
@@ -457,11 +634,11 @@ nav a:hover::after {
 
     transform:
         translateY(-4px)
-        scale(1.03);
+        scale(1.02);
 
     box-shadow:
-        0 15px 45px
-        rgba(37, 99, 235, .45);
+        0 20px 50px
+        rgba(37, 99, 235, .42);
 
 }
 
@@ -469,21 +646,21 @@ nav a:hover::after {
 .play-button:active {
 
     transform:
-        translateY(0)
         scale(.98);
 
 }
 
 
 /* =========================================================
-   📻 PLAYER
+   🎧 PLAYER
 ========================================================= */
 
 .player-section {
 
+    position: relative;
+
     padding:
-        20px
-        8%
+        10px 7%
         100px;
 
 }
@@ -491,11 +668,13 @@ nav a:hover::after {
 
 .player {
 
-    max-width: 950px;
+    width: 100%;
+
+    max-width: 1050px;
 
     margin: auto;
 
-    padding: 25px;
+    padding: 20px;
 
     display: flex;
 
@@ -507,87 +686,49 @@ nav a:hover::after {
 
         linear-gradient(
             135deg,
-            rgba(255,255,255,.08),
-            rgba(255,255,255,.04)
+            rgba(255,255,255,.09),
+            rgba(255,255,255,.035)
         );
 
     border:
         1px solid var(--border);
 
-    border-radius: 22px;
+    border-radius: 24px;
 
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(18px);
 
     box-shadow:
-        0 20px 60px
-        rgba(0, 0, 0, .25);
-
-    transition: .3s;
+        0 25px 70px
+        rgba(0,0,0,.3);
 
 }
 
 
-.player:hover {
+.player-cover {
 
-    border-color:
-        rgba(96, 165, 250, .35);
-
-    box-shadow:
-        0 20px 65px
-        rgba(37, 99, 235, .12);
-
-}
-
-
-/* =========================================================
-   📻 ICÔNE RADIO
-========================================================= */
-
-.radio-icon {
-
-    width: 70px;
-    height: 70px;
+    width: 78px;
+    height: 78px;
 
     flex-shrink: 0;
 
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
-
-    background:
-
-        linear-gradient(
-            135deg,
-            var(--blue),
-            var(--blue-light)
-        );
-
-    border-radius: 18px;
-
-    font-size: 35px;
-
-    box-shadow:
-        0 10px 30px
-        rgba(37, 99, 235, .3);
-
-    transition: .3s;
-
 }
 
 
-.player:hover .radio-icon {
+.player-cover img {
 
-    transform:
-        rotate(-4deg)
-        scale(1.04);
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 16px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
 
 }
 
-
-/* =========================================================
-   🎵 INFORMATIONS MUSIQUE
-========================================================= */
 
 .player-info {
 
@@ -600,13 +741,13 @@ nav a:hover::after {
 
 .player-label {
 
-    font-size: 11px;
-
     color: var(--blue-light);
+
+    font-size: 10px;
 
     font-weight: 800;
 
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
 
 }
 
@@ -616,7 +757,7 @@ nav a:hover::after {
     margin:
         5px 0;
 
-    font-size: 21px;
+    font-size: 20px;
 
     white-space: nowrap;
 
@@ -631,26 +772,22 @@ nav a:hover::after {
 
     color: var(--text-muted);
 
-    font-size: 14px;
+    font-size: 13px;
 
 }
 
-
-/* =========================================================
-   📈 PROGRESSION
-========================================================= */
 
 .progress-container {
 
     width: 100%;
 
-    margin-top: 13px;
+    margin-top: 12px;
 
     display: flex;
 
     align-items: center;
 
-    gap: 9px;
+    gap: 8px;
 
 }
 
@@ -661,10 +798,9 @@ nav a:hover::after {
 
     color: var(--text-muted);
 
-    font-size: 11px;
+    font-size: 10px;
 
-    font-variant-numeric:
-        tabular-nums;
+    font-variant-numeric: tabular-nums;
 
 }
 
@@ -681,8 +817,6 @@ nav a:hover::after {
     flex: 1;
 
     height: 5px;
-
-    margin: 0;
 
     appearance: none;
 
@@ -704,8 +838,6 @@ nav a:hover::after {
 
     appearance: none;
 
-    -webkit-appearance: none;
-
     width: 13px;
     height: 13px;
 
@@ -714,10 +846,8 @@ nav a:hover::after {
     background: var(--blue-light);
 
     box-shadow:
-        0 0 10px
-        rgba(96, 165, 250, .5);
-
-    cursor: pointer;
+        0 0 12px
+        rgba(96,165,250,.5);
 
 }
 
@@ -732,8 +862,6 @@ nav a:hover::after {
     border-radius: 50%;
 
     background: var(--blue-light);
-
-    cursor: pointer;
 
 }
 
@@ -755,10 +883,8 @@ nav a:hover::after {
 
 .player-controls button {
 
-    width: 52px;
-    height: 52px;
-
-    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
 
     border-radius: 50%;
 
@@ -768,7 +894,7 @@ nav a:hover::after {
 
     color: #0f172a;
 
-    font-size: 20px;
+    font-size: 18px;
 
     cursor: pointer;
 
@@ -783,8 +909,8 @@ nav a:hover::after {
         scale(1.08);
 
     box-shadow:
-        0 5px 20px
-        rgba(255,255,255,.2);
+        0 8px 25px
+        rgba(255,255,255,.15);
 
 }
 
@@ -792,15 +918,13 @@ nav a:hover::after {
 #nextButton {
 
     background:
-        rgba(255,255,255,.10);
+        rgba(255,255,255,.08);
 
     color: white;
 
     border:
         1px solid
         rgba(255,255,255,.15);
-
-    font-size: 17px;
 
 }
 
@@ -822,12 +946,10 @@ nav a:hover::after {
 
 .volume-container {
 
-    max-width: 950px;
+    max-width: 1050px;
 
     margin:
-        13px
-        auto
-        0;
+        12px auto 0;
 
     padding:
         0 8px;
@@ -850,7 +972,7 @@ nav a:hover::after {
 
 #volumeBar {
 
-    width: 130px;
+    width: 150px;
 
     height: 5px;
 
@@ -863,8 +985,6 @@ nav a:hover::after {
 
     border-radius: 999px;
 
-    outline: none;
-
     cursor: pointer;
 
 }
@@ -874,16 +994,12 @@ nav a:hover::after {
 
     appearance: none;
 
-    -webkit-appearance: none;
-
     width: 13px;
     height: 13px;
 
     border-radius: 50%;
 
     background: var(--blue-light);
-
-    cursor: pointer;
 
 }
 
@@ -899,8 +1015,6 @@ nav a:hover::after {
 
     background: var(--blue-light);
 
-    cursor: pointer;
-
 }
 
 
@@ -913,16 +1027,19 @@ nav a:hover::after {
 .about-section {
 
     padding:
-        100px 8%;
+        100px 7%;
 
 }
 
 
 .section-title {
 
-    text-align: center;
+    max-width: 700px;
 
-    margin-bottom: 50px;
+    margin:
+        0 auto 50px;
+
+    text-align: center;
 
 }
 
@@ -932,7 +1049,7 @@ nav a:hover::after {
 
     color: var(--blue-light);
 
-    font-size: 13px;
+    font-size: 11px;
 
     font-weight: 800;
 
@@ -943,10 +1060,11 @@ nav a:hover::after {
 
 .section-title h2 {
 
-    font-size: 42px;
-
     margin:
         10px 0;
+
+    font-size:
+        clamp(32px, 5vw, 46px);
 
 }
 
@@ -955,7 +1073,7 @@ nav a:hover::after {
 
     color: var(--text-muted);
 
-    font-size: 15px;
+    font-size: 14px;
 
 }
 
@@ -982,7 +1100,7 @@ nav a:hover::after {
 
 .playlist-card {
 
-    min-height: 150px;
+    min-height: 160px;
 
     padding: 25px;
 
@@ -993,11 +1111,10 @@ nav a:hover::after {
     gap: 20px;
 
     background:
-
         linear-gradient(
             135deg,
-            rgba(255,255,255,.08),
-            rgba(255,255,255,.04)
+            rgba(255,255,255,.075),
+            rgba(255,255,255,.035)
         );
 
     border:
@@ -1007,10 +1124,7 @@ nav a:hover::after {
 
     backdrop-filter: blur(12px);
 
-    transition:
-        transform .3s,
-        border-color .3s,
-        box-shadow .3s;
+    transition: .3s;
 
 }
 
@@ -1018,45 +1132,47 @@ nav a:hover::after {
 .playlist-card:hover {
 
     transform:
-        translateY(-6px);
+        translateY(-7px);
 
     border-color:
-        rgba(96, 165, 250, .4);
+        rgba(96,165,250,.4);
+
+    background:
+        var(--card-hover);
 
     box-shadow:
-        0 20px 45px
-        rgba(0, 0, 0, .25);
+        0 25px 50px
+        rgba(0,0,0,.25);
 
 }
 
 
 .playlist-icon {
 
-    width: 68px;
-    height: 68px;
+    width: 65px;
+    height: 65px;
 
     flex-shrink: 0;
 
     display: flex;
 
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 
-    border-radius: 19px;
+    border-radius: 18px;
 
     background:
-
         linear-gradient(
             135deg,
             var(--blue),
             var(--blue-light)
         );
 
-    font-size: 31px;
+    font-size: 29px;
 
     box-shadow:
         0 10px 25px
-        rgba(37, 99, 235, .25);
+        rgba(37,99,235,.25);
 
 }
 
@@ -1074,7 +1190,7 @@ nav a:hover::after {
 
     color: var(--blue-light);
 
-    font-size: 10px;
+    font-size: 9px;
 
     font-weight: 800;
 
@@ -1086,10 +1202,9 @@ nav a:hover::after {
 .playlist-info h3 {
 
     margin:
-        5px 0
-        6px;
+        5px 0;
 
-    font-size: 22px;
+    font-size: 21px;
 
 }
 
@@ -1098,7 +1213,7 @@ nav a:hover::after {
 
     color: var(--text-muted);
 
-    font-size: 13px;
+    font-size: 12px;
 
     line-height: 1.5;
 
@@ -1109,20 +1224,21 @@ nav a:hover::after {
 
     flex-shrink: 0;
 
+    padding:
+        10px 14px;
+
     border:
         1px solid
-        rgba(96, 165, 250, .3);
+        rgba(96,165,250,.3);
+
+    border-radius: 11px;
 
     background:
-        rgba(37, 99, 235, .15);
+        rgba(37,99,235,.12);
 
     color: white;
 
-    padding:
-        11px
-        16px;
-
-    border-radius: 12px;
+    font-size: 12px;
 
     font-weight: 700;
 
@@ -1194,10 +1310,10 @@ nav a:hover::after {
         translateY(-7px);
 
     border-color:
-        rgba(96, 165, 250, .4);
+        rgba(96,165,250,.4);
 
     box-shadow:
-        0 15px 35px
+        0 20px 40px
         rgba(0,0,0,.2);
 
 }
@@ -1205,7 +1321,7 @@ nav a:hover::after {
 
 .program-icon {
 
-    font-size: 35px;
+    font-size: 34px;
 
     flex-shrink: 0;
 
@@ -1216,7 +1332,7 @@ nav a:hover::after {
 
     color: var(--blue-light);
 
-    font-size: 11px;
+    font-size: 10px;
 
     font-weight: 800;
 
@@ -1230,7 +1346,7 @@ nav a:hover::after {
     margin:
         7px 0;
 
-    font-size: 19px;
+    font-size: 18px;
 
 }
 
@@ -1239,7 +1355,7 @@ nav a:hover::after {
 
     color: var(--text-muted);
 
-    font-size: 14px;
+    font-size: 13px;
 
     line-height: 1.6;
 
@@ -1252,13 +1368,15 @@ nav a:hover::after {
 
 .about-box {
 
-    max-width: 950px;
+    max-width: 1000px;
 
     margin: auto;
 
     padding: 40px;
 
     display: flex;
+
+    align-items: flex-start;
 
     gap: 30px;
 
@@ -1277,7 +1395,7 @@ nav a:hover::after {
 
 .about-icon {
 
-    font-size: 60px;
+    font-size: 55px;
 
     flex-shrink: 0;
 
@@ -1287,10 +1405,9 @@ nav a:hover::after {
 .about-box h2 {
 
     margin:
-        10px 0
-        15px;
+        10px 0 15px;
 
-    font-size: 32px;
+    font-size: 31px;
 
 }
 
@@ -1299,94 +1416,9 @@ nav a:hover::after {
 
     color: var(--text-light);
 
-    line-height: 1.7;
+    font-size: 14px;
 
-    font-size: 15px;
-
-}
-
-
-/* =========================================================
-   🎄 MESSAGE DE NOËL
-========================================================= */
-
-.christmas-message {
-
-    position: fixed;
-
-    top: 95px;
-
-    left: 50%;
-
-    transform:
-        translate(-50%, -30px);
-
-    width:
-        min(90%, 500px);
-
-    padding:
-        16px
-        22px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 4px;
-
-    text-align: center;
-
-    background:
-        rgba(15, 23, 42, .95);
-
-    border:
-        1px solid
-        rgba(96, 165, 250, .5);
-
-    border-radius: 16px;
-
-    box-shadow:
-
-        0 15px 40px
-        rgba(0, 0, 0, .35),
-
-        0 0 25px
-        rgba(37, 99, 235, .2);
-
-    backdrop-filter: blur(15px);
-
-    z-index: 9999;
-
-    animation:
-        christmasMessageIn
-        .45s ease forwards;
-
-}
-
-
-.christmas-message strong {
-
-    color: var(--blue-light);
-
-    font-size: 15px;
-
-}
-
-
-.christmas-message span {
-
-    color: var(--text-light);
-
-    font-size: 13px;
-
-}
-
-
-.christmas-message.hide {
-
-    animation:
-        christmasMessageOut
-        .45s ease forwards;
+    line-height: 1.8;
 
 }
 
@@ -1398,67 +1430,68 @@ nav a:hover::after {
 footer {
 
     padding:
-        50px
-        8%
-        25px;
+        50px 7% 25px;
+
+    background:
+        rgba(0,0,0,.25);
 
     border-top:
         1px solid var(--border);
-
-    background:
-        rgba(0, 0, 0, .25);
 
 }
 
 
 .footer-content {
 
-    display: flex;
-
-    justify-content:
-        space-between;
-
-    gap: 30px;
-
     max-width: 1100px;
 
     margin: auto;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 30px;
 
 }
 
 
 .footer-content strong {
 
-    font-size: 18px;
+    font-size: 17px;
 
 }
 
 
 .footer-content p {
 
+    margin-top: 8px;
+
     color: #64748b;
 
-    margin-top: 8px;
+    font-size: 13px;
 
 }
 
 
-.footer-content a {
+.footer-links a {
 
     display: block;
+
+    margin-bottom: 10px;
 
     color: #94a3b8;
 
     text-decoration: none;
 
-    margin-bottom: 10px;
+    font-size: 13px;
 
     transition: .2s;
 
 }
 
 
-.footer-content a:hover {
+.footer-links a:hover {
 
     color: white;
 
@@ -1470,18 +1503,21 @@ footer {
 
 .footer-bottom {
 
-    text-align: center;
+    max-width: 1100px;
 
-    margin-top: 40px;
+    margin:
+        35px auto 0;
 
     padding-top: 20px;
+
+    text-align: center;
 
     border-top:
         1px solid var(--border);
 
     color: #64748b;
 
-    font-size: 13px;
+    font-size: 12px;
 
 }
 
@@ -1520,61 +1556,15 @@ footer {
 
         box-shadow:
             0 0 0
-            rgba(239, 68, 68, 0);
+            rgba(96,165,250,0);
 
     }
 
     50% {
 
         box-shadow:
-            0 0 20px
-            rgba(239, 68, 68, .12);
-
-    }
-
-}
-
-
-@keyframes christmasMessageIn {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            translate(-50%, -30px);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translate(-50%, 0);
-
-    }
-
-}
-
-
-@keyframes christmasMessageOut {
-
-    from {
-
-        opacity: 1;
-
-        transform:
-            translate(-50%, 0);
-
-    }
-
-    to {
-
-        opacity: 0;
-
-        transform:
-            translate(-50%, -30px);
+            0 0 22px
+            rgba(96,165,250,.15);
 
     }
 
@@ -1582,41 +1572,15 @@ footer {
 
 
 /* =========================================================
-   📱 MOBILE
+   📱 TABLETTES / MOBILE
 ========================================================= */
 
-@media (max-width: 750px) {
-
-
-    /* HEADER */
+@media (max-width: 850px) {
 
     header {
 
-        height: 70px;
-
         padding:
             0 20px;
-
-    }
-
-
-    .logo-icon {
-
-        font-size: 29px;
-
-    }
-
-
-    .logo strong {
-
-        font-size: 17px;
-
-    }
-
-
-    .logo small {
-
-        font-size: 9px;
 
     }
 
@@ -1628,43 +1592,40 @@ footer {
     }
 
 
-    .account-button {
-
-        padding:
-            9px
-            13px;
-
-        font-size: 12px;
-
-    }
-
-
-    /* HERO */
-
     .hero {
 
-        min-height:
-            80vh;
-
         padding:
-            115px
-            20px
-            60px;
+            130px 20px 70px;
 
     }
 
 
-    .hero h1 {
+    .hero-content {
 
-        font-size:
-            clamp(
-                50px,
-                15vw,
-                75px
-            );
+        grid-template-columns: 1fr;
 
-        letter-spacing:
-            -3px;
+        gap: 45px;
+
+        text-align: center;
+
+    }
+
+
+    .hero-cover {
+
+        width:
+            min(75vw, 350px);
+
+    }
+
+
+    .hero-text {
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
 
     }
 
@@ -1673,49 +1634,26 @@ footer {
 
         font-size: 16px;
 
-        line-height: 1.6;
+    }
+
+
+    .playlists-grid {
+
+        grid-template-columns: 1fr;
 
     }
 
 
-    .play-button {
+    .programs-grid {
 
-        width: 100%;
-
-        max-width: 350px;
-
-    }
-
-
-    /* PLAYER */
-
-    .player-section {
-
-        padding:
-            10px
-            20px
-            70px;
+        grid-template-columns: 1fr;
 
     }
 
 
     .player {
 
-        padding: 18px;
-
-        gap: 14px;
-
         flex-wrap: wrap;
-
-    }
-
-
-    .radio-icon {
-
-        width: 55px;
-        height: 55px;
-
-        font-size: 27px;
 
     }
 
@@ -1724,21 +1662,7 @@ footer {
 
         flex:
             1 1
-            calc(100% - 75px);
-
-    }
-
-
-    .player-info h2 {
-
-        font-size: 17px;
-
-    }
-
-
-    .player-info p {
-
-        font-size: 12px;
+            calc(100% - 100px);
 
     }
 
@@ -1747,8 +1671,141 @@ footer {
 
         width: 100%;
 
-        justify-content:
-            flex-end;
+        justify-content: flex-end;
+
+    }
+
+}
+
+
+/* =========================================================
+   📱 PETITS ÉCRANS
+========================================================= */
+
+@media (max-width: 550px) {
+
+    header {
+
+        height: 70px;
+
+    }
+
+
+    .logo-icon {
+
+        width: 36px;
+        height: 36px;
+
+        font-size: 19px;
+
+    }
+
+
+    .logo-text strong {
+
+        font-size: 15px;
+
+    }
+
+
+    .logo-text small {
+
+        font-size: 8px;
+
+    }
+
+
+    .account-button {
+
+        max-width: 150px;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+
+        padding:
+            9px 12px;
+
+        font-size: 10px;
+
+    }
+
+
+    .christmas-message {
+
+        top: 82px;
+
+        width:
+            calc(100% - 24px);
+
+    }
+
+
+    .hero {
+
+        min-height:
+            auto;
+
+        padding:
+            120px 18px 60px;
+
+    }
+
+
+    .hero h1 {
+
+        font-size:
+            clamp(48px, 15vw, 70px);
+
+        letter-spacing:
+            -3px;
+
+    }
+
+
+    .hero-cover {
+
+        width:
+            min(82vw, 310px);
+
+    }
+
+
+    .player-section {
+
+        padding:
+            10px 18px 70px;
+
+    }
+
+
+    .player {
+
+        padding: 16px;
+
+        border-radius: 20px;
+
+    }
+
+
+    .player-cover {
+
+        width: 60px;
+        height: 60px;
+
+    }
+
+
+    .player-info h2 {
+
+        font-size: 16px;
+
+    }
+
+
+    .player-info p {
+
+        font-size: 11px;
 
     }
 
@@ -1761,17 +1818,9 @@ footer {
     }
 
 
-    .progress-container {
-
-        gap: 6px;
-
-    }
-
-
     .volume-container {
 
-        justify-content:
-            center;
+        justify-content: center;
 
     }
 
@@ -1780,19 +1829,17 @@ footer {
 
         flex: 1;
 
-        max-width: 180px;
+        max-width: 190px;
 
     }
 
-
-    /* SECTIONS */
 
     .playlists-section,
     .programs-section,
     .about-section {
 
         padding:
-            70px 20px;
+            70px 18px;
 
     }
 
@@ -1806,27 +1853,16 @@ footer {
 
     .section-title h2 {
 
-        font-size: 32px;
-
-    }
-
-
-    /* PLAYLISTS */
-
-    .playlists-grid {
-
-        grid-template-columns:
-            1fr;
+        font-size: 30px;
 
     }
 
 
     .playlist-card {
 
-        padding: 20px;
+        padding: 18px;
 
-        align-items:
-            flex-start;
+        align-items: flex-start;
 
         flex-wrap: wrap;
 
@@ -1836,14 +1872,7 @@ footer {
     .playlist-info {
 
         min-width:
-            calc(100% - 88px);
-
-    }
-
-
-    .playlist-info h3 {
-
-        font-size: 19px;
+            calc(100% - 85px);
 
     }
 
@@ -1857,22 +1886,9 @@ footer {
     }
 
 
-    /* PROGRAMMES */
-
-    .programs-grid {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-
-    /* ABOUT */
-
     .about-box {
 
-        flex-direction:
-            column;
+        flex-direction: column;
 
         padding: 25px;
 
@@ -1881,71 +1897,21 @@ footer {
 
     .about-icon {
 
-        font-size: 50px;
+        font-size: 45px;
 
     }
 
 
     .about-box h2 {
 
-        font-size: 27px;
-
-    }
-
-
-    /* CHRISTMAS */
-
-    .christmas-message {
-
-        top: 80px;
-
-        width:
-            calc(100% - 30px);
-
-        padding:
-            14px
-            18px;
-
-    }
-
-
-    .christmas-message strong {
-
-        font-size: 14px;
-
-    }
-
-
-    .christmas-message span {
-
-        font-size: 12px;
-
-    }
-
-
-    /* FOOTER */
-
-    footer {
-
-        padding:
-            40px
-            20px
-            20px;
+        font-size: 25px;
 
     }
 
 
     .footer-content {
 
-        flex-direction:
-            column;
-
-    }
-
-
-    .footer-content > div:last-child {
-
-        margin-top: 10px;
+        flex-direction: column;
 
     }
 
@@ -1953,65 +1919,37 @@ footer {
 
 
 /* =========================================================
-   📱 PETITS TÉLÉPHONES
+   📱 TRÈS PETITS ÉCRANS
 ========================================================= */
 
-@media (max-width: 420px) {
-
+@media (max-width: 380px) {
 
     .account-button {
 
         max-width: 120px;
-
-        overflow: hidden;
-
-        text-overflow: ellipsis;
 
     }
 
 
     .hero h1 {
 
-        font-size: 48px;
+        font-size: 45px;
 
     }
 
 
     .hero p {
 
-        font-size: 15px;
+        font-size: 14px;
 
     }
 
 
     .player {
 
-        padding: 15px;
-
-    }
-
-
-    .playlist-card {
-
-        padding: 17px;
-
-    }
-
-
-    .playlist-icon {
-
-        width: 58px;
-        height: 58px;
-
-        font-size: 27px;
-
-    }
-
-
-    .section-title h2 {
-
-        font-size: 28px;
+        padding: 13px;
 
     }
 
 }
+```
