@@ -1,8 +1,8 @@
 // ============================================================
 // 📻 GALOULOURADIO
-// 🎵 LECTEUR AUTOMATIQUE
-// 🎲 CATALOGUE MUSICAL
+// 🎵 LECTEUR RADIO AUTOMATIQUE
 // 🔐 FIREBASE AUTHENTICATION
+// 🔀 PROGRAMMATION AUTOMATIQUE
 // ============================================================
 
 
@@ -13,7 +13,6 @@
 import {
     auth
 } from "./firebase.js";
-
 
 import {
     GoogleAuthProvider,
@@ -40,72 +39,60 @@ const googleLoginButton =
         "googleLoginButton"
     );
 
-
 const audio =
     document.getElementById(
         "radioAudio"
     );
-
 
 const playButton =
     document.getElementById(
         "playButton"
     );
 
-
 const mainPlay =
     document.getElementById(
         "mainPlay"
     );
-
 
 const nextButton =
     document.getElementById(
         "nextButton"
     );
 
-
 const currentTitle =
     document.getElementById(
         "currentTitle"
     );
-
 
 const currentArtist =
     document.getElementById(
         "currentArtist"
     );
 
-
 const progressBar =
     document.getElementById(
         "progressBar"
     );
-
 
 const currentTime =
     document.getElementById(
         "currentTime"
     );
 
-
 const duration =
     document.getElementById(
         "duration"
     );
-
 
 const volumeBar =
     document.getElementById(
         "volumeBar"
     );
 
-
 const radioStatus =
     document.getElementById(
         "radioStatus"
     );
-
 
 const playlistButtons =
     document.querySelectorAll(
@@ -116,34 +103,19 @@ const playlistButtons =
 // ============================================================
 // 🎵 CATALOGUE MUSICAL
 // ============================================================
-//
-// Pour ajouter une musique, ajoute simplement un objet.
-//
-// Exemple :
-//
-// {
-//     id: "nouvelle-musique",
-//     title: "Nom du morceau",
-//     artist: "Artiste",
-//     file: "music/nom-du-fichier.mp3",
-//     playlists: ["hits", "chill"]
-// }
-//
-// Une musique peut appartenir à plusieurs playlists.
-//
-// ============================================================
 
 const catalogueMusical = [
 
-    // ========================================================
+    // --------------------------------------------------------
     // 🔥 HITS
-    // ========================================================
+    // --------------------------------------------------------
 
     {
-        id: "music2",
+        id:
+            "music2",
 
         title:
-            "Le Site sera prêt en Noel 2026 !",
+            "Le Site sera prêt à Noël 2026 ! 🎄",
 
         artist:
             "GaloulouStudio",
@@ -152,12 +124,15 @@ const catalogueMusical = [
             "music/music2.mp3",
 
         playlists:
-            ["hits"]
+            [
+                "hits"
+            ]
     },
 
 
     {
-        id: "music1",
+        id:
+            "music1",
 
         title:
             "Music 1",
@@ -177,12 +152,13 @@ const catalogueMusical = [
     },
 
 
-    // ========================================================
+    // --------------------------------------------------------
     // ☀️ MORNING
-    // ========================================================
+    // --------------------------------------------------------
 
     {
-        id: "kulakovka-chill",
+        id:
+            "kulakovka-chill",
 
         title:
             "Chill",
@@ -203,7 +179,8 @@ const catalogueMusical = [
 
 
     {
-        id: "kulakovka-lofi",
+        id:
+            "kulakovka-lofi",
 
         title:
             "Réveil Doux",
@@ -230,32 +207,51 @@ const catalogueMusical = [
 
 const playlists = {
 
-    hits: [],
+    hits:
+        [],
 
-    morning: [],
+    morning:
+        [],
 
-    night: [],
+    night:
+        [],
 
-    chill: []
+    chill:
+        []
 
 };
 
 
 // ============================================================
-// 🔄 CONSTRUCTION AUTOMATIQUE DES PLAYLISTS
+// 🔄 CONSTRUCTION DES PLAYLISTS
 // ============================================================
 
 catalogueMusical.forEach(
     song => {
 
+        if (
+            !Array.isArray(
+                song.playlists
+            )
+        ) {
+
+            return;
+
+        }
+
+
         song.playlists.forEach(
             playlistName => {
 
                 if (
-                    playlists[playlistName]
+                    playlists[
+                        playlistName
+                    ]
                 ) {
 
-                    playlists[playlistName].push(
+                    playlists[
+                        playlistName
+                    ].push(
                         song
                     );
 
@@ -269,7 +265,7 @@ catalogueMusical.forEach(
 
 
 // ============================================================
-// 📊 INFORMATIONS DU CATALOGUE
+// 📊 INFORMATIONS
 // ============================================================
 
 console.log(
@@ -278,100 +274,33 @@ console.log(
     "morceaux"
 );
 
-
 console.log(
     "🔥 Hits :",
-    playlists.hits.length,
-    "morceaux"
+    playlists.hits.length
 );
-
 
 console.log(
     "☀️ Morning :",
-    playlists.morning.length,
-    "morceaux"
+    playlists.morning.length
 );
-
 
 console.log(
     "🌙 Night :",
-    playlists.night.length,
-    "morceaux"
+    playlists.night.length
 );
-
 
 console.log(
     "🎶 Chill :",
-    playlists.chill.length,
-    "morceaux"
+    playlists.chill.length
 );
 
 
 // ============================================================
-// 🤖 PROGRAMMATION AUTOMATIQUE
-// ============================================================
-//
-// 06h → 12h : Morning
-// 12h → 18h : Hits
-// 18h → 22h : Chill
-// 22h → 06h : Night
-//
-// Le navigateur ne charge pas toutes les musiques.
-// Une seule musique est chargée dans <audio> à la fois.
-//
-// ============================================================
-
-function obtenirPlaylistSelonHeure() {
-
-    const heure =
-        new Date().getHours();
-
-
-    // 🌅 06h → 12h
-    if (
-        heure >= 6 &&
-        heure < 12
-    ) {
-
-        return playlists.morning;
-
-    }
-
-
-    // ☀️ 12h → 18h
-    if (
-        heure >= 12 &&
-        heure < 18
-    ) {
-
-        return playlists.hits;
-
-    }
-
-
-    // 🌆 18h → 22h
-    if (
-        heure >= 18 &&
-        heure < 22
-    ) {
-
-        return playlists.chill;
-
-    }
-
-
-    // 🌙 22h → 06h
-    return playlists.night;
-
-}
-
-
-// ============================================================
-// 📻 PLAYLIST AUTOMATIQUE ACTUELLE
+// 🤖 RADIO AUTOMATIQUE
 // ============================================================
 
 let radioPlaylist =
-    obtenirPlaylistSelonHeure();
+    playlists.hits;
 
 
 // ============================================================
@@ -381,45 +310,11 @@ let radioPlaylist =
 let currentIndex =
     0;
 
-
 let isPlaying =
     false;
 
-
 let radioStarted =
     false;
-
-
-// ============================================================
-// 🔄 ACTUALISER LA PLAYLIST AUTOMATIQUE
-// ============================================================
-
-function actualiserProgrammation() {
-
-    const nouvellePlaylist =
-        obtenirPlaylistSelonHeure();
-
-
-    if (
-        nouvellePlaylist !==
-        radioPlaylist
-    ) {
-
-        radioPlaylist =
-            nouvellePlaylist;
-
-
-        currentIndex =
-            0;
-
-
-        console.log(
-            "🕐 Changement de programmation automatique."
-        );
-
-    }
-
-}
 
 
 // ============================================================
@@ -454,8 +349,11 @@ async function connecterAvecGoogle() {
             "✅ Connexion Google réussie."
         );
 
+    }
 
-    } catch (error) {
+    catch (
+        error
+    ) {
 
         if (
             error.code ===
@@ -491,7 +389,7 @@ async function connecterAvecGoogle() {
         ) {
 
             console.error(
-                "❌ Le domaine du site n'est pas autorisé dans Firebase."
+                "❌ Domaine non autorisé dans Firebase."
             );
 
             return;
@@ -526,8 +424,11 @@ async function deconnecter() {
             "🚪 Déconnexion réussie."
         );
 
+    }
 
-    } catch (error) {
+    catch (
+        error
+    ) {
 
         console.error(
             "❌ Déconnexion impossible :",
@@ -680,16 +581,14 @@ function formatTime(
 
 
 // ============================================================
-// 🎲 CHOISIR UNE MUSIQUE ALÉATOIRE
+// 🔀 CHOISIR UNE MUSIQUE ALÉATOIREMENT
 // ============================================================
 
-function choisirMusiqueAleatoire(
-    playlist
-) {
+function choisirMusiqueAleatoire() {
 
     if (
-        !playlist ||
-        playlist.length === 0
+        !radioPlaylist ||
+        radioPlaylist.length === 0
     ) {
 
         return 0;
@@ -698,7 +597,7 @@ function choisirMusiqueAleatoire(
 
 
     if (
-        playlist.length === 1
+        radioPlaylist.length === 1
     ) {
 
         return 0;
@@ -714,7 +613,7 @@ function choisirMusiqueAleatoire(
         nouvelIndex =
             Math.floor(
                 Math.random() *
-                playlist.length
+                radioPlaylist.length
             );
 
     }
@@ -739,13 +638,21 @@ function loadSong(
 ) {
 
     if (
-        !audio ||
+        !audio
+    ) {
+
+        return;
+
+    }
+
+
+    if (
         !radioPlaylist ||
         radioPlaylist.length === 0
     ) {
 
         console.error(
-            "❌ Aucune musique disponible."
+            "❌ La playlist est vide."
         );
 
         return;
@@ -754,20 +661,12 @@ function loadSong(
 
 
     if (
-        index < 0
+        index < 0 ||
+        index >= radioPlaylist.length
     ) {
 
-        index = 0;
-
-    }
-
-
-    if (
-        index >=
-        radioPlaylist.length
-    ) {
-
-        index = 0;
+        index =
+            0;
 
     }
 
@@ -782,21 +681,11 @@ function loadSong(
         ];
 
 
-    if (
-        !song
-    ) {
-
-        console.error(
-            "❌ Musique introuvable."
-        );
-
-        return;
-
-    }
-
-
     audio.src =
         song.file;
+
+
+    audio.load();
 
 
     if (
@@ -850,7 +739,7 @@ function loadSong(
 
 
     console.log(
-        "🎵 Chargé :",
+        "🎵 Morceau chargé :",
         song.title,
         "-",
         song.artist
@@ -904,8 +793,11 @@ async function playRadio() {
             "▶️ Radio en lecture."
         );
 
+    }
 
-    } catch (error) {
+    catch (
+        error
+    ) {
 
         isPlaying =
             false;
@@ -963,36 +855,47 @@ function pauseRadio() {
 function updatePlayer() {
 
     if (
-        !playButton ||
-        !mainPlay
+        playButton
     ) {
 
-        return;
+        if (
+            isPlaying
+        ) {
+
+            playButton.textContent =
+                "⏸ Mettre en pause";
+
+        }
+
+        else {
+
+            playButton.textContent =
+                "▶ Écouter GaloulouRadio";
+
+        }
 
     }
 
 
     if (
-        isPlaying
+        mainPlay
     ) {
 
-        playButton.textContent =
-            "⏸ Mettre en pause";
+        if (
+            isPlaying
+        ) {
 
+            mainPlay.textContent =
+                "⏸";
 
-        mainPlay.textContent =
-            "⏸";
+        }
 
-    }
+        else {
 
-    else {
+            mainPlay.textContent =
+                "▶";
 
-        playButton.textContent =
-            "▶ Écouter GaloulouRadio";
-
-
-        mainPlay.textContent =
-            "▶";
+        }
 
     }
 
@@ -1015,31 +918,16 @@ function nextSong() {
     }
 
 
-    // Vérifie l'heure avant de choisir
-    // le prochain morceau.
-
-    actualiserProgrammation();
-
-
-    const nouvelIndex =
-        choisirMusiqueAleatoire(
-            radioPlaylist
-        );
+    const prochainIndex =
+        choisirMusiqueAleatoire();
 
 
     loadSong(
-        nouvelIndex
+        prochainIndex
     );
 
 
-    if (
-        radioStarted ||
-        isPlaying
-    ) {
-
-        playRadio();
-
-    }
+    playRadio();
 
 }
 
@@ -1118,23 +1006,14 @@ if (
 
     nextButton.addEventListener(
         "click",
-        () => {
-
-            nextSong();
-
-        }
+        nextSong
     );
 
 }
 
 
 // ============================================================
-// 🎧 PLAYLISTS MANUELLES
-// ============================================================
-//
-// Si l'utilisateur clique sur une playlist,
-// on la lance immédiatement.
-//
+// 🎧 PLAYLISTS
 // ============================================================
 
 playlistButtons.forEach(
@@ -1164,21 +1043,6 @@ playlistButtons.forEach(
                 }
 
 
-                if (
-                    playlists[
-                        playlistName
-                    ].length === 0
-                ) {
-
-                    console.error(
-                        "❌ Cette playlist est vide."
-                    );
-
-                    return;
-
-                }
-
-
                 radioPlaylist =
                     playlists[
                         playlistName
@@ -1186,25 +1050,18 @@ playlistButtons.forEach(
 
 
                 currentIndex =
-                    choisirMusiqueAleatoire(
-                        radioPlaylist
-                    );
+                    0;
+
+
+                console.log(
+                    "🎧 Playlist sélectionnée :",
+                    playlistName
+                );
 
 
                 loadSong(
                     currentIndex
                 );
-
-
-                if (
-                    radioStatus
-                ) {
-
-                    radioStatus.textContent =
-                        "🎵 PLAYLIST : " +
-                        playlistName.toUpperCase();
-
-                }
 
 
                 playRadio();
@@ -1388,7 +1245,7 @@ if (
 
 
 // ============================================================
-// 🎵 MUSIQUE TERMINÉE
+// 🎵 MORCEAU TERMINÉ
 // ============================================================
 
 if (
@@ -1400,7 +1257,7 @@ if (
         () => {
 
             console.log(
-                "🎵 Musique terminée."
+                "🎵 Morceau terminé."
             );
 
 
@@ -1452,106 +1309,22 @@ if (
 
 
             console.error(
-                "❌ Impossible de charger :",
-                audio.src
+                "❌ Erreur lors du chargement audio."
             );
 
         }
     );
 
 }
-
-
-// ============================================================
-// 🕐 VÉRIFICATION DE L'HORAIRE
-// ============================================================
-//
-// Toutes les minutes, on vérifie si la programmation
-// doit changer.
-//
-// Le morceau actuel continue jusqu'à sa fin.
-// Le changement de playlist se fera au prochain morceau.
-//
-// ============================================================
-
-setInterval(
-    () => {
-
-        if (
-            !radioStarted
-        ) {
-
-            return;
-
-        }
-
-
-        const anciennePlaylist =
-            radioPlaylist;
-
-
-        const nouvellePlaylist =
-            obtenirPlaylistSelonHeure();
-
-
-        if (
-            nouvellePlaylist !==
-            anciennePlaylist
-        ) {
-
-            radioPlaylist =
-                nouvellePlaylist;
-
-
-            currentIndex =
-                -1;
-
-
-            console.log(
-                "🕐 Nouvelle programmation détectée."
-            );
-
-
-            if (
-                radioStatus &&
-                isPlaying
-            ) {
-
-                radioStatus.textContent =
-                    "🤖 PROGRAMME AUTOMATIQUE";
-
-            }
-
-        }
-
-    },
-    60 * 1000
-);
 
 
 // ============================================================
 // 🚀 DÉMARRAGE
 // ============================================================
 
-actualiserProgrammation();
-
-
-if (
-    radioPlaylist &&
-    radioPlaylist.length > 0
-) {
-
-    currentIndex =
-        choisirMusiqueAleatoire(
-            radioPlaylist
-        );
-
-
-    loadSong(
-        currentIndex
-    );
-
-}
+loadSong(
+    0
+);
 
 
 updatePlayer();
@@ -1567,16 +1340,34 @@ if (
 }
 
 
+// ============================================================
+// 📻 INFORMATIONS DE DÉMARRAGE
+// ============================================================
+
 console.log(
-    "📻 GaloulouRadio démarré."
+    "========================================"
 );
 
-
 console.log(
-    "🤖 Programmation automatique activée."
+    "📻 GALOULOURADIO"
 );
 
+console.log(
+    "🎵 Lecteur chargé."
+);
+
+console.log(
+    "🤖 Radio automatique activée."
+);
+
+console.log(
+    "🔀 Sélection aléatoire activée."
+);
 
 console.log(
     "🔥 Firebase Authentication chargé."
+);
+
+console.log(
+    "========================================"
 );
