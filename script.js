@@ -1,7 +1,7 @@
 // ============================================================
 // 📻 GALOULOURADIO
-// 🤖 RADIO AUTOMATIQUE
-// 🎵 LECTEUR
+// 🎵 LECTEUR AUTOMATIQUE
+// 🎲 CATALOGUE MUSICAL
 // 🔐 FIREBASE AUTHENTICATION
 // ============================================================
 
@@ -114,24 +114,22 @@ const playlistButtons =
 
 
 // ============================================================
-// 🎵 CATALOGUE MUSICAL — GALOULOURADIO
+// 🎵 CATALOGUE MUSICAL
 // ============================================================
 //
-// Pour ajouter une musique :
+// Pour ajouter une musique, ajoute simplement un objet.
+//
+// Exemple :
 //
 // {
-//     id: "identifiant-unique",
+//     id: "nouvelle-musique",
 //     title: "Nom du morceau",
 //     artist: "Artiste",
 //     file: "music/nom-du-fichier.mp3",
-//     playlists: ["hits", "morning"]
+//     playlists: ["hits", "chill"]
 // }
 //
-// playlists possibles :
-// hits
-// morning
-// night
-// chill
+// Une musique peut appartenir à plusieurs playlists.
 //
 // ============================================================
 
@@ -143,18 +141,39 @@ const catalogueMusical = [
 
     {
         id: "music2",
-        title: "Le Site sera prêt en Noel 2026 !",
-        artist: "GaloulouStudio",
-        file: "music/music2.mp3",
-        playlists: ["hits"]
+
+        title:
+            "Le Site sera prêt en Noel 2026 !",
+
+        artist:
+            "GaloulouStudio",
+
+        file:
+            "music/music2.mp3",
+
+        playlists:
+            ["hits"]
     },
+
 
     {
         id: "music1",
-        title: "Music 1",
-        artist: "GaloulouRadio",
-        file: "music/music1.mp3",
-        playlists: ["hits", "night", "chill"]
+
+        title:
+            "Music 1",
+
+        artist:
+            "GaloulouRadio",
+
+        file:
+            "music/music1.mp3",
+
+        playlists:
+            [
+                "hits",
+                "night",
+                "chill"
+            ]
     },
 
 
@@ -164,39 +183,66 @@ const catalogueMusical = [
 
     {
         id: "kulakovka-chill",
-        title: "Chill",
-        artist: "Kulakovka",
-        file: "music/kulakovka-chill-reel-570198.mp3",
-        playlists: ["morning", "chill", "night"]
+
+        title:
+            "Chill",
+
+        artist:
+            "Kulakovka",
+
+        file:
+            "music/kulakovka-chill-reel-570198.mp3",
+
+        playlists:
+            [
+                "morning",
+                "chill",
+                "night"
+            ]
     },
+
 
     {
         id: "kulakovka-lofi",
-        title: "Réveil Doux",
-        artist: "Kulakovka",
-        file: "music/kulakovka-lofi-relax-570489.mp3",
-        playlists: ["morning", "chill"]
+
+        title:
+            "Réveil Doux",
+
+        artist:
+            "Kulakovka",
+
+        file:
+            "music/kulakovka-lofi-relax-570489.mp3",
+
+        playlists:
+            [
+                "morning",
+                "chill"
+            ]
     }
 
 ];
 
 
 // ============================================================
-// 📻 CONSTRUCTION AUTOMATIQUE DES PLAYLISTS
+// 📻 PLAYLISTS
 // ============================================================
 
 const playlists = {
 
     hits: [],
+
     morning: [],
+
     night: [],
+
     chill: []
 
 };
 
 
 // ============================================================
-// 🔄 AJOUT DES MUSIQUES AUX PLAYLISTS
+// 🔄 CONSTRUCTION AUTOMATIQUE DES PLAYLISTS
 // ============================================================
 
 catalogueMusical.forEach(
@@ -223,7 +269,7 @@ catalogueMusical.forEach(
 
 
 // ============================================================
-// 📊 INFORMATIONS CATALOGUE
+// 📊 INFORMATIONS DU CATALOGUE
 // ============================================================
 
 console.log(
@@ -235,25 +281,29 @@ console.log(
 
 console.log(
     "🔥 Hits :",
-    playlists.hits.length
+    playlists.hits.length,
+    "morceaux"
 );
 
 
 console.log(
     "☀️ Morning :",
-    playlists.morning.length
+    playlists.morning.length,
+    "morceaux"
 );
 
 
 console.log(
     "🌙 Night :",
-    playlists.night.length
+    playlists.night.length,
+    "morceaux"
 );
 
 
 console.log(
     "🎶 Chill :",
-    playlists.chill.length
+    playlists.chill.length,
+    "morceaux"
 );
 
 
@@ -261,19 +311,71 @@ console.log(
 // 🤖 PROGRAMMATION AUTOMATIQUE
 // ============================================================
 //
-// Pour l'instant la radio utilise la playlist "hits".
-// Plus tard, cette partie pourra contenir 250+ musiques.
+// 06h → 12h : Morning
+// 12h → 18h : Hits
+// 18h → 22h : Chill
+// 22h → 06h : Night
 //
-// Le navigateur ne charge PAS toutes les musiques.
-// Il charge uniquement celle qui est actuellement jouée.
+// Le navigateur ne charge pas toutes les musiques.
+// Une seule musique est chargée dans <audio> à la fois.
+//
+// ============================================================
+
+function obtenirPlaylistSelonHeure() {
+
+    const heure =
+        new Date().getHours();
+
+
+    // 🌅 06h → 12h
+    if (
+        heure >= 6 &&
+        heure < 12
+    ) {
+
+        return playlists.morning;
+
+    }
+
+
+    // ☀️ 12h → 18h
+    if (
+        heure >= 12 &&
+        heure < 18
+    ) {
+
+        return playlists.hits;
+
+    }
+
+
+    // 🌆 18h → 22h
+    if (
+        heure >= 18 &&
+        heure < 22
+    ) {
+
+        return playlists.chill;
+
+    }
+
+
+    // 🌙 22h → 06h
+    return playlists.night;
+
+}
+
+
+// ============================================================
+// 📻 PLAYLIST AUTOMATIQUE ACTUELLE
 // ============================================================
 
 let radioPlaylist =
-    playlists.hits;
+    obtenirPlaylistSelonHeure();
 
 
 // ============================================================
-// ⚙️ ÉTAT DE LA RADIO
+// ⚙️ ÉTAT DU LECTEUR
 // ============================================================
 
 let currentIndex =
@@ -286,6 +388,38 @@ let isPlaying =
 
 let radioStarted =
     false;
+
+
+// ============================================================
+// 🔄 ACTUALISER LA PLAYLIST AUTOMATIQUE
+// ============================================================
+
+function actualiserProgrammation() {
+
+    const nouvellePlaylist =
+        obtenirPlaylistSelonHeure();
+
+
+    if (
+        nouvellePlaylist !==
+        radioPlaylist
+    ) {
+
+        radioPlaylist =
+            nouvellePlaylist;
+
+
+        currentIndex =
+            0;
+
+
+        console.log(
+            "🕐 Changement de programmation automatique."
+        );
+
+    }
+
+}
 
 
 // ============================================================
@@ -471,7 +605,7 @@ function mettreAJourBoutonCompte(
 
 onAuthStateChanged(
     auth,
-    (user) => {
+    user => {
 
         mettreAJourBoutonCompte(
             user
@@ -546,59 +680,52 @@ function formatTime(
 
 
 // ============================================================
-// 🎵 MUSIQUE ACTUELLE
+// 🎲 CHOISIR UNE MUSIQUE ALÉATOIRE
 // ============================================================
 
-function getCurrentSong() {
+function choisirMusiqueAleatoire(
+    playlist
+) {
 
     if (
-        !radioPlaylist ||
-        radioPlaylist.length === 0
+        !playlist ||
+        playlist.length === 0
     ) {
 
-        return null;
+        return 0;
 
     }
 
 
-    return radioPlaylist[
+    if (
+        playlist.length === 1
+    ) {
+
+        return 0;
+
+    }
+
+
+    let nouvelIndex;
+
+
+    do {
+
+        nouvelIndex =
+            Math.floor(
+                Math.random() *
+                playlist.length
+            );
+
+    }
+
+    while (
+        nouvelIndex ===
         currentIndex
-    ];
-
-}
+    );
 
 
-// ============================================================
-// ⏭️ CALCULER LE PROCHAIN MORCEAU
-// ============================================================
-
-function getNextIndex() {
-
-    if (
-        !radioPlaylist ||
-        radioPlaylist.length === 0
-    ) {
-
-        return 0;
-
-    }
-
-
-    const nextIndex =
-        currentIndex + 1;
-
-
-    if (
-        nextIndex >=
-        radioPlaylist.length
-    ) {
-
-        return 0;
-
-    }
-
-
-    return nextIndex;
+    return nouvelIndex;
 
 }
 
@@ -617,14 +744,27 @@ function loadSong(
         radioPlaylist.length === 0
     ) {
 
+        console.error(
+            "❌ Aucune musique disponible."
+        );
+
         return;
 
     }
 
 
     if (
-        index < 0 ||
-        index >= radioPlaylist.length
+        index < 0
+    ) {
+
+        index = 0;
+
+    }
+
+
+    if (
+        index >=
+        radioPlaylist.length
     ) {
 
         index = 0;
@@ -637,29 +777,27 @@ function loadSong(
 
 
     const song =
-        getCurrentSong();
+        radioPlaylist[
+            currentIndex
+        ];
 
 
     if (
         !song
     ) {
 
+        console.error(
+            "❌ Musique introuvable."
+        );
+
         return;
 
     }
 
 
-    // --------------------------------------------------------
-    // 🎵 FICHIER AUDIO
-    // --------------------------------------------------------
-
     audio.src =
         song.file;
 
-
-    // --------------------------------------------------------
-    // 📝 TITRE
-    // --------------------------------------------------------
 
     if (
         currentTitle
@@ -671,10 +809,6 @@ function loadSong(
     }
 
 
-    // --------------------------------------------------------
-    // 👤 ARTISTE
-    // --------------------------------------------------------
-
     if (
         currentArtist
     ) {
@@ -684,10 +818,6 @@ function loadSong(
 
     }
 
-
-    // --------------------------------------------------------
-    // 📊 PROGRESSION
-    // --------------------------------------------------------
 
     if (
         progressBar
@@ -720,18 +850,20 @@ function loadSong(
 
 
     console.log(
-        "🎵 Morceau chargé :",
-        song.title
+        "🎵 Chargé :",
+        song.title,
+        "-",
+        song.artist
     );
 
 }
 
 
 // ============================================================
-// 🤖 DÉMARRER LA RADIO AUTOMATIQUE
+// ▶️ LECTURE
 // ============================================================
 
-async function startAutomaticRadio() {
+async function playRadio() {
 
     if (
         !audio
@@ -742,27 +874,16 @@ async function startAutomaticRadio() {
     }
 
 
-    if (
-        !radioStarted
-    ) {
-
-        radioStarted =
-            true;
-
-
-        console.log(
-            "🤖 Radio automatique démarrée."
-        );
-
-    }
-
-
     try {
 
         await audio.play();
 
 
         isPlaying =
+            true;
+
+
+        radioStarted =
             true;
 
 
@@ -780,8 +901,7 @@ async function startAutomaticRadio() {
 
 
         console.log(
-            "▶️ Lecture automatique :",
-            getCurrentSong()?.title
+            "▶️ Radio en lecture."
         );
 
 
@@ -805,7 +925,7 @@ async function startAutomaticRadio() {
 
 
 // ============================================================
-// ⏸️ PAUSE RADIO
+// ⏸️ PAUSE
 // ============================================================
 
 function pauseRadio() {
@@ -880,12 +1000,10 @@ function updatePlayer() {
 
 
 // ============================================================
-// ⏭️ PASSER AU MORCEAU SUIVANT
+// ⏭️ MUSIQUE SUIVANTE
 // ============================================================
 
-function nextSong(
-    automatic = false
-) {
+function nextSong() {
 
     if (
         !radioPlaylist ||
@@ -897,34 +1015,29 @@ function nextSong(
     }
 
 
-    const nextIndex =
-        getNextIndex();
+    // Vérifie l'heure avant de choisir
+    // le prochain morceau.
+
+    actualiserProgrammation();
 
 
-    currentIndex =
-        nextIndex;
+    const nouvelIndex =
+        choisirMusiqueAleatoire(
+            radioPlaylist
+        );
 
 
     loadSong(
-        currentIndex
+        nouvelIndex
     );
 
-
-    console.log(
-        automatic
-            ? "🤖 Passage automatique au morceau suivant."
-            : "⏭️ Morceau suivant."
-    );
-
-
-    // Si la radio était en lecture,
-    // le nouveau morceau démarre immédiatement.
 
     if (
+        radioStarted ||
         isPlaying
     ) {
 
-        startAutomaticRadio();
+        playRadio();
 
     }
 
@@ -953,7 +1066,7 @@ if (
 
             else {
 
-                startAutomaticRadio();
+                playRadio();
 
             }
 
@@ -985,7 +1098,7 @@ if (
 
             else {
 
-                startAutomaticRadio();
+                playRadio();
 
             }
 
@@ -1007,9 +1120,7 @@ if (
         "click",
         () => {
 
-            nextSong(
-                false
-            );
+            nextSong();
 
         }
     );
@@ -1018,7 +1129,12 @@ if (
 
 
 // ============================================================
-// 🎧 CHANGEMENT DE PLAYLIST
+// 🎧 PLAYLISTS MANUELLES
+// ============================================================
+//
+// Si l'utilisateur clique sur une playlist,
+// on la lance immédiatement.
+//
 // ============================================================
 
 playlistButtons.forEach(
@@ -1048,9 +1164,20 @@ playlistButtons.forEach(
                 }
 
 
-                // ------------------------------------------------
-                // Nouvelle programmation
-                // ------------------------------------------------
+                if (
+                    playlists[
+                        playlistName
+                    ].length === 0
+                ) {
+
+                    console.error(
+                        "❌ Cette playlist est vide."
+                    );
+
+                    return;
+
+                }
+
 
                 radioPlaylist =
                     playlists[
@@ -1059,13 +1186,9 @@ playlistButtons.forEach(
 
 
                 currentIndex =
-                    0;
-
-
-                console.log(
-                    "📻 Nouvelle programmation :",
-                    playlistName
-                );
+                    choisirMusiqueAleatoire(
+                        radioPlaylist
+                    );
 
 
                 loadSong(
@@ -1073,7 +1196,18 @@ playlistButtons.forEach(
                 );
 
 
-                startAutomaticRadio();
+                if (
+                    radioStatus
+                ) {
+
+                    radioStatus.textContent =
+                        "🎵 PLAYLIST : " +
+                        playlistName.toUpperCase();
+
+                }
+
+
+                playRadio();
 
             }
         );
@@ -1254,14 +1388,7 @@ if (
 
 
 // ============================================================
-// 🤖 AUTOMATISATION
-// ============================================================
-//
-// C'EST LE CŒUR DE LA RADIO.
-//
-// Quand le morceau arrive à la fin,
-// le prochain morceau est automatiquement chargé.
-//
+// 🎵 MUSIQUE TERMINÉE
 // ============================================================
 
 if (
@@ -1273,13 +1400,11 @@ if (
         () => {
 
             console.log(
-                "🎵 Morceau terminé."
+                "🎵 Musique terminée."
             );
 
 
-            nextSong(
-                true
-            );
+            nextSong();
 
         }
     );
@@ -1328,7 +1453,7 @@ if (
 
             console.error(
                 "❌ Impossible de charger :",
-                getCurrentSong()
+                audio.src
             );
 
         }
@@ -1338,20 +1463,95 @@ if (
 
 
 // ============================================================
+// 🕐 VÉRIFICATION DE L'HORAIRE
+// ============================================================
+//
+// Toutes les minutes, on vérifie si la programmation
+// doit changer.
+//
+// Le morceau actuel continue jusqu'à sa fin.
+// Le changement de playlist se fera au prochain morceau.
+//
+// ============================================================
+
+setInterval(
+    () => {
+
+        if (
+            !radioStarted
+        ) {
+
+            return;
+
+        }
+
+
+        const anciennePlaylist =
+            radioPlaylist;
+
+
+        const nouvellePlaylist =
+            obtenirPlaylistSelonHeure();
+
+
+        if (
+            nouvellePlaylist !==
+            anciennePlaylist
+        ) {
+
+            radioPlaylist =
+                nouvellePlaylist;
+
+
+            currentIndex =
+                -1;
+
+
+            console.log(
+                "🕐 Nouvelle programmation détectée."
+            );
+
+
+            if (
+                radioStatus &&
+                isPlaying
+            ) {
+
+                radioStatus.textContent =
+                    "🤖 PROGRAMME AUTOMATIQUE";
+
+            }
+
+        }
+
+    },
+    60 * 1000
+);
+
+
+// ============================================================
 // 🚀 DÉMARRAGE
 // ============================================================
 
-// La radio est préparée,
-// mais elle ne démarre PAS toute seule.
-//
-// Le navigateur bloque généralement
-// la lecture audio automatique sans interaction.
-//
-// Il faut donc cliquer sur ▶ une première fois.
+actualiserProgrammation();
 
-loadSong(
-    0
-);
+
+if (
+    radioPlaylist &&
+    radioPlaylist.length > 0
+) {
+
+    currentIndex =
+        choisirMusiqueAleatoire(
+            radioPlaylist
+        );
+
+
+    loadSong(
+        currentIndex
+    );
+
+}
 
 
 updatePlayer();
@@ -1373,7 +1573,7 @@ console.log(
 
 
 console.log(
-    "🤖 Système de radio automatique chargé."
+    "🤖 Programmation automatique activée."
 );
 
 
